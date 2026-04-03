@@ -1,0 +1,3070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareStepsHQ v1.6</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F7F4;
+    --card: #FFFFFF;
+    --accent: #6B8C7A;
+    --accent-light: #EBF1ED;
+    --accent2: #8A9490;
+    --accent2-light: #EEF0EF;
+    --text: #252B27;
+    --text2: #6B7570;
+    --text3: #9BA5A0;
+    --border: rgba(30,40,35,0.08);
+    --border-solid: #E2E5E2;
+    --red: #A04040;
+    --red-light: #F5EAEA;
+    --orange: #A06830;
+    --orange-light: #F5EDE0;
+    --green: #4A7A5C;
+    --green-light: #E6F0EA;
+    --yellow: #8A7820;
+    --yellow-light: #F2EED8;
+    --purple: #6A6888;
+    --purple-light: #EEEDF5;
+    --teal: #3A7070;
+    --teal-light: #E4EEEE;
+    --nav-h: 64px;
+    --fab-size: 52px;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(30,40,35,0.05);
+    --shadow-lg: 0 8px 24px rgba(30,40,35,0.10);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(30,40,35,0.05);
+  }
+  /* APP SHELL — centering wrapper */
+  .app-shell {
+    display: flex;
+    justify-content: center;
+    background: #E5E8E4;
+    min-height: 100vh;
+  }
+  .app-container {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg);
+    min-height: 100vh;
+    position: relative;
+  }
+  @media (min-width: 768px) {
+    .app-container {
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 24px 0 24px;
+      min-height: calc(100vh - 48px);
+      box-shadow: 0 8px 40px rgba(30,40,35,0.13);
+      /* This makes fixed children position relative to this container */
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    /* Nav and FAB now position relative to the container, not the viewport */
+    .bottom-nav {
+      left: 0;
+      right: 0;
+      width: 100%;
+      transform: none;
+    }
+    .fab {
+      right: 18px;
+    }
+    .sheet-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+    }
+    #app-menu-dropdown {
+      right: 12px !important;
+      top: 52px !important;
+    }
+  }
+  html, body {
+    height: 100%; width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    font-size: 18px;
+    background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+  }
+  #app { height: 100%; display: flex; flex-direction: column; }
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  .topbar-logo {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    font-size: 21px; font-weight: 700; letter-spacing: -0.5px;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .topbar-logo .part-care { color: #6B8C7A; }
+  .topbar-logo .part-steps { color: #8A9490; }
+  .topbar-logo .part-hq { color: #6B8C7A; }
+  .topbar-search-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text2); padding: 6px; display: flex; align-items: center;
+    border-radius: 8px;
+  }
+  /* SCROLL AREA */
+  .screen-area {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    padding-bottom: calc(var(--nav-h) + var(--fab-size) + 16px);
+    -webkit-overflow-scrolling: touch;
+  }
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: var(--card);
+    border-top: 1px solid rgba(30,40,35,0.06);
+    display: flex; align-items: center;
+    z-index: 100;
+    box-shadow: 0 -1px 0 rgba(30,40,35,0.06);
+  }
+  .nav-tab {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 4px;
+    cursor: pointer; padding: 8px 0;
+    color: #9BA5A0; font-size: 15px; font-weight: 500;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    min-height: 44px;
+  }
+  .nav-tab.active { color: #6B8C7A; }
+  .nav-tab svg { width: 24px; height: 24px; }
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: calc(var(--nav-h) + 14px);
+    right: 20px;
+    width: var(--fab-size); height: var(--fab-size);
+    border-radius: 50%;
+    background: #6B8C7A;
+    color: #fff;
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(107,140,122,0.30);
+    z-index: 101;
+    font-size: 24px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .fab:active { transform: scale(0.93); box-shadow: 0 2px 8px rgba(74,104,88,0.24); }
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(30,40,35,0.05);
+  }
+  .card-title {
+    font-size: 15px; font-weight: 600; letter-spacing: 0.4px;
+    text-transform: uppercase; color: var(--text2);
+    margin-bottom: 14px;
+    font-family: 'Inter', sans-serif;
+  }
+  /* SCREEN TITLE */
+  .screen-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px; font-weight: 700; color: var(--text);
+    letter-spacing: -0.5px; margin-bottom: 16px;
+    padding-top: 2px;
+  }
+  /* SCREEN */
+  .screen { display: none; padding: 22px 18px 0; }
+  .screen.active { display: block; }
+  /* BADGES */
+  .badge {
+    display: inline-block; padding: 2px 9px; border-radius: 20px;
+    font-size: 15px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  }
+  .badge-low { background: #F0F2F0; color: #6B7280; }
+  .badge-medium { background: #FFF8F0; color: #B45309; }
+  .badge-high { background: #FFF1F0; color: #C0392B; }
+  .badge-update { background: var(--accent-light); color: #4A6858; }
+  .badge-medical { background: var(--red-light); color: #8C3A34; }
+  .badge-move { background: var(--purple-light); color: #5C5080; }
+  .badge-conversation { background: var(--teal-light); color: #2E5C5C; }
+  .badge-other { background: #F0F2F0; color: var(--text2); }
+  /* HQ STYLES */
+  .hq-hero {
+    background: linear-gradient(135deg, #4A6858 0%, #5C7A6A 100%);
+    border-radius: var(--radius);
+    padding: 22px; color: #fff;
+    margin-bottom: 14px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(74,104,88,0.24);
+  }
+  .hq-hero::before {
+    content: ''; position: absolute; top: -30px; right: -30px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .hq-hero::after {
+    content: ''; position: absolute; bottom: -20px; left: 20px;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .hq-hero-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px; font-weight: 700; margin-bottom: 5px;
+    letter-spacing: -0.3px;
+  }
+  .hq-hero-meta { font-size: 15px; opacity: 0.85; font-weight: 400; }
+  .hq-hero-location {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.20);
+    display: flex; align-items: center; gap: 8px;
+    font-size: 15px;
+  }
+  .location-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #A8CDBA; flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(168,205,186,0.28);
+  }
+  /* ENTRY ROW — signature timeline design */
+  .entry-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(30,40,35,0.06);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .entry-row:last-child { border-bottom: none; }
+  .entry-sev-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 6px;
+  }
+  .entry-sev-dot.high { background: #E57373; }
+  .entry-sev-dot.medium { background: #F2A65A; }
+  .entry-sev-dot.low { background: #C7CDD6; }
+  .entry-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+    background: #F0F2F0;
+  }
+  .entry-body { flex: 1; min-width: 0; }
+  .entry-title {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    letter-spacing: -0.1px;
+  }
+  .entry-meta { font-size: 15px; color: var(--text2); margin-top: 3px; }
+  .entry-details {
+    font-size: 15px; color: var(--text2); margin-top: 5px; line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .entry-time {
+    font-size: 15px; color: var(--text3); flex-shrink: 0;
+    margin-top: 4px; font-variant-numeric: tabular-nums;
+  }
+  /* TASK ROW */
+  .task-row {
+    display: flex; align-items: flex-start; gap: 13px;
+    padding: 17px 0; border-bottom: 1px solid rgba(30,40,35,0.06);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .task-row:last-child { border-bottom: none; }
+  .task-check {
+    width: 26px; height: 26px; border-radius: 7px;
+    border: 2px solid #C4CAC4;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .task-check.done { background: #4CAF7D; border-color: #4CAF7D; color: #fff; }
+  .task-check.overdue { border-color: #E57373; }
+  .task-title { font-size: 18px; font-weight: 500; letter-spacing: -0.1px; }
+  .task-title.done { text-decoration: line-through; color: var(--text2); }
+  .task-title.overdue { color: #C0392B; }
+  .task-due { font-size: 15px; color: var(--text2); margin-top: 4px; }
+  .task-due.overdue { font-size: 15px; color: #C0392B; font-weight: 600; }
+  /* DAILY SUMMARY */
+  .summary-text {
+    font-size: 18px; line-height: 1.7; color: var(--text);
+  }
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; gap: 8px; overflow-x: auto; padding: 0 0 14px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 7px 14px; border-radius: 20px;
+    border: 1.5px solid rgba(30,40,35,0.10);
+    font-size: 15px; font-weight: 500; color: var(--text2);
+    background: var(--card); cursor: pointer; white-space: nowrap;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', sans-serif;
+  }
+  .filter-chip.active {
+    background: #EBF1ED;
+    border-color: #6B8C7A;
+    color: #6B8C7A;
+  }
+  /* MODAL / SHEET */
+  .sheet-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.40);
+    z-index: 200; display: flex; align-items: flex-end;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .sheet-overlay.open { opacity: 1; pointer-events: auto; }
+  .sheet {
+    width: 100%; background: var(--card);
+    border-radius: 24px 24px 0 0;
+    max-height: 92vh;
+    display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .sheet-overlay.open .sheet { transform: translateY(0); }
+  .sheet-handle {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: #E2E6E2; margin: 12px auto 4px;
+    flex-shrink: 0;
+  }
+  .sheet-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px 10px;
+    border-bottom: 1px solid rgba(30,40,35,0.06);
+    flex-shrink: 0;
+    position: sticky; top: 0; background: var(--card); z-index: 1;
+  }
+  .sheet-scroll {
+    overflow-y: auto; flex: 1;
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+    -webkit-overflow-scrolling: touch;
+  }
+  .sheet-title { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .sheet-close {
+    background: #F0F2F0; border: none; cursor: pointer;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text2); font-size: 16px;
+  }
+  .sheet-body { padding: 20px 22px; }
+  /* FORM */
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block; font-size: 15px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    color: var(--text2); margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 14px 16px;
+    border: 1.5px solid #E2E6E2; border-radius: var(--radius-sm);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    font-size: 18px; color: var(--text);
+    background: #F6F8F6;
+    outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: #6B8C7A;
+    box-shadow: 0 0 0 3px rgba(107,140,122,0.10);
+    background: #fff;
+  }
+  .form-textarea { resize: none; min-height: 90px; }
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px; padding: 14px 22px; border-radius: var(--radius-sm); min-height: 48px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; font-size: 17px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent; letter-spacing: -0.1px;
+  }
+  .btn-primary { background: #6B8C7A; color: #fff; box-shadow: 0 1px 2px rgba(107,140,122,0.15); }
+  .btn-primary:active { background: #4A6858; }
+  .btn-secondary { background: #F0F2F0; color: var(--text2); border: 1px solid #E2E6E2; }
+  .btn-danger { background: #FFF1F0; color: #C0392B; }
+  .btn-full { width: 100%; }
+  .btn-sm { padding: 11px 16px; font-size: 15px; border-radius: 8px; min-height: 44px; }
+  /* QUICK PHRASE GRID */
+  .phrase-section { margin-bottom: 16px; }
+  .phrase-section-label {
+    font-size: 15px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.4px; color: var(--text2); margin-bottom: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  }
+  .phrase-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .phrase-chip {
+    padding: 10px 16px; border-radius: 20px;
+    border: 1.5px solid #E2E6E2;
+    font-size: 15px; font-weight: 500; color: var(--text2);
+    background: var(--card); cursor: pointer;
+    transition: all 0.12s; -webkit-tap-highlight-color: transparent;
+    font-family: 'Inter', sans-serif;
+  }
+  .phrase-chip.selected {
+    background: #EBF1ED; border-color: #6B8C7A; color: #6B8C7A;
+  }
+  /* DETAIL VIEW */
+  .detail-header {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 18px 20px; border-bottom: 1px solid rgba(30,40,35,0.06);
+  }
+  .detail-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0; background: #F0F2F0;
+  }
+  .detail-title { font-size: 21px; font-weight: 700; line-height: 1.3; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .detail-meta { font-size: 15px; color: var(--text2); margin-top: 5px; }
+  .detail-section {
+    padding: 15px 20px; border-bottom: 1px solid rgba(30,40,35,0.06);
+  }
+  .detail-section-label {
+    font-size: 15px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.4px; color: var(--text2); margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  }
+  .detail-section-value { font-size: 17px; line-height: 1.65; }
+  .detail-actions { display: flex; gap: 10px; padding: 16px 20px; }
+  /* CONFIRM */
+  .confirm-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.45);
+    z-index: 300; display: flex; align-items: center; justify-content: center;
+    padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.15s;
+  }
+  .confirm-overlay.open { opacity: 1; pointer-events: auto; }
+  .confirm-box {
+    background: var(--card); border-radius: var(--radius);
+    padding: 24px; width: 100%; max-width: 320px;
+    box-shadow: 0 20px 48px rgba(15,23,42,0.18);
+    transform: scale(0.92); transition: transform 0.15s;
+  }
+  .confirm-overlay.open .confirm-box { transform: scale(1); }
+  .confirm-title { font-size: 19px; font-weight: 700; margin-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .confirm-body { font-size: 16px; color: var(--text2); margin-bottom: 22px; line-height: 1.6; }
+  .confirm-actions { display: flex; gap: 10px; }
+  /* TOAST */
+  .toast-container {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    z-index: 500; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none; width: calc(100% - 32px); max-width: 340px;
+  }
+  .toast {
+    background: #252B27; color: #fff;
+    padding: 12px 16px; border-radius: 12px;
+    font-size: 15px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.15);
+    animation: toastIn 0.25s ease, toastOut 0.25s ease 2.25s forwards;
+    font-family: 'Inter', sans-serif;
+  }
+  @keyframes toastIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+  @keyframes toastOut { to { opacity:0; transform:translateY(-8px); } }
+  /* TEAM CARD */
+  .team-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 15px 16px; background: var(--card);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    border: 1px solid rgba(30,40,35,0.05);
+    margin-bottom: 10px; cursor: pointer;
+  }
+  .team-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #EBF1ED; color: #6B8C7A;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .team-name { font-size: 17px; font-weight: 600; letter-spacing: -0.1px; }
+  .team-role { font-size: 15px; color: var(--text2); margin-top: 3px; }
+  /* DOC CARD */
+  .doc-card {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px; background: var(--card);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    border: 1px solid rgba(30,40,35,0.05);
+    margin-bottom: 10px; cursor: pointer;
+  }
+  .doc-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+    background: #EBF1ED;
+  }
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px; padding: 0 0 2px;
+  }
+  .section-title { font-size: 18px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .section-link {
+    font-size: 15px; color: #6B8C7A; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  /* SEARCH */
+  .search-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border-radius: var(--radius-sm);
+    padding: 11px 14px; box-shadow: var(--shadow-card);
+    border: 1px solid rgba(30,40,35,0.06);
+    margin-bottom: 14px;
+  }
+  .search-input {
+    flex: 1; border: none; background: none; outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; font-size: 17px; color: var(--text);
+  }
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 32px 20px; color: var(--text2); }
+  .empty-state .emoji { font-size: 36px; margin-bottom: 10px; }
+  .empty-state p { font-size: 17px; line-height: 1.6; }
+  /* PROFILE */
+  .profile-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 12px 0; border-bottom: 1px solid rgba(30,40,35,0.06);
+  }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-label { font-size: 15px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .profile-value { font-size: 17px; font-weight: 500; text-align: right; max-width: 60%; }
+  /* MOVE FORM */
+  #ql-move-fields { display: none; }
+  /* FAB LABEL */
+  .fab-label {
+    position: fixed; bottom: calc(var(--nav-h) + 14px);
+    right: calc(20px + var(--fab-size) + 8px);
+    background: #252B27; color: #fff;
+    padding: 5px 10px; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    pointer-events: none; white-space: nowrap;
+    opacity: 0; transition: opacity 0.2s; z-index: 101;
+    font-family: 'Inter', sans-serif;
+  }
+  /* ADD BUTTONS */
+  .add-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 13px 16px; border-radius: var(--radius);
+    border: 1.5px dashed #D0D5D0;
+    color: #6B8C7A; font-size: 17px; font-weight: 600;
+    cursor: pointer; background: none; width: 100%;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* CALENDAR */
+  .cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .cal-month-label { font-size: 16px; font-weight: 700; }
+  .cal-nav-btn {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 7px; width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text2); font-size: 15px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+    margin-bottom: 8px;
+  }
+  .cal-day-name {
+    text-align: center; font-size: 15px; font-weight: 600;
+    color: var(--text2); padding-bottom: 6px;
+  }
+  .cal-cell {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 7px; font-size: 15px; cursor: pointer;
+    position: relative; flex-direction: column; gap: 1px;
+    -webkit-tap-highlight-color: transparent; font-weight: 400;
+    max-height: 40px;
+  }
+  .cal-cell.other-month { color: var(--border); cursor: default; }
+  .cal-cell.today { font-weight: 700; color: var(--accent); }
+  .cal-cell.has-entries { font-weight: 600; }
+  .cal-cell.selected { background: var(--accent); color: #fff !important; border-radius: 6px; }
+  .cal-dot-row { display: flex; gap: 2px; position: absolute; bottom: 2px; }
+  .cal-dot { width: 3px; height: 3px; border-radius: 50%; }
+  .cal-dot-medical { background: var(--red); }
+  .cal-dot-move { background: var(--purple); }
+  .cal-dot-conversation { background: var(--teal); }
+  .cal-dot-update { background: var(--accent); }
+  .cal-dot-other { background: var(--text2); }
+  .cal-day-entries { margin-top: 8px; }
+  .cal-day-header {
+    font-size: 15px; font-weight: 700; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 8px 0 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+<div class="app-container">
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.6</span></div>
+    <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+      <button class="topbar-search-btn" onclick="showSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="topbar-search-btn" onclick="openAppMenu()" id="menu-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="screen-area" id="screen-area">
+    <!-- HQ -->
+    <div class="screen active" id="screen-hq">
+      <div id="hq-hero"></div>
+      <div id="hq-actions"></div>
+      <div id="hq-today"></div>
+      <div id="hq-tasks"></div>
+      <div id="hq-location-history"></div>
+    </div>
+
+    <!-- TIMELINE + CALENDAR -->
+    <div class="screen" id="screen-timeline">
+      <div class="screen-title">Care Timeline</div>
+      <div class="filter-bar" id="timeline-filters"></div>
+      <div style="display:flex;gap:0;background:var(--border);border-radius:10px;padding:3px;margin-bottom:12px">
+        <div id="tl-tab-list" onclick="setTimelineView('list')" style="flex:1;text-align:center;padding:10px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--card);color:var(--text)">📋 List</div>
+        <div id="tl-tab-cal" onclick="setTimelineView('calendar')" style="flex:1;text-align:center;padding:10px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--text2)">📅 Calendar</div>
+      </div>
+      <div id="timeline-list"></div>
+      <div id="timeline-calendar" style="display:none"></div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="screen" id="screen-docs">
+      <div class="screen-title">Documents</div>
+      <button class="add-btn" onclick="openAddDoc()" style="margin-bottom:14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add Document
+      </button>
+      <div id="docs-list"></div>
+    </div>
+
+    <!-- CARE TEAM -->
+    <div class="screen" id="screen-team">
+      <div class="screen-title">Care Team</div>
+      <button class="add-btn" onclick="openAddTeam()" style="margin-bottom:14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add Care Team Member
+      </button>
+      <div id="team-list"></div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="screen" id="screen-tasks">
+      <div class="screen-title">Care Tasks</div>
+      <button class="add-btn" onclick="openAddTask()" style="margin-bottom:14px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add Care Task
+      </button>
+      <div class="filter-bar" id="task-filters"></div>
+      <div id="tasks-list"></div>
+    </div>
+
+    <!-- REPORTS screen removed — accessed via menu -->
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-tab active" data-tab="hq" onclick="switchTab('hq')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><rect x="9" y="14" width="6" height="7"/></svg>
+      HQ
+    </div>
+    <div class="nav-tab" data-tab="timeline" onclick="switchTab('timeline')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Timeline
+    </div>
+    <div class="nav-tab" data-tab="docs" onclick="switchTab('docs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Docs
+    </div>
+    <div class="nav-tab" data-tab="team" onclick="switchTab('team')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Team
+    </div>
+    <div class="nav-tab" data-tab="tasks" onclick="switchTab('tasks')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Tasks
+    </div>
+  </nav>
+
+  <button class="fab" onclick="openQuickLog()" title="Quick Log">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+  </button>
+</div><!-- /#app -->
+</div><!-- /.app-container -->
+</div><!-- /.app-shell -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- APP MENU DROPDOWN -->
+<div id="app-menu-dropdown" style="display:none;position:fixed;top:52px;right:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);z-index:400;min-width:160px;overflow:hidden">
+  <div onclick="openReportsPicker();closeAppMenu()" style="display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;font-size:15px;font-weight:500;color:var(--text)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Reports
+  </div>
+</div>
+<div id="app-menu-bg" style="display:none;position:fixed;inset:0;z-index:399" onclick="closeAppMenu()"></div>
+
+<!-- REPORTS PICKER SHEET -->
+<div class="sheet-overlay" id="reports-picker-overlay" onclick="closeSheetIfBg(event,'reports-picker-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Create a Report</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('reports-picker-overlay')">✕</button>
+    </div>
+    <div class="sheet-body" style="padding-top:8px">
+      <p style="font-size:16px;color:var(--text2);margin-bottom:18px;line-height:1.6">Choose what you'd like to put together. Each report can be copied or sent.</p>
+      <div id="report-type-list"></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- REPORT CONFIG SHEET -->
+<div class="sheet-overlay" id="report-config-overlay" onclick="closeSheetIfBg(event,'report-config-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="report-config-title">Report Options</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('report-config-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div id="report-config-body"></div>
+      <button class="btn btn-primary btn-full" onclick="generateReport()" style="margin-top:8px">Generate Report</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- REPORT OUTPUT SHEET -->
+<div class="sheet-overlay" id="report-output-overlay" onclick="closeSheetIfBg(event,'report-output-overlay')">
+  <div class="sheet" style="max-height:92vh">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="report-output-title">Report</div>
+      <button class="sheet-close" onclick="closeSheet('report-output-overlay')">✕</button>
+    </div>
+    <div id="report-output-body" style="padding:0 20px 28px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px;padding:12px 18px;border-top:1px solid var(--border)">
+      <button class="btn btn-primary" style="flex:1" onclick="copyReport()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+      <button class="btn btn-secondary" style="flex:1" onclick="sendReport()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK LOG SHEET -->
+<div class="sheet-overlay" id="ql-overlay" onclick="closeSheetIfBg(event,'ql-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">⚡ Quick Log</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('ql-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="ql-type" onchange="qlTypeChanged()">
+          <option value="Update">Update</option>
+          <option value="Medical">Medical</option>
+          <option value="Conversation">Conversation</option>
+          <option value="Move">Move</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Severity</label>
+        <select class="form-select" id="ql-severity">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+      <div class="phrase-section">
+        <div class="phrase-section-label">🩺 Health</div>
+        <div class="phrase-grid" id="phrases-health"></div>
+      </div>
+      <div class="phrase-section">
+        <div class="phrase-section-label">💊 Care</div>
+        <div class="phrase-grid" id="phrases-care"></div>
+      </div>
+      <div class="phrase-section">
+        <div class="phrase-section-label">💬 Communication</div>
+        <div class="phrase-grid" id="phrases-comm"></div>
+      </div>
+      <div class="phrase-section">
+        <div class="phrase-section-label">📝 General</div>
+        <div class="phrase-grid" id="phrases-general"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="ql-title" placeholder="What happened?">
+      </div>
+      <div id="ql-move-fields">
+        <div class="form-group">
+          <label class="form-label">New Location Name</label>
+          <input class="form-input" id="ql-new-loc-name" placeholder="e.g. Rehab Center">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location Type</label>
+          <select class="form-select" id="ql-new-loc-type">
+            <option>Hospital</option><option>Rehab</option><option>Home</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room Number (optional)</label>
+          <input class="form-input" id="ql-new-room" placeholder="e.g. 214">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Details (optional)</label>
+        <textarea class="form-textarea" id="ql-details" placeholder="Any additional notes..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitQuickLog()">Log Care Update</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ENTRY DETAIL SHEET -->
+<div class="sheet-overlay" id="entry-detail-overlay" onclick="closeSheetIfBg(event,'entry-detail-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Entry Detail</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('entry-detail-overlay')">✕</button>
+    </div>
+    <div id="entry-detail-body"></div>
+  </div></div>
+</div>
+
+<!-- ENTRY EDIT SHEET -->
+<div class="sheet-overlay" id="entry-edit-overlay" onclick="closeSheetIfBg(event,'entry-edit-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="entry-edit-title">Edit Entry</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('entry-edit-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="ee-title">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="ee-type">
+          <option>Update</option><option>Medical</option><option>Conversation</option><option>Move</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Severity</label>
+        <select class="form-select" id="ee-severity">
+          <option>Low</option><option>Medium</option><option>High</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Details</label>
+        <textarea class="form-textarea" id="ee-details"></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveEntryEdit()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('entry-edit-overlay')">Cancel</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- TASK DETAIL SHEET -->
+<div class="sheet-overlay" id="task-detail-overlay" onclick="closeSheetIfBg(event,'task-detail-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Task Detail</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('task-detail-overlay')">✕</button>
+    </div>
+    <div id="task-detail-body"></div>
+  </div></div>
+</div>
+
+<!-- TASK EDIT SHEET -->
+<div class="sheet-overlay" id="task-edit-overlay" onclick="closeSheetIfBg(event,'task-edit-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="task-edit-title">Add Task</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('task-edit-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="te-title" placeholder="Task title">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Due Date</label>
+        <input class="form-input" type="date" id="te-due">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Priority</label>
+        <select class="form-select" id="te-priority">
+          <option>Low</option><option>Medium</option><option>High</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link to Timeline Entry (optional)</label>
+        <select class="form-select" id="te-linked-entry">
+          <option value="">— None —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="te-notes" placeholder="Any extra notes..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveTaskEdit()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('task-edit-overlay')">Cancel</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- TEAM DETAIL SHEET -->
+<div class="sheet-overlay" id="team-detail-overlay" onclick="closeSheetIfBg(event,'team-detail-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Team Member</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('team-detail-overlay')">✕</button>
+    </div>
+    <div id="team-detail-body"></div>
+  </div></div>
+</div>
+
+<!-- TEAM EDIT SHEET -->
+<div class="sheet-overlay" id="team-edit-overlay" onclick="closeSheetIfBg(event,'team-edit-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="team-edit-title">Add Team Member</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('team-edit-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input class="form-input" id="tme-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <input class="form-input" id="tme-role" placeholder="e.g. Primary Physician">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Organization</label>
+        <input class="form-input" id="tme-org" placeholder="Hospital or clinic">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-input" id="tme-phone" type="tel" placeholder="Phone number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="tme-email" type="email" placeholder="Email address">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="tme-notes" placeholder="Any notes..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveTeamEdit()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('team-edit-overlay')">Cancel</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- DOC DETAIL SHEET -->
+<div class="sheet-overlay" id="doc-detail-overlay" onclick="closeSheetIfBg(event,'doc-detail-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Document</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('doc-detail-overlay')">✕</button>
+    </div>
+    <div id="doc-detail-body"></div>
+  </div></div>
+</div>
+
+<!-- DOC EDIT SHEET -->
+<div class="sheet-overlay" id="doc-edit-overlay" onclick="closeSheetIfBg(event,'doc-edit-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="doc-edit-title">Add Document</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('doc-edit-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input class="form-input" id="de-name" placeholder="Document name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="de-type">
+          <option>Lab Results</option><option>Imaging</option><option>Prescription</option><option>Insurance</option><option>Advance Directive</option><option>DNR</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link to Timeline Entry (optional)</label>
+        <select class="form-select" id="de-linked-entry">
+          <option value="">— None —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="de-notes" placeholder="Any notes..."></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveDocEdit()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('doc-edit-overlay')">Cancel</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- LOCATION DETAIL SHEET -->
+<div class="sheet-overlay" id="loc-detail-overlay" onclick="closeSheetIfBg(event,'loc-detail-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Location Detail</div>
+      <button class="sheet-close" onclick="closeSheet('loc-detail-overlay')">✕</button>
+    </div>
+  <div class="sheet-scroll">
+    <div id="loc-detail-body"></div>
+  </div>
+  </div>
+</div>
+
+<!-- PROFILE SHEET -->
+<div class="sheet-overlay" id="profile-overlay" onclick="closeSheetIfBg(event,'profile-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Loved One Profile</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('profile-overlay')">✕</button>
+    </div>
+    <div id="profile-body"></div>
+  </div></div>
+</div>
+
+<!-- PROFILE EDIT SHEET -->
+<div class="sheet-overlay" id="profile-edit-overlay" onclick="closeSheetIfBg(event,'profile-edit-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Edit Profile</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('profile-edit-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <!-- PHOTO PICKER -->
+      <div class="form-group" style="display:flex;align-items:center;gap:16px">
+        <div id="pe-photo-preview" style="width:68px;height:68px;border-radius:50%;background:var(--accent-light);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;flex-shrink:0;cursor:pointer" onclick="document.getElementById('pe-photo-input').click()"></div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Photo</div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('pe-photo-input').click()">Choose Photo</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="pe-photo-remove" onclick="removeProfilePhoto()" style="display:none">Remove</button>
+          </div>
+        </div>
+        <input type="file" id="pe-photo-input" accept="image/*" style="display:none" onchange="handleProfilePhoto(this)">
+      </div>
+      <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="pe-name"></div>
+      <div class="form-group"><label class="form-label">Date of Birth</label><input class="form-input" type="date" id="pe-dob"></div>
+      <div class="form-group"><label class="form-label">Condition</label><input class="form-input" id="pe-condition" placeholder="Primary condition"></div>
+      <div class="form-group"><label class="form-label">Blood Type</label><input class="form-input" id="pe-blood" placeholder="e.g. A+"></div>
+      <div class="form-group"><label class="form-label">Allergies</label><input class="form-input" id="pe-allergies" placeholder="Comma-separated"></div>
+      <div class="form-group"><label class="form-label">Insurance</label><input class="form-input" id="pe-insurance"></div>
+      <div class="form-group"><label class="form-label">POA</label><input class="form-input" id="pe-poa" placeholder="Name of POA"></div>
+      <div class="form-group"><label class="form-label">Current Room Number</label><input class="form-input" id="pe-room" placeholder="e.g. 214 or 4B"></div>
+      <div class="form-group">
+        <label class="form-label">DNR on File?</label>
+        <select class="form-select" id="pe-dnr"><option value="false">No</option><option value="true">Yes</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Advance Directive?</label>
+        <select class="form-select" id="pe-ad"><option value="false">No</option><option value="true">Yes</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="pe-notes"></textarea></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveProfileEdit()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('profile-edit-overlay')">Cancel</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- SEARCH SHEET -->
+<div class="sheet-overlay" id="search-overlay" onclick="closeSheetIfBg(event,'search-overlay')">
+  <div class="sheet" style="max-height:80vh">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Search</div>
+  <div class="sheet-scroll">
+      <button class="sheet-close" onclick="closeSheet('search-overlay')">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="search-bar" style="margin-bottom:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="search-input" placeholder="Search everything..." oninput="doSearch(this.value)" autofocus>
+      </div>
+      <div id="search-results" style="margin-top:16px"></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- CONFIRM OVERLAY -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title">Are you sure?</div>
+    <div class="confirm-body" id="confirm-body">This cannot be undone.</div>
+    <div class="confirm-actions">
+      <button class="btn btn-danger" style="flex:1" onclick="confirmYes()">Delete</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="confirmNo()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE & PERSISTENCE — REPAIRED BUILD
+// ============================================================
+const LS = key => { try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; } };
+const SS = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+let state = {
+  lovedOne: null,
+  locations: [],
+  stays: [],
+  entries: [],
+  tasks: [],
+  documents: [],
+  team: []
+};
+
+function saveState() {
+  SS('cshq_state', state);
+}
+
+function loadState() {
+  const saved = LS('cshq_state');
+  if (saved && saved.lovedOne) {
+    state = saved;
+    return;
+  }
+  initSampleData();
+}
+
+// ============================================================
+// SAMPLE DATA
+// ============================================================
+function initSampleData() {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+
+  const loId = uid();
+  const loc1Id = uid(), loc2Id = uid();
+  const stay1Id = uid(), stay2Id = uid();
+
+  state.lovedOne = {
+    id: loId, name: 'Margaret Elaine Cooper',
+    DOB: '1942-06-15', condition: 'Congestive Heart Failure, Type 2 Diabetes',
+    bloodType: 'O+', allergies: 'Penicillin, Sulfa drugs',
+    DNR: false, advanceDirective: true,
+    POA: 'Robert Cooper (son)',
+    insurance: 'Medicare Part B, BCBS Supplemental',
+    notes: 'Prefers to be called "Maggie". Very private about her condition with extended family.'
+  };
+
+  state.locations = [
+    { id: loc1Id, name: 'St. Mary\'s Medical Center', type: 'Hospital', address: '1200 E. Medical Dr., Springfield, IL' },
+    { id: loc2Id, name: 'Sunrise Rehabilitation Center', type: 'Rehab', address: '450 Wellness Way, Springfield, IL' }
+  ];
+
+  const admit1 = new Date(y, m, 1);
+  const admit2 = new Date(y, m, 8);
+  state.stays = [
+    { id: stay1Id, lovedOneId: loId, locationId: loc1Id, startDate: admit1.toISOString(), endDate: new Date(y,m,7).toISOString(), notes: 'Initial admission for cardiac event', room: '4B' },
+    { id: stay2Id, lovedOneId: loId, locationId: loc2Id, startDate: admit2.toISOString(), endDate: null, notes: 'Transferred for cardiac rehabilitation', room: '214' }
+  ];
+
+  function d(daysAgo, hr=10, mn=0) {
+    const dt = new Date(); dt.setHours(hr,mn,0,0);
+    dt.setDate(dt.getDate() - daysAgo);
+    return dt.toISOString();
+  }
+
+  state.entries = [
+    { id: uid(), lovedOneId: loId, date: d(0,9,0), type: 'Medical', title: 'Morning Vitals Checked', details: 'BP 138/82, HR 72, O2 sat 96%. Slightly elevated blood pressure noted.', severity: 'Medium', locationId: loc2Id, stayId: stay2Id, createdAt: d(0,9,0) },
+    { id: uid(), lovedOneId: loId, date: d(0,11,30), type: 'Conversation', title: 'Spoke with Dr. Patel', details: 'Reviewed latest echo results. EF improved slightly to 38%. Plan to continue current medications with a follow-up in two weeks.', severity: 'High', locationId: loc2Id, stayId: stay2Id, createdAt: d(0,11,30) },
+    { id: uid(), lovedOneId: loId, date: d(0,8,0), type: 'Update', title: 'Ate well at breakfast', details: 'Finished most of her oatmeal and half a banana. Good appetite this morning.', severity: 'Low', locationId: loc2Id, stayId: stay2Id, createdAt: d(0,8,0) },
+    { id: uid(), lovedOneId: loId, date: d(1,14,0), type: 'Medical', title: 'PT Session Completed', details: 'Worked on walking with therapist. Completed 2 laps in hallway. Reported mild fatigue afterward but no chest pain.', severity: 'Low', locationId: loc2Id, stayId: stay2Id, createdAt: d(1,14,0) },
+    { id: uid(), lovedOneId: loId, date: d(1,16,0), type: 'Update', title: 'Pain worse than yesterday', details: 'Reported 4/10 discomfort in lower back. Nurse notified. Heating pad applied.', severity: 'Medium', locationId: loc2Id, stayId: stay2Id, createdAt: d(1,16,0) },
+    { id: uid(), lovedOneId: loId, date: d(2,10,0), type: 'Conversation', title: 'Spoke with insurance', details: 'Called BCBS to confirm rehab coverage. Confirmed 20 days approved. Requested extension form.', severity: 'Medium', locationId: loc2Id, stayId: stay2Id, createdAt: d(2,10,0) },
+    { id: uid(), lovedOneId: loId, date: d(3,9,0), type: 'Medical', title: 'Medication adjusted', details: 'Carvedilol dose reduced from 12.5mg to 6.25mg twice daily due to low BP reading. Will monitor.', severity: 'High', locationId: loc2Id, stayId: stay2Id, createdAt: d(3,9,0) },
+    { id: uid(), lovedOneId: loId, date: d(7), type: 'Move', title: 'Transferred to Sunrise Rehab', details: 'Stable for transfer. Transported by medical van. Arrived at 2:30pm. Room 214.', severity: 'Medium', locationId: loc2Id, stayId: stay2Id, createdAt: d(7) },
+    { id: uid(), lovedOneId: loId, date: d(8,17,0), type: 'Update', title: 'Rough day', details: 'Emotional afternoon, asked about going home. Called Robert to come visit. Visit helped significantly.', severity: 'Medium', locationId: loc1Id, stayId: stay1Id, createdAt: d(8,17,0) },
+    { id: uid(), lovedOneId: loId, date: d(10,8,0), type: 'Medical', title: 'Echocardiogram performed', details: 'Echo completed. Results pending. Cardiologist to review within 48hrs.', severity: 'High', locationId: loc1Id, stayId: stay1Id, createdAt: d(10,8,0) },
+    { id: uid(), lovedOneId: loId, date: d(12,9,0), type: 'Update', title: 'Slept well', details: 'Reported best night of sleep since admission. No overnight interruptions needed.', severity: 'Low', locationId: loc1Id, stayId: stay1Id, createdAt: d(12,9,0) },
+    { id: uid(), lovedOneId: loId, date: d(14,14,0), type: 'Conversation', title: 'Spoke with nurse about discharge plan', details: 'Discussed expectations for rehab transition. Goal is 4–6 weeks at Sunrise then home with home health aide.', severity: 'Low', locationId: loc1Id, stayId: stay1Id, createdAt: d(14,14,0) }
+  ];
+
+  function td(daysFromNow) {
+    const dt = new Date(); dt.setDate(dt.getDate() + daysFromNow);
+    return dt.toISOString().slice(0,10);
+  }
+
+  state.tasks = [
+    { id: uid(), title: 'Call BCBS about rehab extension form', notes: 'Need to follow up on the form requested on the 24th', dueDate: td(1), priority: 'High', status: 'Open', createdAt: new Date().toISOString() },
+    { id: uid(), title: 'Schedule follow-up with Dr. Patel', notes: 'Two week follow-up after med adjustment', dueDate: td(4), priority: 'High', status: 'Open', createdAt: new Date().toISOString() },
+    { id: uid(), title: 'Bring personal items from home', notes: 'Maggie wants her blue cardigan and family photo album', dueDate: td(2), priority: 'Medium', status: 'Open', createdAt: new Date().toISOString() },
+    { id: uid(), title: 'Review advance directive document', notes: 'Make sure facility has a copy on file', dueDate: td(-2), priority: 'High', status: 'Open', createdAt: new Date().toISOString() },
+    { id: uid(), title: 'Confirm PT schedule for next week', notes: '', dueDate: td(5), priority: 'Low', status: 'Open', createdAt: new Date().toISOString() },
+    { id: uid(), title: 'Notify family of latest doctor update', notes: 'Share echo results with sibling group chat', dueDate: td(0), priority: 'Medium', status: 'Completed', createdAt: new Date().toISOString(), completedAt: new Date().toISOString() }
+  ];
+
+  state.documents = [
+    { id: uid(), name: 'Advance Healthcare Directive', type: 'Advance Directive', fileUrl: '#', uploadDate: d(30), notes: 'Signed 2021. Has healthcare proxy designation for Robert Cooper.' },
+    { id: uid(), name: 'BCBS Insurance Card', type: 'Insurance', fileUrl: '#', uploadDate: d(14), notes: 'Group: 8837291, Member: MGC00192' },
+    { id: uid(), name: 'Cardiology Echo Report – March', type: 'Imaging', fileUrl: '#', uploadDate: d(10), notes: 'EF 35-38%. Mild mitral regurgitation noted.' }
+  ];
+
+  const tm1Id = uid(), tm2Id = uid(), tm3Id = uid();
+  state.team = [
+    { id: tm1Id, name: 'Dr. Aisha Patel', role: 'Cardiologist', organization: 'St. Mary\'s Heart Center', phone: '(217) 555-0182', email: 'apatel@stmarys.org', locationId: loc1Id, notes: 'Primary cardiac team lead. Prefers calls in morning.' },
+    { id: tm2Id, name: 'Nurse Linda Okonkwo', role: 'Primary Care Nurse', organization: 'Sunrise Rehabilitation Center', phone: '(217) 555-0247', email: 'l.okonkwo@sunriserehab.com', locationId: loc2Id, notes: 'Day shift nurse. Very responsive to family questions.' },
+    { id: tm3Id, name: 'Marcus Webb, PT', role: 'Physical Therapist', organization: 'Sunrise Rehabilitation Center', phone: '(217) 555-0251', email: 'm.webb@sunriserehab.com', locationId: loc2Id, notes: 'Works with Maggie Tue/Thu/Sat.' }
+  ];
+
+  saveState();
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function uid() { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function fmtTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function fmtDatetime(iso) {
+  return fmtDate(iso) + ' · ' + fmtTime(iso);
+}
+
+function age(dob) {
+  if (!dob) return '';
+  const d = new Date(dob), now = new Date();
+  let a = now.getFullYear() - d.getFullYear();
+  if (now < new Date(now.getFullYear(), d.getMonth(), d.getDate())) a--;
+  return a;
+}
+
+function isToday(iso) {
+  const d = new Date(iso), n = new Date();
+  return d.toDateString() === n.toDateString();
+}
+
+function isOverdue(dueDate) {
+  if (!dueDate) return false;
+  // Parse YYYY-MM-DD as local date to avoid UTC offset issues
+  const parts = dueDate.split('-');
+  if (parts.length !== 3) return false;
+  const due = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return due < today;
+}
+
+function typeIcon(type) {
+  const map = { Update: '📋', Medical: '🩺', Move: '🚑', Conversation: '💬', Other: '📝' };
+  return map[type] || '📝';
+}
+
+function typeColor(type) {
+  const map = { Update: 'accent-light', Medical: 'red-light', Move: 'purple-light', Conversation: 'teal-light', Other: 'border' };
+  return `var(--${map[type] || 'border'})`;
+}
+
+function typeBadgeClass(type) {
+  return 'badge badge-' + (type || 'other').toLowerCase();
+}
+
+function sevBadgeClass(sev) {
+  return 'badge badge-' + (sev || 'low').toLowerCase();
+}
+
+function getCurrentStay() {
+  return state.stays.find(s => s.lovedOneId === state.lovedOne?.id && !s.endDate);
+}
+
+function getCurrentLocation() {
+  const stay = getCurrentStay();
+  if (!stay) return null;
+  return state.locations.find(l => l.id === stay.locationId);
+}
+
+function fmtLocation(locationId, stayId) {
+  const loc = state.locations.find(l => l.id === locationId);
+  if (!loc) return null;
+  const stay = stayId ? state.stays.find(s => s.id === stayId) : state.stays.find(s => s.locationId === locationId && !s.endDate);
+  const room = stay?.room ? ` · Room ${stay.room}` : '';
+  return loc.name + room;
+}
+
+function fmtCurrentLocation() {
+  const stay = getCurrentStay();
+  if (!stay) return null;
+  const loc = state.locations.find(l => l.id === stay.locationId);
+  if (!loc) return null;
+  const room = stay.room ? ` · Room ${stay.room}` : '';
+  return loc.name + room;
+}
+
+function docTypeEmoji(type) {
+  const m = { 'Lab Results': '🧪', 'Imaging': '🫁', 'Prescription': '💊', 'Insurance': '📄', 'Advance Directive': '📜', 'DNR': '⛔', 'Other': '📎' };
+  return m[type] || '📎';
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+
+// ============================================================
+// TABS
+// ============================================================
+let activeTab = 'hq';
+
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === 'screen-' + tab));
+  document.getElementById('screen-area').scrollTop = 0;
+  activeTab = tab;
+  if (tab === 'hq') renderHQ();
+  if (tab === 'timeline') renderTimeline();
+  if (tab === 'docs') renderDocs();
+  if (tab === 'team') renderTeam();
+  if (tab === 'tasks') renderTasks();
+}
+
+// ============================================================
+// SHEETS
+// ============================================================
+function openSheet(id) { document.getElementById(id).classList.add('open'); }
+function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+function closeSheetIfBg(e, id) { if (e.target.id === id) closeSheet(id); }
+
+// ============================================================
+// CONFIRM
+// ============================================================
+let _confirmCb = null;
+function confirm_(title, body, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-body').textContent = body;
+  _confirmCb = cb;
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+function confirmYes() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  if (_confirmCb) _confirmCb();
+  _confirmCb = null;
+}
+function confirmNo() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  _confirmCb = null;
+}
+
+// ============================================================
+// HQ RENDER
+// ============================================================
+function renderHQ() {
+  const lo = state.lovedOne;
+  if (!lo) return;
+
+  // HERO — read-only tap, no "Edit ›" label
+  const loc = getCurrentLocation();
+  const stay = getCurrentStay();
+  const locDisplay = fmtCurrentLocation();
+  document.getElementById('hq-hero').innerHTML = `
+    <div class="hq-hero" onclick="openProfile()" style="cursor:pointer">
+      <div>
+        <div class="hq-hero-name">${lo.name}</div>
+        <div class="hq-hero-meta">Born ${fmtDate(lo.DOB)} · Age ${age(lo.DOB)}</div>
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
+          ${lo.condition.split(',').map(c => `<span style="background:rgba(255,255,255,0.22);color:#fff;padding:3px 9px;border-radius:20px;font-size:15px;font-weight:600">${c.trim()}</span>`).join('')}
+        </div>
+      </div>
+      <div class="hq-hero-location">
+        <div class="location-dot"></div>
+        <div>
+          <div style="font-weight:600;font-size:17px">${locDisplay || 'No location'}</div>
+          <div style="opacity:0.80;font-size:15px">${stay ? 'Since ' + fmtDate(stay.startDate) : ''}</div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('hq-actions').innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <button onclick="hqQuickReport('daily')"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+        padding:11px 10px;border-radius:10px;border:1.5px solid var(--border);
+        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
+        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Daily Summary
+      </button>
+      <button onclick="hqQuickReport('family')"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+        padding:11px 10px;border-radius:10px;border:1.5px solid var(--border);
+        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
+        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent;min-height:44px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Family Update
+      </button>
+    </div>`;
+
+  // DAILY SUMMARY — narrative card
+  const allToday = state.entries.filter(e => isToday(e.date));
+  const summary = buildDailySummary(lo, allToday);
+
+  document.getElementById('hq-today').innerHTML = `
+    <div class="card" style="background:#EBF1ED;border:1px solid rgba(107,140,122,0.10);box-shadow:none">
+      <div class="section-header" style="margin-bottom:10px">
+        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6B8C7A;font-family:'Inter',sans-serif">Today</div>
+        <div class="section-link" onclick="switchTab('timeline')" style="color:#6B8C7A">Timeline ›</div>
+      </div>
+      <div style="font-size:18px;line-height:1.7;color:#252B27;font-family:'Inter',sans-serif">${summary}</div>
+      ${allToday.length ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(107,140,122,0.12);font-size:15px;color:#6B8C7A;font-weight:500;font-family:'Inter',sans-serif">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
+    </div>`;
+
+  // TASK STAT CHIPS + LIST
+  const allOpen = state.tasks.filter(t => t.status === 'Open');
+  const overdue = allOpen.filter(t => isOverdue(t.dueDate));
+  const openTasks = allOpen
+    .sort((a,b) => { const p={High:3,Medium:2,Low:1}; return (p[b.priority]||0)-(p[a.priority]||0); })
+    .slice(0,5);
+
+  document.getElementById('hq-tasks').innerHTML = `
+    <div class="card">
+      <div class="section-header" style="margin-bottom:12px">
+        <div class="card-title" style="margin-bottom:0">Care Tasks</div>
+        <div class="section-link" onclick="switchTab('tasks')">All ›</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:14px">
+        <div onclick="switchTab('tasks')" style="flex:1;padding:12px 10px;border-radius:10px;background:var(--accent-light);cursor:pointer;text-align:center">
+          <div style="font-size:24px;font-weight:700;color:var(--accent);line-height:1">${allOpen.length}</div>
+          <div style="font-size:15px;font-weight:600;color:var(--accent);margin-top:4px">Open</div>
+        </div>
+        <div onclick="switchTab('tasks')" style="flex:1;padding:12px 10px;border-radius:10px;background:${overdue.length ? 'var(--red-light)' : 'var(--green-light)'};cursor:pointer;text-align:center">
+          <div style="font-size:24px;font-weight:700;color:${overdue.length ? 'var(--red)' : 'var(--green)'};line-height:1">${overdue.length}</div>
+          <div style="font-size:15px;font-weight:600;color:${overdue.length ? 'var(--red)' : 'var(--green)'};margin-top:3px">Overdue</div>
+        </div>
+      </div>
+      ${openTasks.length ? openTasks.map(t => taskRowHtml(t, true)).join('') : `<div class="empty-state" style="padding:12px 0"><p>No open tasks 🎉</p></div>`}
+    </div>`;
+
+  // LOCATION HISTORY
+  const stayHistory = state.stays
+    .filter(s => s.lovedOneId === lo.id)
+    .sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
+  const now = new Date();
+
+  document.getElementById('hq-location-history').innerHTML = `
+    <div class="card" style="margin-bottom:24px">
+      <div class="card-title">Location History</div>
+      ${stayHistory.length === 0
+        ? `<div class="empty-state" style="padding:12px 0"><p>No stays recorded.</p></div>`
+        : stayHistory.map((s, i) => {
+            const loc = state.locations.find(l => l.id === s.locationId);
+            const isCurrent = !s.endDate;
+            const days = s.endDate
+              ? Math.round((new Date(s.endDate) - new Date(s.startDate)) / 86400000)
+              : Math.round((now - new Date(s.startDate)) / 86400000);
+            return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:${i < stayHistory.length-1 ? '1px solid var(--border)' : 'none'};cursor:pointer;-webkit-tap-highlight-color:transparent" onclick="openLocDetail('${s.id}')">
+              <div style="display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;padding-top:4px">
+                <div style="width:10px;height:10px;border-radius:50%;background:${isCurrent ? 'var(--green)' : 'var(--border)'};border:2px solid ${isCurrent ? 'var(--green)' : 'var(--text2)'};flex-shrink:0"></div>
+                ${i < stayHistory.length - 1 ? `<div style="width:2px;flex:1;min-height:20px;background:var(--border);margin-top:3px"></div>` : ''}
+              </div>
+              <div style="flex:1;min-width:0;padding-bottom:4px">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  <span style="font-size:17px;font-weight:600;color:var(--text)">${loc?.name || 'Unknown'}</span>
+                  ${s.room ? `<span style="font-size:15px;background:var(--accent-light);color:var(--accent);padding:1px 7px;border-radius:20px;font-weight:600">Rm ${s.room}</span>` : ''}
+                  ${isCurrent ? `<span style="font-size:15px;background:var(--green-light);color:var(--green);padding:1px 7px;border-radius:20px;font-weight:600">Current</span>` : ''}
+                </div>
+                <div style="font-size:15px;color:var(--text2);margin-top:4px">
+                  ${fmtDate(s.startDate)} → ${s.endDate ? fmtDate(s.endDate) : 'Present'}
+                  <span style="font-weight:600"> · ${days} day${days !== 1 ? 's' : ''}</span>
+                </div>
+                ${loc?.type ? `<div style="font-size:15px;color:var(--text2);margin-top:2px">${loc.type}</div>` : ''}
+              </div>
+            </div>`;
+          }).join('')}
+    </div>`;
+}
+
+function openLocDetail(stayId) {
+  const s = state.stays.find(x => x.id === stayId);
+  if (!s) return;
+  const loc = state.locations.find(l => l.id === s.locationId);
+  const isCurrent = !s.endDate;
+  const now = new Date();
+  const days = s.endDate
+    ? Math.round((new Date(s.endDate) - new Date(s.startDate)) / 86400000)
+    : Math.round((now - new Date(s.startDate)) / 86400000);
+  const relatedEntries = state.entries
+    .filter(e => e.stayId === stayId)
+    .sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  document.getElementById('loc-detail-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-icon" style="background:var(--accent-light);font-size:22px">🏥</div>
+      <div style="flex:1;min-width:0">
+        <div class="detail-title">${loc?.name || 'Unknown Location'}</div>
+        ${loc?.type ? `<div class="detail-meta">${loc.type}</div>` : ''}
+        ${isCurrent ? `<div style="margin-top:6px"><span style="font-size:15px;background:var(--green-light);color:var(--green);padding:2px 9px;border-radius:20px;font-weight:600">Current</span></div>` : ''}
+      </div>
+    </div>
+    ${s.room ? `<div class="detail-section"><div class="detail-section-label">Room</div><div class="detail-section-value">${s.room}</div></div>` : ''}
+    ${loc?.address ? `<div class="detail-section"><div class="detail-section-label">Address</div><div class="detail-section-value">${loc.address}</div></div>` : ''}
+    <div class="detail-section"><div class="detail-section-label">Admitted</div><div class="detail-section-value">${fmtDate(s.startDate)}</div></div>
+    <div class="detail-section"><div class="detail-section-label">${isCurrent ? 'Status' : 'Discharged'}</div><div class="detail-section-value">${isCurrent ? 'Currently here' : fmtDate(s.endDate)}</div></div>
+    <div class="detail-section"><div class="detail-section-label">Length of Stay</div><div class="detail-section-value">${days} day${days !== 1 ? 's' : ''}</div></div>
+    ${s.notes ? `<div class="detail-section"><div class="detail-section-label">Notes</div><div class="detail-section-value">${s.notes}</div></div>` : ''}
+    ${relatedEntries.length ? `
+      <div class="detail-section" style="border-bottom:none">
+        <div class="detail-section-label">Timeline Entries (${relatedEntries.length})</div>
+        <div style="margin-top:6px">
+          ${relatedEntries.slice(0,8).map(e => `
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(30,40,35,0.06);cursor:pointer" onclick="closeSheet('loc-detail-overlay');openEntryDetail('${e.id}')">
+              <div style="width:8px;height:8px;border-radius:50%;margin-top:7px;flex-shrink:0;background:${e.severity==='High'?'#A04040':e.severity==='Medium'?'#A06830':'#C8CEC8'}"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:16px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</div>
+                <div style="font-size:15px;color:var(--text2);margin-top:2px">${e.type} · ${fmtDate(e.date)}</div>
+              </div>
+            </div>`).join('')}
+          ${relatedEntries.length > 8 ? `<div style="font-size:15px;color:var(--text2);padding:10px 0">+${relatedEntries.length - 8} more entries</div>` : ''}
+        </div>
+      </div>` : `<div class="detail-section" style="border-bottom:none"><div class="detail-section-label">Timeline Entries</div><div style="font-size:15px;color:var(--text2);padding-top:4px">No entries for this stay.</div></div>`}
+    <div style="height:8px"></div>`;
+  openSheet('loc-detail-overlay');
+}
+
+function buildDailySummary(lo, allToday) {
+  const name = lo.name.split(' ')[0];
+  if (allToday.length === 0) {
+    return `No care entries have been logged yet today for ${name}. Use Quick Log to record what's happening.`;
+  }
+
+  const medical = allToday.filter(e => e.type === 'Medical');
+  const moves = allToday.filter(e => e.type === 'Move');
+  const convos = allToday.filter(e => e.type === 'Conversation');
+  const highSev = allToday.filter(e => e.severity === 'High');
+  const parts = [];
+
+  if (moves.length) {
+    parts.push(`${name} was moved today — ${moves.map(e=>e.title).join(' and ')}.`);
+  }
+  if (medical.length) {
+    const titles = medical.map(e=>e.title.toLowerCase());
+    if (medical.length === 1) {
+      parts.push(`On the medical side, ${titles[0]} was logged${medical[0].details ? ' — ' + medical[0].details.slice(0,80) + (medical[0].details.length>80?'…':'') : ''}.`);
+    } else {
+      parts.push(`There were ${medical.length} medical updates today: ${titles.join('; ')}.`);
+    }
+  }
+  if (convos.length) {
+    const who = convos.map(e=>e.title.replace(/^spoke with /i,'').toLowerCase());
+    parts.push(`Communication-wise, the team connected with ${who.join(' and ')} today.`);
+  }
+  if (highSev.length && !medical.find(e=>e.severity==='High')) {
+    parts.push(`${highSev.length} high-priority update${highSev.length>1?'s require':'requires'} attention: ${highSev.map(e=>e.title.toLowerCase()).join('; ')}.`);
+  }
+
+  const overdueTasks = state.tasks.filter(t => t.status==='Open' && isOverdue(t.dueDate));
+  if (overdueTasks.length) {
+    parts.push(`There ${overdueTasks.length===1?'is':'are'} ${overdueTasks.length} overdue care task${overdueTasks.length>1?'s':''} that need attention.`);
+  }
+
+  if (parts.length === 0) {
+    parts.push(`Today has been relatively calm for ${name}, with ${allToday.length} routine update${allToday.length>1?'s':''} logged.`);
+  }
+
+  return parts.slice(0,5).join(' ');
+}
+
+function entryRowHtml(e) {
+  const sevClass = (e.severity||'low').toLowerCase();
+  return `<div class="entry-row" onclick="openEntryDetail('${e.id}')">
+    <div class="entry-sev-dot ${sevClass}"></div>
+    <div class="entry-icon">${typeIcon(e.type)}</div>
+    <div class="entry-body">
+      <div class="entry-title">${e.title}</div>
+      <div class="entry-meta">${e.type} · ${fmtDate(e.date)}</div>
+      ${e.details ? `<div class="entry-details">${e.details}</div>` : ''}
+    </div>
+    <div class="entry-time">${fmtTime(e.date)}</div>
+  </div>`;
+}
+
+function taskRowHtml(t, compact=false) {
+  const over = t.status !== 'Completed' && isOverdue(t.dueDate);
+  return `<div class="task-row" onclick="openTaskDetail('${t.id}')">
+    <div class="task-check ${t.status==='Completed'?'done':''} ${over?'overdue':''}"
+      onclick="event.stopPropagation();toggleTask('${t.id}')">
+      ${t.status==='Completed'?`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`:''}
+    </div>
+    <div style="flex:1;min-width:0">
+      <div class="task-title ${t.status==='Completed'?'done':''} ${over?'overdue':''}">${t.title}</div>
+      ${t.dueDate ? `<div class="task-due ${over?'overdue':''}">
+        ${over?'⚠️ Overdue · ':''}Due ${fmtDate(t.dueDate)}
+        <span class="${sevBadgeClass(t.priority)}" style="margin-left:6px">${t.priority}</span>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// TIMELINE RENDER
+// ============================================================
+let timelineFilter = 'All';
+let timelineView = 'list'; // 'list' | 'calendar'
+let calendarDate = new Date(); // month being viewed
+let calSelectedDay = null;
+
+function renderTimeline() {
+  const types = ['All', 'Update', 'Medical', 'Move', 'Conversation', 'Other'];
+  const filtersEl = document.getElementById('timeline-filters');
+  filtersEl.innerHTML = types.map(t => `
+    <div class="filter-chip ${timelineFilter===t?'active':''}" onclick="setTimelineFilter('${t}')">${t}</div>
+  `).join('');
+
+  // sync tab highlight
+  const tabList = document.getElementById('tl-tab-list');
+  const tabCal  = document.getElementById('tl-tab-cal');
+  if (tabList && tabCal) {
+    if (timelineView === 'list') {
+      tabList.style.cssText = 'flex:1;text-align:center;padding:7px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--card);color:var(--text)';
+      tabCal.style.cssText  = 'flex:1;text-align:center;padding:7px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--text2)';
+    } else {
+      tabCal.style.cssText  = 'flex:1;text-align:center;padding:10px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--card);color:var(--text)';
+      tabList.style.cssText = 'flex:1;text-align:center;padding:10px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--text2)';
+    }
+  }
+
+  document.getElementById('timeline-list').style.display     = timelineView === 'list' ? '' : 'none';
+  document.getElementById('timeline-calendar').style.display = timelineView === 'calendar' ? '' : 'none';
+
+  if (timelineView === 'list') renderTimelineList();
+  else renderCalendar();
+}
+
+function renderTimelineList() {
+  let entries = [...state.entries].sort((a,b) => new Date(b.date) - new Date(a.date));
+  if (timelineFilter !== 'All') entries = entries.filter(e => e.type === timelineFilter);
+
+  const list = document.getElementById('timeline-list');
+  if (entries.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">🕐</div><p>No entries yet.<br>Use Quick Log to add one.</p></div>`;
+    return;
+  }
+
+  const groups = {};
+  entries.forEach(e => {
+    const dk = new Date(e.date).toDateString();
+    if (!groups[dk]) groups[dk] = [];
+    groups[dk].push(e);
+  });
+
+  list.innerHTML = Object.entries(groups).map(([dk, es]) => {
+    const label = dk === new Date().toDateString() ? 'Today' : fmtDate(es[0].date);
+    return `<div style="margin-bottom:4px">
+      <div style="font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.4px;padding:10px 0 5px">${label}</div>
+      <div class="card" style="padding:6px 16px">
+        ${es.map(e => entryRowHtml(e)).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderCalendar() {
+  // get filtered entries for this month
+  let allFiltered = [...state.entries];
+  if (timelineFilter !== 'All') allFiltered = allFiltered.filter(e => e.type === timelineFilter);
+
+  const y = calendarDate.getFullYear();
+  const mo = calendarDate.getMonth();
+  const firstDay = new Date(y, mo, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(y, mo + 1, 0).getDate();
+  const today = new Date();
+  const monthName = calendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  // Build day→entries map
+  const dayMap = {};
+  allFiltered.forEach(e => {
+    const d = new Date(e.date);
+    if (d.getFullYear() === y && d.getMonth() === mo) {
+      const day = d.getDate();
+      if (!dayMap[day]) dayMap[day] = [];
+      dayMap[day].push(e);
+    }
+  });
+
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  let cells = '';
+  // empty cells before first day
+  for (let i = 0; i < firstDay; i++) cells += `<div class="cal-cell other-month"></div>`;
+  // actual days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const entries = dayMap[d] || [];
+    const isT = today.getFullYear()===y && today.getMonth()===mo && today.getDate()===d;
+    const isSel = calSelectedDay === d;
+    const classes = ['cal-cell', entries.length?'has-entries':'', isT?'today':'', isSel?'selected':''].filter(Boolean).join(' ');
+    // dots by type (up to 3)
+    const dots = [...new Set(entries.map(e=>e.type))].slice(0,3).map(t=>`<div class="cal-dot cal-dot-${t.toLowerCase()}"></div>`).join('');
+    cells += `<div class="${classes}" onclick="selectCalDay(${d})">
+      ${d}
+      ${entries.length ? `<div class="cal-dot-row">${dots}</div>` : ''}
+    </div>`;
+  }
+
+  // selected day entries
+  let dayEntriesHtml = '';
+  if (calSelectedDay && dayMap[calSelectedDay]) {
+    const label = `${calendarDate.toLocaleDateString('en-US',{month:'long'})} ${calSelectedDay}`;
+    const dayEntries = dayMap[calSelectedDay].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    dayEntriesHtml = `<div class="cal-day-entries">
+      <div class="cal-day-header">${label} — ${dayEntries.length} entr${dayEntries.length===1?'y':'ies'}</div>
+      <div class="card" style="padding:6px 16px">${dayEntries.map(e=>entryRowHtml(e)).join('')}</div>
+    </div>`;
+  } else if (calSelectedDay) {
+    const label = `${calendarDate.toLocaleDateString('en-US',{month:'long'})} ${calSelectedDay}`;
+    dayEntriesHtml = `<div class="cal-day-entries"><div class="cal-day-header">${label}</div>
+      <div class="empty-state" style="padding:16px 0"><p>No ${timelineFilter==='All'?'':timelineFilter+' '}entries on this day.</p></div>
+    </div>`;
+  }
+
+  document.getElementById('timeline-calendar').innerHTML = `
+    <div class="card" style="padding:12px">
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="calPrevMonth()">‹</button>
+        <div class="cal-month-label">${monthName}</div>
+        <button class="cal-nav-btn" onclick="calNextMonth()">›</button>
+      </div>
+      <div class="cal-grid">
+        ${dayNames.map(n=>`<div class="cal-day-name">${n[0]}</div>`).join('')}
+        ${cells}
+      </div>
+      ${timelineFilter !== 'All' ? `<div style="text-align:center;font-size:15px;color:var(--accent);margin-bottom:6px">Showing: ${timelineFilter} only</div>` : ''}
+    </div>
+    ${dayEntriesHtml}`;
+}
+
+function selectCalDay(d) {
+  calSelectedDay = calSelectedDay === d ? null : d;
+  renderCalendar();
+}
+
+function calPrevMonth() {
+  calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1);
+  calSelectedDay = null;
+  renderCalendar();
+}
+
+function calNextMonth() {
+  calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1);
+  calSelectedDay = null;
+  renderCalendar();
+}
+
+function setTimelineFilter(f) {
+  timelineFilter = f;
+  calSelectedDay = null;
+  renderTimeline();
+}
+
+function setTimelineView(v) {
+  timelineView = v;
+  renderTimeline();
+}
+
+// ============================================================
+// ENTRY DETAIL / EDIT
+// ============================================================
+let currentEntryId = null;
+
+function openEntryDetail(id) {
+  currentEntryId = id;
+  renderEntryDetail(id);
+  openSheet('entry-detail-overlay');
+}
+
+function renderEntryDetail(id) {
+  const e = state.entries.find(x => x.id === id);
+  if (!e) return;
+  const loc = state.locations.find(l => l.id === e.locationId);
+  const locWithRoom = fmtLocation(e.locationId, e.stayId);
+  const linkedTasks = state.tasks.filter(t => t.linkedEntryId === id);
+  const linkedDocs  = state.documents.filter(d => d.linkedEntryId === id);
+
+  document.getElementById('entry-detail-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-icon" style="background:${typeColor(e.type)}">${typeIcon(e.type)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="detail-title">${e.title}</div>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <span class="${typeBadgeClass(e.type)}">${e.type}</span>
+          <span class="${sevBadgeClass(e.severity)}">${e.severity}</span>
+        </div>
+        <div class="detail-meta" style="margin-top:6px">${fmtDatetime(e.date)}</div>
+      </div>
+    </div>
+    ${e.details ? `<div class="detail-section"><div class="detail-section-label">Details</div><div class="detail-section-value">${e.details}</div></div>` : ''}
+    ${locWithRoom ? `<div class="detail-section"><div class="detail-section-label">Location</div><div class="detail-section-value">${locWithRoom}</div></div>` : ''}
+    <div class="detail-section"><div class="detail-section-label">Logged</div><div class="detail-section-value">${fmtDatetime(e.createdAt)}</div></div>
+    ${linkedTasks.length ? `<div class="detail-section">
+      <div class="detail-section-label">Linked Care Tasks</div>
+      ${linkedTasks.map(t=>`<div style="font-size:16px;padding:6px 0;cursor:pointer;color:var(--accent)" onclick="closeSheet('entry-detail-overlay');openTaskDetail('${t.id}')">📋 ${t.title}</div>`).join('')}
+    </div>` : ''}
+    ${linkedDocs.length ? `<div class="detail-section">
+      <div class="detail-section-label">Linked Documents</div>
+      ${linkedDocs.map(d=>`<div style="font-size:16px;padding:7px 0;cursor:pointer;color:var(--accent)" onclick="closeSheet('entry-detail-overlay');openDocDetail('${d.id}')">📄 ${d.name}</div>`).join('')}
+    </div>` : ''}
+    <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
+      <button class="btn btn-secondary btn-full btn-sm" onclick="createTaskFromEntry('${id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Create Care Task from Entry
+      </button>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-secondary" style="flex:1" onclick="openEntryEdit('${id}')">Edit</button>
+      <button class="btn btn-danger" style="flex:1" onclick="deleteEntry('${id}')">Delete</button>
+    </div>`;
+}
+
+function createTaskFromEntry(entryId) {
+  const e = state.entries.find(x => x.id === entryId);
+  if (!e) return;
+  currentTaskId = null;
+  document.getElementById('task-edit-title').textContent = 'Create Care Task';
+  document.getElementById('te-title').value = 'Follow up: ' + e.title;
+  document.getElementById('te-due').value = '';
+  document.getElementById('te-priority').value = e.severity === 'High' ? 'High' : e.severity === 'Medium' ? 'Medium' : 'Low';
+  document.getElementById('te-notes').value = e.details || '';
+  populateEntryDropdown('te-linked-entry', entryId);
+  openSheet('task-edit-overlay');
+}
+
+function openEntryEdit(id) {
+  const e = state.entries.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('ee-title').value = e.title;
+  document.getElementById('ee-type').value = e.type;
+  document.getElementById('ee-severity').value = e.severity;
+  document.getElementById('ee-details').value = e.details || '';
+  openSheet('entry-edit-overlay');
+}
+
+function saveEntryEdit() {
+  const e = state.entries.find(x => x.id === currentEntryId);
+  if (!e) return;
+  e.title = document.getElementById('ee-title').value.trim() || e.title;
+  e.type = document.getElementById('ee-type').value;
+  e.severity = document.getElementById('ee-severity').value;
+  e.details = document.getElementById('ee-details').value;
+  e.updatedAt = new Date().toISOString();
+  saveState();
+  closeSheet('entry-edit-overlay');
+  renderEntryDetail(currentEntryId);
+  if (activeTab === 'timeline') renderTimeline();
+  if (activeTab === 'hq') renderHQ();
+  toast('Entry updated');
+}
+
+function deleteEntry(id) {
+  closeSheet('entry-detail-overlay');
+  confirm_('Delete Entry?', 'This entry will be permanently removed.', () => {
+    state.entries = state.entries.filter(e => e.id !== id);
+    saveState();
+    if (activeTab === 'timeline') renderTimeline();
+    if (activeTab === 'hq') renderHQ();
+    toast('Entry deleted');
+  });
+}
+
+// ============================================================
+// TASKS
+// ============================================================
+let taskFilter = 'All';
+let currentTaskId = null;
+
+function renderTasks() {
+  const filters = ['All', 'Open', 'Overdue', 'Completed'];
+  document.getElementById('task-filters').innerHTML = filters.map(f => `
+    <div class="filter-chip ${taskFilter===f?'active':''}" onclick="setTaskFilter('${f}')">${f}</div>
+  `).join('');
+
+  // Filter first, then sort per context
+  let tasks = [...state.tasks];
+
+  if (taskFilter === 'Open') {
+    tasks = tasks.filter(t => t.status === 'Open');
+    tasks.sort((a,b) => {
+      // Overdue items first, then by priority, then by due date
+      const aOver = isOverdue(a.dueDate) ? 0 : 1;
+      const bOver = isOverdue(b.dueDate) ? 0 : 1;
+      if (aOver !== bOver) return aOver - bOver;
+      const p = {High:3,Medium:2,Low:1};
+      if ((p[b.priority]||0) !== (p[a.priority]||0)) return (p[b.priority]||0) - (p[a.priority]||0);
+      return new Date(a.dueDate||'9999') - new Date(b.dueDate||'9999');
+    });
+  } else if (taskFilter === 'Overdue') {
+    tasks = tasks.filter(t => t.status === 'Open' && isOverdue(t.dueDate));
+    tasks.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate)); // most overdue first
+  } else if (taskFilter === 'Completed') {
+    tasks = tasks.filter(t => t.status === 'Completed');
+    tasks.sort((a,b) => new Date(b.completedAt||0) - new Date(a.completedAt||0)); // most recently completed first
+  } else {
+    // All: incomplete first (overdue highlighted), then completed
+    tasks.sort((a,b) => {
+      if (a.status === 'Completed' && b.status !== 'Completed') return 1;
+      if (b.status === 'Completed' && a.status !== 'Completed') return -1;
+      const aOver = isOverdue(a.dueDate) ? 0 : 1;
+      const bOver = isOverdue(b.dueDate) ? 0 : 1;
+      if (aOver !== bOver) return aOver - bOver;
+      return new Date(a.dueDate||'9999') - new Date(b.dueDate||'9999');
+    });
+  }
+
+  const list = document.getElementById('tasks-list');
+  list.innerHTML = tasks.length
+    ? `<div class="card" style="padding:6px 16px">${tasks.map(t => taskRowHtml(t)).join('')}</div>`
+    : `<div class="empty-state"><div class="emoji">✅</div><p>No tasks here.</p></div>`;
+}
+
+function setTaskFilter(f) { taskFilter = f; renderTasks(); }
+
+function toggleTask(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  t.status = t.status === 'Completed' ? 'Open' : 'Completed';
+  t.completedAt = t.status === 'Completed' ? new Date().toISOString() : null;
+  saveState();
+  if (activeTab === 'tasks') renderTasks();
+  if (activeTab === 'hq') renderHQ();
+  toast(t.status === 'Completed' ? '✅ Task completed' : 'Task reopened');
+}
+
+function completeTaskFromDetail(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  t.status = 'Completed';
+  t.completedAt = new Date().toISOString();
+  saveState();
+  openTaskDetail(id); // refresh detail view
+  if (activeTab === 'tasks') renderTasks();
+  if (activeTab === 'hq') renderHQ();
+  toast('✅ Task completed');
+}
+
+function reopenTaskFromDetail(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  t.status = 'Open';
+  t.completedAt = null;
+  saveState();
+  openTaskDetail(id); // refresh detail view
+  if (activeTab === 'tasks') renderTasks();
+  if (activeTab === 'hq') renderHQ();
+  toast('Task reopened');
+}
+
+function openTaskDetail(id) {
+  currentTaskId = id;
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  const over = t.status !== 'Completed' && isOverdue(t.dueDate);
+  const linkedEntry = t.linkedEntryId ? state.entries.find(e => e.id === t.linkedEntryId) : null;
+  document.getElementById('task-detail-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-icon" style="background:${t.status==='Completed'?'var(--green-light)':'var(--accent-light)'}">
+        ${t.status==='Completed'?'✅':'📋'}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="detail-title" ${t.status==='Completed'?'style="text-decoration:line-through;opacity:0.6"':''}>${t.title}</div>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <span class="${sevBadgeClass(t.priority)}">${t.priority} Priority</span>
+          ${over?'<span class="badge" style="background:var(--red-light);color:var(--red)">Overdue</span>':''}
+          <span class="badge" style="background:${t.status==='Completed'?'#E6F0EA':'#EBF1ED'};color:${t.status==='Completed'?'#3D6B50':'#6B8C7A'}">${t.status}</span>
+        </div>
+        ${t.dueDate ? `<div class="detail-meta" style="margin-top:6px">Due ${fmtDate(t.dueDate)}</div>` : ''}
+      </div>
+    </div>
+    ${t.notes ? `<div class="detail-section"><div class="detail-section-label">Notes</div><div class="detail-section-value">${t.notes}</div></div>` : ''}
+    ${linkedEntry ? `<div class="detail-section">
+      <div class="detail-section-label">Linked Timeline Entry</div>
+      <div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding-top:2px" onclick="closeSheet('task-detail-overlay');openEntryDetail('${linkedEntry.id}')">
+        <div style="width:32px;height:32px;border-radius:8px;background:${typeColor(linkedEntry.type)};display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">${typeIcon(linkedEntry.type)}</div>
+        <div>
+          <div style="font-size:17px;font-weight:600;color:var(--accent)">${linkedEntry.title}</div>
+          <div style="font-size:15px;color:var(--text2)">${fmtDate(linkedEntry.date)}</div>
+        </div>
+      </div>
+    </div>` : ''}
+    <div class="detail-section"><div class="detail-section-label">Created</div><div class="detail-section-value">${fmtDatetime(t.createdAt)}</div></div>
+    ${t.completedAt ? `<div class="detail-section"><div class="detail-section-label">Completed</div><div class="detail-section-value">${fmtDatetime(t.completedAt)}</div></div>` : ''}
+    <div class="detail-actions" style="flex-wrap:wrap;gap:10px">
+      ${t.status === 'Open'
+        ? `<button class="btn btn-primary btn-full" style="margin-bottom:6px" onclick="completeTaskFromDetail('${id}')">
+             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+             Complete Task
+           </button>`
+        : `<button class="btn btn-secondary btn-full" style="margin-bottom:6px" onclick="reopenTaskFromDetail('${id}')">Reopen Task</button>`
+      }
+      <div style="display:flex;gap:10px;width:100%">
+        <button class="btn btn-secondary" style="flex:1" onclick="openEditTaskSheet('${id}')">Edit</button>
+        <button class="btn btn-danger" style="flex:1" onclick="deleteTask('${id}')">Delete</button>
+      </div>
+    </div>`;
+  openSheet('task-detail-overlay');
+}
+
+function openAddTask() { currentTaskId = null; openEditTaskSheet(null); }
+
+function openEditTaskSheet(id) {
+  const t = id ? state.tasks.find(x => x.id === id) : null;
+  document.getElementById('task-edit-title').textContent = t ? 'Edit Care Task' : 'Add Care Task';
+  document.getElementById('te-title').value = t ? t.title : '';
+  document.getElementById('te-due').value = t ? (t.dueDate || '') : '';
+  document.getElementById('te-priority').value = t ? t.priority : 'Medium';
+  document.getElementById('te-notes').value = t ? (t.notes || '') : '';
+  populateEntryDropdown('te-linked-entry', t?.linkedEntryId || '');
+  currentTaskId = id;
+  openSheet('task-edit-overlay');
+}
+
+function saveTaskEdit() {
+  const title = document.getElementById('te-title').value.trim();
+  if (!title) { toast('Please enter a title'); return; }
+  const linkedEntryId = document.getElementById('te-linked-entry').value || null;
+  if (currentTaskId) {
+    const t = state.tasks.find(x => x.id === currentTaskId);
+    t.title = title;
+    t.dueDate = document.getElementById('te-due').value;
+    t.priority = document.getElementById('te-priority').value;
+    t.notes = document.getElementById('te-notes').value;
+    t.linkedEntryId = linkedEntryId;
+  } else {
+    state.tasks.push({
+      id: uid(), title,
+      dueDate: document.getElementById('te-due').value,
+      priority: document.getElementById('te-priority').value,
+      notes: document.getElementById('te-notes').value,
+      linkedEntryId,
+      status: 'Open', createdAt: new Date().toISOString()
+    });
+  }
+  saveState();
+  closeSheet('task-edit-overlay');
+  if (currentTaskId) { closeSheet('task-detail-overlay'); openTaskDetail(currentTaskId); }
+  if (activeTab === 'tasks') renderTasks();
+  if (activeTab === 'hq') renderHQ();
+  toast('Care task saved');
+}
+
+function deleteTask(id) {
+  closeSheet('task-detail-overlay');
+  confirm_('Delete Task?', 'This task will be permanently removed.', () => {
+    state.tasks = state.tasks.filter(t => t.id !== id);
+    saveState();
+    if (activeTab === 'tasks') renderTasks();
+    if (activeTab === 'hq') renderHQ();
+    toast('Task deleted');
+  });
+}
+
+// ============================================================
+// TEAM
+// ============================================================
+let currentTeamId = null;
+
+function renderTeam() {
+  const list = document.getElementById('team-list');
+  if (!state.team.length) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">👥</div><p>No team members added yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = state.team.map(tm => {
+    const initials = tm.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+    const loc = state.locations.find(l => l.id === tm.locationId);
+    return `<div class="team-card" onclick="openTeamDetail('${tm.id}')">
+      <div class="team-avatar">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div class="team-name">${tm.name}</div>
+        <div class="team-role">${tm.role}${tm.locationId ? ' · ' + (fmtLocation(tm.locationId) || loc?.name || '') : ''}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`;
+  }).join('');
+}
+
+function openTeamDetail(id) {
+  currentTeamId = id;
+  const tm = state.team.find(x => x.id === id);
+  if (!tm) return;
+  const loc = state.locations.find(l => l.id === tm.locationId);
+  const initials = tm.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  document.getElementById('team-detail-body').innerHTML = `
+    <div class="detail-header">
+      <div style="width:60px;height:60px;border-radius:50%;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;font-family:'DM Serif Display',serif;flex-shrink:0">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div class="detail-title">${tm.name}</div>
+        <div class="detail-meta">${tm.role}</div>
+        ${tm.organization ? `<div class="detail-meta">${tm.organization}</div>` : ''}
+      </div>
+    </div>
+    ${tm.phone ? `<div class="detail-section"><div class="detail-section-label">Phone</div><div class="detail-section-value"><a href="tel:${tm.phone}" style="color:var(--accent)">${tm.phone}</a></div></div>` : ''}
+    ${tm.email ? `<div class="detail-section"><div class="detail-section-label">Email</div><div class="detail-section-value"><a href="mailto:${tm.email}" style="color:var(--accent)">${tm.email}</a></div></div>` : ''}
+    ${tm.locationId ? `<div class="detail-section"><div class="detail-section-label">Location</div><div class="detail-section-value">${fmtLocation(tm.locationId) || loc?.name || ''}</div></div>` : ''}
+    ${tm.notes ? `<div class="detail-section"><div class="detail-section-label">Notes</div><div class="detail-section-value">${tm.notes}</div></div>` : ''}
+    <div class="detail-actions">
+      <button class="btn btn-secondary" style="flex:1" onclick="openEditTeamSheet('${id}')">Edit</button>
+      <button class="btn btn-danger" style="flex:1" onclick="deleteTeam('${id}')">Delete</button>
+    </div>`;
+  openSheet('team-detail-overlay');
+}
+
+function openAddTeam() { currentTeamId = null; openEditTeamSheet(null); }
+
+function openEditTeamSheet(id) {
+  const tm = id ? state.team.find(x => x.id === id) : null;
+  document.getElementById('team-edit-title').textContent = tm ? 'Edit Member' : 'Add Team Member';
+  document.getElementById('tme-name').value = tm?.name || '';
+  document.getElementById('tme-role').value = tm?.role || '';
+  document.getElementById('tme-org').value = tm?.organization || '';
+  document.getElementById('tme-phone').value = tm?.phone || '';
+  document.getElementById('tme-email').value = tm?.email || '';
+  document.getElementById('tme-notes').value = tm?.notes || '';
+  currentTeamId = id;
+  openSheet('team-edit-overlay');
+}
+
+function saveTeamEdit() {
+  const name = document.getElementById('tme-name').value.trim();
+  if (!name) { toast('Please enter a name'); return; }
+  const data = {
+    name, role: document.getElementById('tme-role').value,
+    organization: document.getElementById('tme-org').value,
+    phone: document.getElementById('tme-phone').value,
+    email: document.getElementById('tme-email').value,
+    notes: document.getElementById('tme-notes').value,
+    locationId: state.stays.find(s=>!s.endDate)?.locationId || state.locations[0]?.id || null
+  };
+  if (currentTeamId) {
+    Object.assign(state.team.find(x => x.id === currentTeamId), data);
+  } else {
+    state.team.push({ id: uid(), ...data });
+  }
+  saveState();
+  closeSheet('team-edit-overlay');
+  if (currentTeamId) { closeSheet('team-detail-overlay'); openTeamDetail(currentTeamId); }
+  if (activeTab === 'team') renderTeam();
+  toast('Team member saved');
+}
+
+function deleteTeam(id) {
+  closeSheet('team-detail-overlay');
+  confirm_('Remove Team Member?', 'They will be removed from your care team.', () => {
+    state.team = state.team.filter(t => t.id !== id);
+    saveState();
+    if (activeTab === 'team') renderTeam();
+    toast('Team member removed');
+  });
+}
+
+// ============================================================
+// DOCUMENTS
+// ============================================================
+let currentDocId = null;
+
+function renderDocs() {
+  const list = document.getElementById('docs-list');
+  if (!state.documents.length) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">📂</div><p>No documents yet.</p></div>`;
+    return;
+  }
+  list.innerHTML = state.documents.map(d => `
+    <div class="doc-card" onclick="openDocDetail('${d.id}')">
+      <div class="doc-icon">${docTypeEmoji(d.type)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.name}</div>
+        <div style="font-size:15px;color:var(--text2);margin-top:3px">${d.type} · ${fmtDate(d.uploadDate)}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`).join('');
+}
+
+function openDocDetail(id) {
+  currentDocId = id;
+  const d = state.documents.find(x => x.id === id);
+  if (!d) return;
+  const linkedEntry = d.linkedEntryId ? state.entries.find(e => e.id === d.linkedEntryId) : null;
+  document.getElementById('doc-detail-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-icon" style="background:var(--accent-light);font-size:26px">${docTypeEmoji(d.type)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="detail-title">${d.name}</div>
+        <div class="detail-meta">${d.type}</div>
+        <div class="detail-meta">Uploaded ${fmtDate(d.uploadDate)}</div>
+      </div>
+    </div>
+    ${d.notes ? `<div class="detail-section"><div class="detail-section-label">Notes</div><div class="detail-section-value">${d.notes}</div></div>` : ''}
+    ${linkedEntry ? `<div class="detail-section">
+      <div class="detail-section-label">Linked Timeline Entry</div>
+      <div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding-top:2px" onclick="closeSheet('doc-detail-overlay');openEntryDetail('${linkedEntry.id}')">
+        <div style="width:32px;height:32px;border-radius:8px;background:${typeColor(linkedEntry.type)};display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">${typeIcon(linkedEntry.type)}</div>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:var(--accent)">${linkedEntry.title}</div>
+          <div style="font-size:15px;color:var(--text2)">${fmtDate(linkedEntry.date)}</div>
+        </div>
+      </div>
+    </div>` : ''}
+    <div class="detail-actions">
+      <button class="btn btn-secondary" style="flex:1" onclick="openEditDocSheet('${id}')">Edit</button>
+      <button class="btn btn-danger" style="flex:1" onclick="deleteDoc('${id}')">Delete</button>
+    </div>`;
+  openSheet('doc-detail-overlay');
+}
+
+function openAddDoc() { currentDocId = null; openEditDocSheet(null); }
+
+function openEditDocSheet(id) {
+  const d = id ? state.documents.find(x => x.id === id) : null;
+  document.getElementById('doc-edit-title').textContent = d ? 'Edit Document' : 'Add Document';
+  document.getElementById('de-name').value = d?.name || '';
+  document.getElementById('de-type').value = d?.type || 'Other';
+  document.getElementById('de-notes').value = d?.notes || '';
+  populateEntryDropdown('de-linked-entry', d?.linkedEntryId || '');
+  currentDocId = id;
+  openSheet('doc-edit-overlay');
+}
+
+function saveDocEdit() {
+  const name = document.getElementById('de-name').value.trim();
+  if (!name) { toast('Please enter a name'); return; }
+  const linkedEntryId = document.getElementById('de-linked-entry').value || null;
+  if (currentDocId) {
+    const d = state.documents.find(x => x.id === currentDocId);
+    d.name = name;
+    d.type = document.getElementById('de-type').value;
+    d.notes = document.getElementById('de-notes').value;
+    d.linkedEntryId = linkedEntryId;
+  } else {
+    state.documents.push({
+      id: uid(), name,
+      type: document.getElementById('de-type').value,
+      notes: document.getElementById('de-notes').value,
+      linkedEntryId,
+      fileUrl: '#', uploadDate: new Date().toISOString()
+    });
+  }
+  saveState();
+  closeSheet('doc-edit-overlay');
+  if (currentDocId) { closeSheet('doc-detail-overlay'); openDocDetail(currentDocId); }
+  if (activeTab === 'docs') renderDocs();
+  toast('Document saved');
+}
+
+function deleteDoc(id) {
+  closeSheet('doc-detail-overlay');
+  confirm_('Delete Document?', 'This document record will be removed.', () => {
+    state.documents = state.documents.filter(d => d.id !== id);
+    saveState();
+    if (activeTab === 'docs') renderDocs();
+    toast('Document deleted');
+  });
+}
+
+// ============================================================
+// PROFILE
+// ============================================================
+function openProfile() {
+  const lo = state.lovedOne;
+  const currentStay = getCurrentStay();
+  const locDisplay = fmtCurrentLocation();
+  const initials = lo.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  const photoHtml = lo.photo
+    ? `<img src="${lo.photo}" style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid var(--border);flex-shrink:0">`
+    : `<div style="width:72px;height:72px;border-radius:50%;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:24px;font-weight:700;flex-shrink:0;border:3px solid var(--border)">${initials}</div>`;
+
+  document.getElementById('profile-body').innerHTML = `
+    <div style="padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px">
+      ${photoHtml}
+      <div style="flex:1;min-width:0">
+        <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Inter',sans-serif;font-size:24px;font-weight:700;line-height:1.2;color:var(--text);margin-bottom:4px">${lo.name}</div>
+        <div style="font-size:16px;color:var(--text2)">Age ${age(lo.DOB)} · Born ${fmtDate(lo.DOB)}</div>
+      </div>
+    </div>
+    <div style="padding:0 18px">
+      ${locDisplay ? profileRow('Current Location', locDisplay) : ''}
+      ${profileRow('Condition', lo.condition)}
+      ${profileRow('Blood Type', lo.bloodType)}
+      ${profileRow('Allergies', lo.allergies)}
+      ${profileRow('Insurance', lo.insurance)}
+      ${profileRow('POA', lo.POA)}
+      ${profileRow('DNR', lo.DNR ? '✅ Yes on file' : 'No')}
+      ${profileRow('Advance Directive', lo.advanceDirective ? '✅ Yes on file' : 'No')}
+      ${lo.notes ? profileRow('Notes', lo.notes) : ''}
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-secondary btn-full" onclick="openProfileEdit()">Edit Profile</button>
+    </div>`;
+  openSheet('profile-overlay');
+}
+
+function profileRow(label, value) {
+  return `<div class="profile-row">
+    <div class="profile-label">${label}</div>
+    <div class="profile-value">${value || '—'}</div>
+  </div>`;
+}
+
+function openProfileEdit() {
+  const lo = state.lovedOne;
+  const currentStay = getCurrentStay();
+  const initials = lo.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  // Photo preview
+  const preview = document.getElementById('pe-photo-preview');
+  const removeBtn = document.getElementById('pe-photo-remove');
+  if (lo.photo) {
+    preview.innerHTML = `<img src="${lo.photo}" style="width:100%;height:100%;object-fit:cover">`;
+    if (removeBtn) removeBtn.style.display = '';
+  } else {
+    preview.innerHTML = `<span style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:700;color:var(--accent)">${initials}</span>`;
+    if (removeBtn) removeBtn.style.display = 'none';
+  }
+  document.getElementById('pe-name').value = lo.name;
+  document.getElementById('pe-dob').value = lo.DOB;
+  document.getElementById('pe-condition').value = lo.condition;
+  document.getElementById('pe-blood').value = lo.bloodType;
+  document.getElementById('pe-allergies').value = lo.allergies;
+  document.getElementById('pe-insurance').value = lo.insurance;
+  document.getElementById('pe-poa').value = lo.POA;
+  document.getElementById('pe-room').value = currentStay?.room || '';
+  document.getElementById('pe-dnr').value = String(lo.DNR);
+  document.getElementById('pe-ad').value = String(lo.advanceDirective);
+  document.getElementById('pe-notes').value = lo.notes || '';
+  openSheet('profile-edit-overlay');
+}
+
+function saveProfileEdit() {
+  state.lovedOne.name = document.getElementById('pe-name').value.trim() || state.lovedOne.name;
+  state.lovedOne.DOB = document.getElementById('pe-dob').value;
+  state.lovedOne.condition = document.getElementById('pe-condition').value;
+  state.lovedOne.bloodType = document.getElementById('pe-blood').value;
+  state.lovedOne.allergies = document.getElementById('pe-allergies').value;
+  state.lovedOne.insurance = document.getElementById('pe-insurance').value;
+  state.lovedOne.POA = document.getElementById('pe-poa').value;
+  state.lovedOne.DNR = document.getElementById('pe-dnr').value === 'true';
+  state.lovedOne.advanceDirective = document.getElementById('pe-ad').value === 'true';
+  state.lovedOne.notes = document.getElementById('pe-notes').value;
+  // Photo is saved live by handleProfilePhoto / removeProfilePhoto
+  const currentStay = getCurrentStay();
+  if (currentStay) {
+    currentStay.room = document.getElementById('pe-room').value.trim() || null;
+  }
+  saveState();
+  closeSheet('profile-edit-overlay');
+  openProfile();
+  renderHQ();
+  toast('Profile updated');
+}
+
+function handleProfilePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Resize to max 400px to keep localStorage lean
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const max = 400;
+      let w = img.width, h = img.height;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      state.lovedOne.photo = dataUrl;
+      // Update preview live
+      const preview = document.getElementById('pe-photo-preview');
+      if (preview) preview.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover">`;
+      const removeBtn = document.getElementById('pe-photo-remove');
+      if (removeBtn) removeBtn.style.display = '';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeProfilePhoto() {
+  state.lovedOne.photo = null;
+  const lo = state.lovedOne;
+  const initials = lo.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  const preview = document.getElementById('pe-photo-preview');
+  if (preview) preview.innerHTML = `<span style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:700;color:var(--accent)">${initials}</span>`;
+  const removeBtn = document.getElementById('pe-photo-remove');
+  if (removeBtn) removeBtn.style.display = 'none';
+  const inp = document.getElementById('pe-photo-input');
+  if (inp) inp.value = '';
+}
+
+// ============================================================
+// QUICK LOG
+// ============================================================
+const PHRASES = {
+  health: ['Pain better', 'Pain worse', 'Slept well', 'Slept poorly', 'Ate well', "Didn't eat much"],
+  care: ['PT completed', 'Medication given', 'Medication adjusted', 'Vitals taken'],
+  comm: ['Spoke with doctor', 'Spoke with nurse', 'Spoke with insurance', 'Family visit'],
+  general: ['Good day', 'Rough day', 'Waiting on update']
+};
+
+let selectedPhrases = [];
+
+function openQuickLog() {
+  selectedPhrases = [];
+  document.getElementById('ql-title').value = '';
+  document.getElementById('ql-details').value = '';
+  document.getElementById('ql-type').value = 'Update';
+  document.getElementById('ql-severity').value = 'Medium';
+  document.getElementById('ql-move-fields').style.display = 'none';
+  document.getElementById('ql-new-room').value = '';
+  renderPhrases();
+  openSheet('ql-overlay');
+}
+
+function renderPhrases() {
+  ['health','care','comm','general'].forEach(cat => {
+    document.getElementById('phrases-'+cat).innerHTML = PHRASES[cat].map((p, idx) => `
+      <div class="phrase-chip ${selectedPhrases.includes(p)?'selected':''}" data-cat="${cat}" data-idx="${idx}" onclick="togglePhraseByIndex(this)">${p}</div>
+    `).join('');
+  });
+}
+
+function togglePhraseByIndex(el) {
+  const cat = el.dataset.cat;
+  const idx = parseInt(el.dataset.idx);
+  const p = PHRASES[cat][idx];
+  togglePhrase(p);
+}
+
+function togglePhrase(p) {
+  if (selectedPhrases.includes(p)) {
+    selectedPhrases = selectedPhrases.filter(x => x !== p);
+  } else {
+    selectedPhrases.push(p);
+    // First phrase → set title if empty
+    if (!document.getElementById('ql-title').value) {
+      document.getElementById('ql-title').value = p;
+    }
+  }
+  // Always rebuild details from ALL selected phrases (excluding whichever is the title)
+  const titleVal = document.getElementById('ql-title').value.trim();
+  const detailPhrases = selectedPhrases.filter(x => x !== titleVal);
+  if (detailPhrases.length > 0) {
+    document.getElementById('ql-details').value = detailPhrases.join('. ') + '.';
+  } else if (selectedPhrases.length === 0) {
+    // Cleared all — also clear details if it was phrase-generated
+    document.getElementById('ql-details').value = '';
+  }
+  renderPhrases();
+}
+
+function qlTypeChanged() {
+  const v = document.getElementById('ql-type').value;
+  document.getElementById('ql-move-fields').style.display = v === 'Move' ? 'block' : 'none';
+}
+
+function submitQuickLog() {
+  const title = document.getElementById('ql-title').value.trim();
+  if (!title) { toast('Please enter a title or select a phrase'); return; }
+
+  const type = document.getElementById('ql-type').value;
+  const severity = document.getElementById('ql-severity').value;
+  const details = document.getElementById('ql-details').value;
+  const now = new Date().toISOString();
+
+  let locationId, stayId;
+  const currentStay = getCurrentStay();
+
+  if (type === 'Move') {
+    const newLocName = document.getElementById('ql-new-loc-name').value.trim() || 'New Location';
+    const newLocType = document.getElementById('ql-new-loc-type').value;
+    const newRoom    = document.getElementById('ql-new-room').value.trim();
+    const newLocId = uid();
+    state.locations.push({ id: newLocId, name: newLocName, type: newLocType, address: '' });
+
+    if (currentStay) { currentStay.endDate = now; }
+
+    const newStayId = uid();
+    state.stays.push({ id: newStayId, lovedOneId: state.lovedOne.id, locationId: newLocId, startDate: now, endDate: null, notes: '', room: newRoom || null });
+    locationId = newLocId;
+    stayId = newStayId;
+  } else {
+    locationId = currentStay?.locationId || state.locations[0]?.id;
+    stayId = currentStay?.id;
+  }
+
+  state.entries.unshift({
+    id: uid(), lovedOneId: state.lovedOne.id,
+    date: now, type, title, details, severity,
+    locationId, stayId, createdAt: now
+  });
+
+  saveState();
+  closeSheet('ql-overlay');
+  toast('✅ Entry logged');
+  if (activeTab === 'hq') renderHQ();
+  if (activeTab === 'timeline') renderTimeline();
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function showSearch() { openSheet('search-overlay'); setTimeout(()=>document.getElementById('search-input').focus(),300); }
+
+function doSearch(q) {
+  q = q.toLowerCase().trim();
+  const res = document.getElementById('search-results');
+  if (!q) { res.innerHTML = ''; return; }
+
+  const results = [];
+  state.entries.filter(e => e.title?.toLowerCase().includes(q) || e.details?.toLowerCase().includes(q))
+    .forEach(e => results.push({ type: 'entry', label: e.title, sub: e.type + ' · ' + fmtDate(e.date), id: e.id }));
+  state.tasks.filter(t => t.title?.toLowerCase().includes(q) || t.notes?.toLowerCase().includes(q))
+    .forEach(t => results.push({ type: 'task', label: t.title, sub: 'Task · ' + (t.dueDate ? fmtDate(t.dueDate) : 'No due date'), id: t.id }));
+  state.documents.filter(d => d.name?.toLowerCase().includes(q) || d.notes?.toLowerCase().includes(q))
+    .forEach(d => results.push({ type: 'doc', label: d.name, sub: 'Document · ' + d.type, id: d.id }));
+  state.team.filter(tm => tm.name?.toLowerCase().includes(q) || tm.role?.toLowerCase().includes(q))
+    .forEach(tm => results.push({ type: 'team', label: tm.name, sub: 'Team · ' + tm.role, id: tm.id }));
+
+  if (!results.length) { res.innerHTML = `<div class="empty-state" style="padding:20px 0"><p>No results for "${q}"</p></div>`; return; }
+
+  res.innerHTML = `<div class="card" style="padding:6px 16px">${results.map(r => `
+    <div class="entry-row" onclick="searchTap('${r.type}','${r.id}')">
+      <div class="entry-icon" style="background:var(--accent-light);font-size:16px">
+        ${r.type==='entry'?'📋':r.type==='task'?'✅':r.type==='doc'?'📄':'👤'}
+      </div>
+      <div class="entry-body">
+        <div class="entry-title">${r.label}</div>
+        <div class="entry-meta">${r.sub}</div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function searchTap(type, id) {
+  closeSheet('search-overlay');
+  if (type === 'entry') { openEntryDetail(id); }
+  else if (type === 'task') { openTaskDetail(id); }
+  else if (type === 'doc') { openDocDetail(id); }
+  else if (type === 'team') { openTeamDetail(id); }
+}
+
+// ============================================================
+// APP MENU
+// ============================================================
+function openAppMenu() {
+  document.getElementById('app-menu-dropdown').style.display = 'block';
+  document.getElementById('app-menu-bg').style.display = 'block';
+}
+function closeAppMenu() {
+  document.getElementById('app-menu-dropdown').style.display = 'none';
+  document.getElementById('app-menu-bg').style.display = 'none';
+}
+
+function hqQuickReport(typeId) {
+  // Skip the picker and jump straight to config for the chosen type
+  selectReportType(typeId);
+}
+
+// ============================================================
+// REPORTS SYSTEM
+// ============================================================
+const REPORT_TYPES = [
+  {
+    id: 'timeline',
+    label: 'Care Timeline',
+    desc: 'A summary of recent care entries — what happened, when, and how significant.',
+    icon: '🕐'
+  },
+  {
+    id: 'family',
+    label: 'Family Update',
+    desc: 'A plain-language update written to share with family members.',
+    icon: '👨‍👩‍👧'
+  },
+  {
+    id: 'team',
+    label: 'Care Team Summary',
+    desc: 'A contact sheet and overview of everyone involved in care.',
+    icon: '👥'
+  },
+  {
+    id: 'daily',
+    label: 'Daily Summary',
+    desc: "A snapshot of today's activity, open tasks, and current status.",
+    icon: '📋'
+  }
+];
+
+let currentReportType = null;
+let currentReportConfig = {};
+let currentReportText = '';
+
+function openReportsPicker() {
+  const list = document.getElementById('report-type-list');
+  list.innerHTML = REPORT_TYPES.map(r => `
+    <div onclick="selectReportType('${r.id}')" style="display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent">
+      <div style="width:40px;height:40px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">${r.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px">${r.label}</div>
+        <div style="font-size:15px;color:var(--text2);line-height:1.5">${r.desc}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" style="flex-shrink:0;margin-top:4px"><path d="M9 18l6-6-6-6"/></svg>
+    </div>`).join('');
+  openSheet('reports-picker-overlay');
+}
+
+function selectReportType(id) {
+  currentReportType = id;
+  currentReportConfig = {};
+  const type = REPORT_TYPES.find(r => r.id === id);
+  document.getElementById('report-config-title').textContent = type.label;
+  document.getElementById('report-config-body').innerHTML = buildConfigUI(id);
+  closeSheet('reports-picker-overlay');
+  openSheet('report-config-overlay');
+}
+
+function buildConfigUI(id) {
+  const dateRangeHTML = `
+    <div style="margin-bottom:20px">
+      <div style="font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text2);margin-bottom:12px">Date Range</div>
+      <div style="display:flex;gap:8px">
+        ${['Today','Last 3 Days','Last 7 Days','Custom'].map(opt => `
+          <div onclick="setReportRange(this,'${opt}')" data-range="${opt}"
+            style="flex:1;text-align:center;padding:11px 8px;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer;
+            border:1.5px solid var(--border);color:var(--text2);background:var(--card);transition:all 0.12s;-webkit-tap-highlight-color:transparent">
+            ${opt === 'Last 3 Days' ? '3 Days' : opt === 'Last 7 Days' ? '7 Days' : opt}
+          </div>`).join('')}
+      </div>
+      <div id="custom-range-fields" style="display:none;margin-top:12px;display:none">
+        <div style="display:flex;gap:10px">
+          <div style="flex:1"><label class="form-label">From</label><input type="date" class="form-input" id="report-date-from"></div>
+          <div style="flex:1"><label class="form-label">To</label><input type="date" class="form-input" id="report-date-to"></div>
+        </div>
+      </div>
+    </div>`;
+
+  if (id === 'timeline') {
+    return dateRangeHTML + `
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text2);margin-bottom:12px">Include</div>
+        ${['Medical','Conversation','Update','Move','Other'].map(t => toggleRow(t, `inc-${t}`, true)).join('')}
+      </div>`;
+  }
+  if (id === 'family') {
+    return dateRangeHTML + `
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text2);margin-bottom:12px">Tone</div>
+        <div style="display:flex;gap:8px">
+          ${['Reassuring','Factual','Detailed'].map(t => `
+            <div onclick="setReportTone(this,'${t}')" data-tone="${t}"
+              style="flex:1;text-align:center;padding:12px 8px;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer;
+              border:1.5px solid var(--border);color:var(--text2);background:var(--card)">
+              ${t}
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+  if (id === 'team') {
+    return `
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text2);margin-bottom:12px">Include</div>
+        ${toggleRow('Phone numbers', 'inc-phone', true)}
+        ${toggleRow('Email addresses', 'inc-email', true)}
+        ${toggleRow('Notes', 'inc-notes', false)}
+      </div>`;
+  }
+  if (id === 'daily') {
+    return `
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--text2);margin-bottom:12px">Include</div>
+        ${toggleRow("Today's entries", 'inc-entries', true)}
+        ${toggleRow('Open tasks', 'inc-tasks', true)}
+        ${toggleRow('Current location', 'inc-location', true)}
+        ${toggleRow('Care team on duty', 'inc-team', false)}
+      </div>`;
+  }
+  return dateRangeHTML;
+}
+
+function toggleRow(label, id, defaultOn) {
+  const trackColor = defaultOn ? 'var(--accent)' : 'var(--border)';
+  const thumbLeft  = defaultOn ? '21px' : '3px';
+  return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+    <span style="font-size:15px;color:var(--text)">${label}</span>
+    <div style="position:relative;width:44px;height:26px;cursor:pointer;flex-shrink:0" onclick="toggleSwitch('${id}')">
+      <div id="${id}-track" style="position:absolute;inset:0;border-radius:13px;background:${trackColor};transition:background 0.2s"></div>
+      <div id="${id}-thumb" style="position:absolute;top:4px;left:${thumbLeft};width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:left 0.2s"></div>
+      <input type="checkbox" id="${id}" ${defaultOn ? 'checked' : ''} style="position:absolute;opacity:0;width:0;height:0;pointer-events:none">
+    </div>
+  </div>`;
+}
+
+function toggleSwitch(id) {
+  const cb = document.getElementById(id);
+  if (!cb) return;
+  cb.checked = !cb.checked;
+  const track = document.getElementById(id + '-track');
+  const thumb = document.getElementById(id + '-thumb');
+  if (track) track.style.background = cb.checked ? 'var(--accent)' : 'var(--border)';
+  if (thumb) thumb.style.left = cb.checked ? '21px' : '3px';
+}
+
+function setReportRange(el, val) {
+  document.querySelectorAll('[data-range]').forEach(d => {
+    d.style.background = 'var(--card)'; d.style.color = 'var(--text2)'; d.style.borderColor = 'var(--border)';
+  });
+  el.style.background = 'var(--accent)'; el.style.color = '#fff'; el.style.borderColor = 'var(--accent)';
+  currentReportConfig.range = val;
+  const cf = document.getElementById('custom-range-fields');
+  if (cf) cf.style.display = val === 'Custom' ? 'block' : 'none';
+}
+
+function setReportTone(el, val) {
+  document.querySelectorAll('[data-tone]').forEach(d => {
+    d.style.background = 'var(--card)'; d.style.color = 'var(--text2)'; d.style.borderColor = 'var(--border)';
+  });
+  el.style.background = 'var(--accent2)'; el.style.color = '#fff'; el.style.borderColor = 'var(--accent2)';
+  currentReportConfig.tone = val;
+}
+
+function getChecked(id) {
+  const el = document.getElementById(id);
+  return el ? el.checked : false;
+}
+
+function getReportDateRange() {
+  const range = currentReportConfig.range || 'Today';
+  const now = new Date();
+  let from;
+  if (range === 'Today') { from = new Date(now.toDateString()); }
+  else if (range === 'Last 3 Days') { from = new Date(now); from.setDate(from.getDate()-3); }
+  else if (range === 'Last 7 Days') { from = new Date(now); from.setDate(from.getDate()-7); }
+  else if (range === 'Custom') {
+    const f = document.getElementById('report-date-from')?.value;
+    const t = document.getElementById('report-date-to')?.value;
+    return { from: f ? new Date(f) : new Date(now.toDateString()), to: t ? new Date(t+'T23:59:59') : now, label: `${f||'?'} – ${t||'?'}` };
+  }
+  return { from, to: now, label: range };
+}
+
+function generateReport() {
+  const lo = state.lovedOne;
+  const type = currentReportType;
+  const { from, to, label } = getReportDateRange();
+  const rangeEntries = state.entries.filter(e => { const d = new Date(e.date); return d >= from && d <= to; });
+  const locDisplay = fmtCurrentLocation() || 'Unknown';
+  const stay = getCurrentStay();
+  const today = new Date();
+
+  let title = '';
+  let text = '';
+
+  if (type === 'timeline') {
+    const types = ['Medical','Conversation','Update','Move','Other'].filter(t => getChecked(`inc-${t}`));
+    const filtered = rangeEntries.filter(e => types.includes(e.type))
+      .sort((a,b) => new Date(b.date) - new Date(a.date));
+    title = `Care Timeline — ${label}`;
+    text = `Care Timeline: ${lo?.name}\n`;
+    text += `Period: ${label}\n`;
+    text += `Location: ${locDisplay}\n`;
+    text += `Generated: ${fmtDate(today.toISOString())}\n`;
+    text += `\n─────────────────────────\n\n`;
+    if (filtered.length === 0) {
+      text += 'No entries for this period.\n';
+    } else {
+      let lastDate = '';
+      filtered.forEach(e => {
+        const dayLabel = new Date(e.date).toDateString();
+        if (dayLabel !== lastDate) {
+          text += `${fmtDate(e.date)}\n\n`;
+          lastDate = dayLabel;
+        }
+        text += `${fmtTime(e.date)}  [${e.type.toUpperCase()}${e.severity === 'High' ? ' ⚠' : ''}]  ${e.title}\n`;
+        if (e.details) text += `  ${e.details}\n`;
+        text += '\n';
+      });
+    }
+
+  } else if (type === 'family') {
+    const tone = currentReportConfig.tone || 'Factual';
+    const loc = getCurrentLocation();
+    const medEntries = rangeEntries.filter(e => e.type === 'Medical').slice(0,3);
+    const convEntries = rangeEntries.filter(e => e.type === 'Conversation').slice(0,2);
+    const highEntries = rangeEntries.filter(e => e.severity === 'High');
+    const openTasks = state.tasks.filter(t => t.status === 'Open' && !isOverdue(t.dueDate)).slice(0,3);
+    title = `Family Update — ${label}`;
+    const greeting = tone === 'Reassuring' ? 'We wanted to share a quick update and let you know things are being well taken care of.' : 'Here is an update on the current care situation.';
+    text = `Update on ${lo?.name}\n${fmtDate(today.toISOString())}\n\n`;
+    text += `${greeting}\n\n`;
+    text += `Current Location:\n${locDisplay}${stay ? ', since ' + fmtDate(stay.startDate) : ''}\n\n`;
+    if (medEntries.length) {
+      text += `Medical Updates:\n`;
+      medEntries.forEach(e => { text += `• ${e.title}${e.details ? ' — ' + e.details.slice(0,100) : ''}\n`; });
+      text += '\n';
+    }
+    if (convEntries.length) {
+      text += `Conversations:\n`;
+      convEntries.forEach(e => { text += `• ${e.title}${e.details ? ': ' + e.details.slice(0,80) : ''}\n`; });
+      text += '\n';
+    }
+    if (highEntries.length && tone === 'Detailed') {
+      text += `Items Requiring Attention:\n`;
+      highEntries.forEach(e => { text += `• ${e.title}\n`; });
+      text += '\n';
+    }
+    if (openTasks.length) {
+      text += `Next Steps:\n`;
+      openTasks.forEach(t => { text += `• ${t.title}${t.dueDate ? ' (by ' + fmtDate(t.dueDate) + ')' : ''}\n`; });
+      text += '\n';
+    }
+    if (tone === 'Reassuring') text += `The care team is attentive and everything is being monitored closely. Please reach out with any questions.\n`;
+
+  } else if (type === 'team') {
+    const incPhone = getChecked('inc-phone');
+    const incEmail = getChecked('inc-email');
+    const incNotes = getChecked('inc-notes');
+    title = 'Care Team Summary';
+    text = `Care Team — ${lo?.name}\n`;
+    text += `Location: ${locDisplay}\n`;
+    text += `Generated: ${fmtDate(today.toISOString())}\n\n`;
+    text += `─────────────────────────\n\n`;
+    if (state.team.length === 0) {
+      text += 'No team members on file.\n';
+    } else {
+      state.team.forEach(tm => {
+        const loc = state.locations.find(l => l.id === tm.locationId);
+        text += `${tm.name}\n${tm.role}${tm.organization ? ' · ' + tm.organization : ''}\n`;
+        if (incPhone && tm.phone) text += `Phone: ${tm.phone}\n`;
+        if (incEmail && tm.email) text += `Email: ${tm.email}\n`;
+        if (loc) text += `Location: ${loc.name}\n`;
+        if (incNotes && tm.notes) text += `Notes: ${tm.notes}\n`;
+        text += '\n';
+      });
+    }
+
+  } else if (type === 'daily') {
+    const todayEntries = state.entries.filter(e => isToday(e.date));
+    const openTasks = state.tasks.filter(t => t.status === 'Open');
+    const overdue = openTasks.filter(t => isOverdue(t.dueDate));
+    const incEntries = getChecked('inc-entries');
+    const incTasks = getChecked('inc-tasks');
+    const incLoc = getChecked('inc-location');
+    const incTeam = getChecked('inc-team');
+    title = `Daily Summary — ${fmtDate(today.toISOString())}`;
+    text = `Daily Summary\n${fmtDate(today.toISOString())}\n\n`;
+    if (incLoc) { text += `Current Location: ${locDisplay}\n\n`; }
+    if (incEntries) {
+      text += `Today's Updates (${todayEntries.length}):\n`;
+      if (todayEntries.length === 0) { text += 'Nothing logged yet today.\n'; }
+      else { todayEntries.sort((a,b) => new Date(b.date)-new Date(a.date)).forEach(e => { text += `• ${fmtTime(e.date)}  ${e.title}${e.severity === 'High' ? ' ⚠' : ''}\n`; if (e.details) text += `  ${e.details.slice(0,100)}\n`; }); }
+      text += '\n';
+    }
+    if (incTasks) {
+      text += `Open Tasks (${openTasks.length}):\n`;
+      if (openTasks.length === 0) { text += 'No open tasks.\n'; }
+      else { openTasks.forEach(t => { text += `• ${t.title}${t.dueDate ? ' — due ' + fmtDate(t.dueDate) : ''}${isOverdue(t.dueDate) ? ' ⚠ overdue' : ''}\n`; }); }
+      text += '\n';
+    }
+    if (incTeam && state.team.length) {
+      text += `Care Team:\n`;
+      state.team.forEach(tm => { text += `• ${tm.name}, ${tm.role}${tm.phone ? ' · ' + tm.phone : ''}\n`; });
+    }
+  }
+
+  currentReportText = text;
+  renderReportOutput(title, text);
+  closeSheet('report-config-overlay');
+  openSheet('report-output-overlay');
+}
+
+function renderReportOutput(title, text) {
+  document.getElementById('report-output-title').textContent = title;
+  // Render as clean, readable prose — no app chrome
+  const lines = text.split('\n');
+  let html = '<div style="font-family:\'Inter\',sans-serif;padding-top:16px">';
+  let inSection = false;
+  lines.forEach((line, i) => {
+    if (i === 0) {
+      // Document title
+      html += `<div style="font-family:'Poppins',sans-serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:2px">${line}</div>`;
+    } else if (i === 1 && line.trim()) {
+      // Date/subtitle
+      html += `<div style="font-size:16px;color:var(--text2);margin-bottom:18px">${line}</div>`;
+    } else if (line === '─────────────────────────') {
+      html += `<hr style="border:none;border-top:1px solid var(--border);margin:14px 0">`;
+    } else if (line.match(/^[A-Z][^•\n]+:\s*$/) && !line.startsWith('•')) {
+      // Section heading
+      html += `<div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text2);margin:16px 0 6px">${line.replace(':','')}</div>`;
+    } else if (line.startsWith('•')) {
+      html += `<div style="font-size:15px;color:var(--text);line-height:1.55;padding:3px 0 3px 14px;position:relative"><span style="position:absolute;left:0;color:var(--accent2)">•</span>${line.slice(1).trim()}</div>`;
+    } else if (line.match(/^\d{2}:\d{2}/) || line.match(/^\w{3} \d{1,2}/)) {
+      // Time or date stamp line
+      html += `<div style="font-size:15px;color:var(--text2);margin-top:8px;font-weight:600">${line}</div>`;
+    } else if (line.trim()) {
+      html += `<div style="font-size:15px;color:var(--text);line-height:1.6;margin-bottom:2px">${line}</div>`;
+    } else {
+      html += `<div style="height:6px"></div>`;
+    }
+  });
+  html += '</div>';
+  document.getElementById('report-output-body').innerHTML = html;
+}
+
+function copyReport() {
+  if (!currentReportText) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(currentReportText).then(() => toast('✓ Copied to clipboard'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = currentReportText;
+    document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('✓ Copied to clipboard');
+  }
+}
+
+function sendReport() {
+  if (!currentReportText) return;
+  const title = document.getElementById('report-output-title').textContent;
+  // Show a small share action sheet
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,40,35,0.45);z-index:600;display:flex;align-items:flex-end;justify-content:center';
+  overlay.innerHTML = `
+    <div style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px))">
+      <div style="width:36px;height:4px;border-radius:2px;background:#E2E6E2;margin:0 auto 18px"></div>
+      <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:16px">Share Report</div>
+      <button onclick="shareViaSMS()" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:var(--bg);border:none;cursor:pointer;margin-bottom:10px;font-family:inherit">
+        <span style="font-size:22px">💬</span>
+        <div style="text-align:left">
+          <div style="font-size:17px;font-weight:600;color:var(--text)">Text Message</div>
+          <div style="font-size:15px;color:var(--text2)">Open in Messages</div>
+        </div>
+      </button>
+      <button onclick="shareViaEmail()" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:var(--bg);border:none;cursor:pointer;margin-bottom:16px;font-family:inherit">
+        <span style="font-size:22px">✉️</span>
+        <div style="text-align:left">
+          <div style="font-size:17px;font-weight:600;color:var(--text)">Email</div>
+          <div style="font-size:15px;color:var(--text2)">Open in Mail</div>
+        </div>
+      </button>
+      <button onclick="this.closest('div[style*=position]').remove()" style="width:100%;padding:14px;border-radius:12px;background:var(--border);border:none;cursor:pointer;font-size:16px;font-weight:600;color:var(--text2);font-family:inherit">Cancel</button>
+    </div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function shareViaSMS() {
+  document.querySelector('div[style*="position:fixed"][style*="z-index:600"]')?.remove();
+  const body = encodeURIComponent(currentReportText);
+  // sms: URI with body pre-filled; works on iOS and Android
+  const smsUrl = `sms:?body=${body}`;
+  const a = document.createElement('a'); a.href = smsUrl; a.click();
+}
+
+function shareViaEmail() {
+  document.querySelector('div[style*="position:fixed"][style*="z-index:600"]')?.remove();
+  const title = document.getElementById('report-output-title').textContent;
+  const subject = encodeURIComponent(title);
+  const body = encodeURIComponent(currentReportText);
+  const a = document.createElement('a'); a.href = `mailto:?subject=${subject}&body=${body}`; a.click();
+}
+
+function populateEntryDropdown(selectId, selectedId) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  const sorted = [...state.entries].sort((a,b) => new Date(b.date) - new Date(a.date));
+  sel.innerHTML = `<option value="">— None —</option>` +
+    sorted.map(e => `<option value="${e.id}" ${e.id === selectedId ? 'selected' : ''}>${fmtDate(e.date)} · ${e.title.slice(0,40)}</option>`).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadState();
+renderHQ();
+</script>
+</body>
+</html>
