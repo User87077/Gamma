@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareStepsHQ v1.7 — Baseline</title>
+<title>CareStepsHQ v1.6</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -325,12 +325,12 @@
   /* MODAL / SHEET */
   .sheet-overlay {
     position: fixed; inset: 0; background: rgba(15,23,42,0.40);
-    z-index: 200; display: flex; align-items: flex-end; justify-content: center;
+    z-index: 200; display: flex; align-items: flex-end;
     opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
   .sheet-overlay.open { opacity: 1; pointer-events: auto; }
   .sheet {
-    width: 100%; max-width: 480px; background: var(--card);
+    width: 100%; background: var(--card);
     border-radius: 24px 24px 0 0;
     max-height: 92vh;
     display: flex; flex-direction: column;
@@ -613,7 +613,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.7</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.6</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -729,9 +729,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Create a Report</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('reports-picker-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body" style="padding-top:8px">
       <p style="font-size:16px;color:var(--text2);margin-bottom:18px;line-height:1.6">Choose what you'd like to put together. Each report can be copied or sent.</p>
       <div id="report-type-list"></div>
@@ -745,9 +745,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="report-config-title">Report Options</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('report-config-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div id="report-config-body"></div>
       <button class="btn btn-primary btn-full" onclick="generateReport()" style="margin-top:8px">Generate Report</button>
@@ -757,16 +757,14 @@
 
 <!-- REPORT OUTPUT SHEET -->
 <div class="sheet-overlay" id="report-output-overlay" onclick="closeSheetIfBg(event,'report-output-overlay')">
-  <div class="sheet" style="max-height:92vh;max-width:480px">
+  <div class="sheet" style="max-height:92vh">
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="report-output-title">Report</div>
       <button class="sheet-close" onclick="closeSheet('report-output-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
-      <div id="report-output-body" style="padding:0 20px 28px"></div>
-    </div>
-    <div style="display:flex;gap:10px;padding:12px 18px;border-top:1px solid var(--border);flex-shrink:0">
+    <div id="report-output-body" style="padding:0 20px 28px;overflow-y:auto"></div>
+    <div style="display:flex;gap:10px;padding:12px 18px;border-top:1px solid var(--border)">
       <button class="btn btn-primary" style="flex:1" onclick="copyReport()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copy
@@ -785,9 +783,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">⚡ Quick Log</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('ql-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="form-group">
         <label class="form-label">Type</label>
@@ -858,9 +856,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Entry Detail</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('entry-detail-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div id="entry-detail-body"></div>
   </div></div>
 </div>
@@ -871,9 +869,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="entry-edit-title">Edit Entry</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('entry-edit-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="form-group">
         <label class="form-label">Title</label>
@@ -909,9 +907,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Task Detail</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('task-detail-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div id="task-detail-body"></div>
   </div></div>
 </div>
@@ -922,9 +920,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="task-edit-title">Add Task</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('task-edit-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="form-group">
         <label class="form-label">Title</label>
@@ -950,10 +948,6 @@
         <label class="form-label">Notes</label>
         <textarea class="form-textarea" id="te-notes" placeholder="Any extra notes..."></textarea>
       </div>
-      <div class="form-group">
-        <label class="form-label">Follow-Up Notes</label>
-        <textarea class="form-textarea" id="te-followup" placeholder="Record outcome, what happened, or next steps..."></textarea>
-      </div>
       <div style="display:flex;gap:10px">
         <button class="btn btn-primary" style="flex:1" onclick="saveTaskEdit()">Save</button>
         <button class="btn btn-secondary" onclick="closeSheet('task-edit-overlay')">Cancel</button>
@@ -968,9 +962,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Team Member</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('team-detail-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div id="team-detail-body"></div>
   </div></div>
 </div>
@@ -981,9 +975,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="team-edit-title">Add Team Member</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('team-edit-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="form-group">
         <label class="form-label">Name</label>
@@ -1023,9 +1017,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Document</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('doc-detail-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div id="doc-detail-body"></div>
   </div></div>
 </div>
@@ -1036,9 +1030,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title" id="doc-edit-title">Add Document</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('doc-edit-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="form-group">
         <label class="form-label">Name</label>
@@ -1088,12 +1082,11 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Loved One Profile</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('profile-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
-      <div id="profile-body"></div>
-    </div>
-  </div>
+    <div id="profile-body"></div>
+  </div></div>
 </div>
 
 <!-- PROFILE EDIT SHEET -->
@@ -1102,9 +1095,9 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Edit Profile</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('profile-edit-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <!-- PHOTO PICKER -->
       <div class="form-group" style="display:flex;align-items:center;gap:16px">
@@ -1145,13 +1138,13 @@
 
 <!-- SEARCH SHEET -->
 <div class="sheet-overlay" id="search-overlay" onclick="closeSheetIfBg(event,'search-overlay')">
-  <div class="sheet" style="max-height:80vh;max-width:480px">
+  <div class="sheet" style="max-height:80vh">
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-title">Search</div>
+  <div class="sheet-scroll">
       <button class="sheet-close" onclick="closeSheet('search-overlay')">✕</button>
     </div>
-    <div class="sheet-scroll">
     <div class="sheet-body">
       <div class="search-bar" style="margin-bottom:0">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1884,7 +1877,7 @@ function renderEntryDetail(id) {
       </div>
     </div>
     ${e.details ? `<div class="detail-section"><div class="detail-section-label">Details</div><div class="detail-section-value">${e.details}</div></div>` : ''}
-    ${locWithRoom && e.stayId ? `<div class="detail-section"><div class="detail-section-label">Location</div><div class="detail-section-value" style="color:var(--accent);cursor:pointer" onclick="closeSheet('entry-detail-overlay');setTimeout(()=>openLocDetail('${e.stayId}'),180)">${locWithRoom} ›</div></div>` : locWithRoom ? `<div class="detail-section"><div class="detail-section-label">Location</div><div class="detail-section-value">${locWithRoom}</div></div>` : ''}
+    ${locWithRoom ? `<div class="detail-section"><div class="detail-section-label">Location</div><div class="detail-section-value">${locWithRoom}</div></div>` : ''}
     <div class="detail-section"><div class="detail-section-label">Logged</div><div class="detail-section-value">${fmtDatetime(e.createdAt)}</div></div>
     ${linkedTasks.length ? `<div class="detail-section">
       <div class="detail-section-label">Linked Care Tasks</div>
@@ -2022,35 +2015,10 @@ function toggleTask(id) {
 function completeTaskFromDetail(id) {
   const t = state.tasks.find(x => x.id === id);
   if (!t) return;
-  // Show a follow-up prompt overlay before closing
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,40,35,0.45);z-index:600;display:flex;align-items:flex-end;justify-content:center';
-  overlay.innerHTML = `
-    <div style="width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom,0px))">
-      <div style="width:36px;height:4px;border-radius:2px;background:#E2E6E2;margin:0 auto 18px"></div>
-      <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px">Complete Task</div>
-      <div style="font-size:16px;color:var(--text2);margin-bottom:16px">Add any follow-up notes before closing (optional).</div>
-      <textarea id="complete-followup-input" placeholder="What happened? Outcome? Next steps?" style="width:100%;min-height:90px;border-radius:12px;border:1.5px solid var(--border);padding:12px;font-size:17px;font-family:inherit;color:var(--text);background:var(--bg);resize:none;box-sizing:border-box;line-height:1.5">${t.followUp || ''}</textarea>
-      <div style="display:flex;gap:10px;margin-top:14px">
-        <button onclick="confirmCompleteTask('${id}')" style="flex:1;padding:14px;border-radius:12px;background:var(--accent);border:none;cursor:pointer;font-size:17px;font-weight:600;color:#fff;font-family:inherit">✓ Complete</button>
-        <button onclick="this.closest('div[style*=position]').remove()" style="padding:14px 18px;border-radius:12px;background:var(--bg);border:1.5px solid var(--border);cursor:pointer;font-size:16px;font-weight:600;color:var(--text2);font-family:inherit">Cancel</button>
-      </div>
-    </div>`;
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
-  setTimeout(() => document.getElementById('complete-followup-input')?.focus(), 100);
-}
-
-function confirmCompleteTask(id) {
-  const t = state.tasks.find(x => x.id === id);
-  if (!t) return;
-  const followUp = document.getElementById('complete-followup-input')?.value || '';
   t.status = 'Completed';
   t.completedAt = new Date().toISOString();
-  if (followUp.trim()) t.followUp = followUp.trim();
   saveState();
-  document.querySelector('div[style*="position:fixed"][style*="z-index:600"]')?.remove();
-  closeSheet('task-detail-overlay');
+  openTaskDetail(id); // refresh detail view
   if (activeTab === 'tasks') renderTasks();
   if (activeTab === 'hq') renderHQ();
   toast('✅ Task completed');
@@ -2090,7 +2058,6 @@ function openTaskDetail(id) {
       </div>
     </div>
     ${t.notes ? `<div class="detail-section"><div class="detail-section-label">Notes</div><div class="detail-section-value">${t.notes}</div></div>` : ''}
-    ${t.followUp ? `<div class="detail-section"><div class="detail-section-label">Follow-Up Notes</div><div class="detail-section-value" style="color:var(--text)">${t.followUp}</div></div>` : ''}
     ${linkedEntry ? `<div class="detail-section">
       <div class="detail-section-label">Linked Timeline Entry</div>
       <div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding-top:2px" onclick="closeSheet('task-detail-overlay');openEntryDetail('${linkedEntry.id}')">
@@ -2128,7 +2095,6 @@ function openEditTaskSheet(id) {
   document.getElementById('te-due').value = t ? (t.dueDate || '') : '';
   document.getElementById('te-priority').value = t ? t.priority : 'Medium';
   document.getElementById('te-notes').value = t ? (t.notes || '') : '';
-  document.getElementById('te-followup').value = t ? (t.followUp || '') : '';
   populateEntryDropdown('te-linked-entry', t?.linkedEntryId || '');
   currentTaskId = id;
   openSheet('task-edit-overlay');
@@ -2144,7 +2110,6 @@ function saveTaskEdit() {
     t.dueDate = document.getElementById('te-due').value;
     t.priority = document.getElementById('te-priority').value;
     t.notes = document.getElementById('te-notes').value;
-    t.followUp = document.getElementById('te-followup').value;
     t.linkedEntryId = linkedEntryId;
   } else {
     state.tasks.push({
@@ -2152,7 +2117,6 @@ function saveTaskEdit() {
       dueDate: document.getElementById('te-due').value,
       priority: document.getElementById('te-priority').value,
       notes: document.getElementById('te-notes').value,
-      followUp: document.getElementById('te-followup').value,
       linkedEntryId,
       status: 'Open', createdAt: new Date().toISOString()
     });
