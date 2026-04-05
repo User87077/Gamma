@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareStepsHQ v1.8</title>
+<title>CareStepsHQ v1.7 — Baseline</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -244,9 +244,7 @@
     border-bottom: 1px solid rgba(30,40,35,0.06);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: opacity 0.15s;
   }
-  .entry-row:active { opacity: 0.7; transform: scale(0.99); }
   .entry-row:last-child { border-bottom: none; }
   .entry-sev-dot {
     width: 9px; height: 9px; border-radius: 50%;
@@ -282,9 +280,7 @@
     display: flex; align-items: flex-start; gap: 13px;
     padding: 17px 0; border-bottom: 1px solid rgba(30,40,35,0.06);
     cursor: pointer; -webkit-tap-highlight-color: transparent;
-    transition: opacity 0.15s;
   }
-  .task-row:active { opacity: 0.7; }
   .task-row:last-child { border-bottom: none; }
   .task-check {
     width: 26px; height: 26px; border-radius: 7px;
@@ -617,7 +613,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.8</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.7</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -632,10 +628,9 @@
     <!-- HQ -->
     <div class="screen active" id="screen-hq">
       <div id="hq-hero"></div>
-      <div id="hq-top3"></div>
+      <div id="hq-actions"></div>
       <div id="hq-today"></div>
       <div id="hq-tasks"></div>
-      <div id="hq-actions"></div>
       <div id="hq-location-history"></div>
     </div>
 
@@ -901,16 +896,6 @@
         <textarea class="form-textarea" id="ee-details"></textarea>
       </div>
       <div style="display:flex;gap:10px">
-        <div class="form-group" style="flex:1;margin-bottom:0">
-          <label class="form-label">Date</label>
-          <input class="form-input" type="date" id="ee-date">
-        </div>
-        <div class="form-group" style="flex:1;margin-bottom:0">
-          <label class="form-label">Time</label>
-          <input class="form-input" type="time" id="ee-time">
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:18px">
         <button class="btn btn-primary" style="flex:1" onclick="saveEntryEdit()">Save</button>
         <button class="btn btn-secondary" onclick="closeSheet('entry-edit-overlay')">Cancel</button>
       </div>
@@ -1482,36 +1467,35 @@ function renderHQ() {
       </div>
     </div>`;
 
-  // DAILY SUMMARY + TOP 3
-  const allToday = state.entries.filter(e => isToday(e.date));
-  const summary = buildDailySummary(lo, allToday);
-  const top3 = buildTop3Today(allToday);
-
-  // TOP 3 TODAY
-  document.getElementById('hq-top3').innerHTML = `
-    <div class="card" style="margin-bottom:16px">
-      <div class="section-header" style="margin-bottom:12px">
-        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text2);font-family:'Inter',sans-serif">Top 3 Today</div>
-        <div class="section-link" onclick="switchTab('timeline')">Timeline ›</div>
-      </div>
-      ${top3.length === 0
-        ? `<div style="font-size:17px;color:var(--text2);padding:8px 0;line-height:1.5">No updates logged today yet.</div>`
-        : top3.map((e,i) => `
-          <div onclick="openEntryDetail('${e.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:${i < top3.length-1 ? '1px solid var(--border)' : 'none'};cursor:pointer;-webkit-tap-highlight-color:transparent">
-            <div style="width:36px;height:36px;border-radius:10px;background:${typeColor(e.type)};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${typeIcon(e.type)}</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:17px;font-weight:600;color:var(--text);line-height:1.3">${e.title}</div>
-              <div style="font-size:15px;color:var(--text2);margin-top:3px">${e.type} · ${fmtTime(e.date)}</div>
-            </div>
-            <span class="${sevBadgeClass(e.severity)}" style="flex-shrink:0">${e.severity}</span>
-          </div>`).join('')}
+  document.getElementById('hq-actions').innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <button onclick="hqQuickReport('daily')"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+        padding:11px 10px;border-radius:10px;border:1.5px solid var(--border);
+        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
+        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Daily Summary
+      </button>
+      <button onclick="hqQuickReport('family')"
+        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+        padding:11px 10px;border-radius:10px;border:1.5px solid var(--border);
+        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
+        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent;min-height:44px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Family Update
+      </button>
     </div>`;
 
-  // DAILY SUMMARY
+  // DAILY SUMMARY — narrative card
+  const allToday = state.entries.filter(e => isToday(e.date));
+  const summary = buildDailySummary(lo, allToday);
+
   document.getElementById('hq-today').innerHTML = `
     <div class="card" style="background:#EBF1ED;border:1px solid rgba(107,140,122,0.10);box-shadow:none">
       <div class="section-header" style="margin-bottom:10px">
-        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6B8C7A;font-family:'Inter',sans-serif">Daily Summary</div>
+        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6B8C7A;font-family:'Inter',sans-serif">Today</div>
+        <div class="section-link" onclick="switchTab('timeline')" style="color:#6B8C7A">Timeline ›</div>
       </div>
       <div style="font-size:18px;line-height:1.7;color:#252B27;font-family:'Inter',sans-serif">${summary}</div>
       ${allToday.length ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(107,140,122,0.12);font-size:15px;color:#6B8C7A;font-weight:500;font-family:'Inter',sans-serif">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
@@ -1541,27 +1525,6 @@ function renderHQ() {
         </div>
       </div>
       ${openTasks.length ? openTasks.map(t => taskRowHtml(t, true)).join('') : `<div class="empty-state" style="padding:12px 0"><p>No open tasks 🎉</p></div>`}
-    </div>`;
-
-  // QUICK ACTIONS
-  document.getElementById('hq-actions').innerHTML = `
-    <div style="display:flex;gap:10px;margin-bottom:16px">
-      <button onclick="hqQuickReport('daily')"
-        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-        padding:13px 10px;border-radius:10px;border:1.5px solid var(--border);
-        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
-        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent;min-height:44px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Daily Summary
-      </button>
-      <button onclick="hqQuickReport('family')"
-        style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-        padding:13px 10px;border-radius:10px;border:1.5px solid var(--border);
-        background:var(--card);color:var(--text);font-family:'Inter',sans-serif;
-        font-size:16px;font-weight:600;cursor:pointer;box-shadow:var(--shadow-card);-webkit-tap-highlight-color:transparent;min-height:44px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Family Update
-      </button>
     </div>`;
 
   // LOCATION HISTORY
@@ -1650,79 +1613,47 @@ function openLocDetail(stayId) {
   openSheet('loc-detail-overlay');
 }
 
-function buildTop3Today(allToday) {
-  const typePriority = { Medical: 5, Move: 4, Conversation: 3, Update: 2, Other: 1 };
-  const sevPriority = { High: 3, Medium: 2, Low: 1 };
-  return [...allToday]
-    .sort((a, b) => {
-      const sd = (sevPriority[b.severity]||0) - (sevPriority[a.severity]||0);
-      if (sd !== 0) return sd;
-      const td = (typePriority[b.type]||0) - (typePriority[a.type]||0);
-      if (td !== 0) return td;
-      return new Date(b.date) - new Date(a.date);
-    })
-    .slice(0, 3);
-}
-
 function buildDailySummary(lo, allToday) {
   const name = lo.name.split(' ')[0];
   if (allToday.length === 0) {
-    return `Nothing has been logged for ${name} yet today. Tap the + button to add a care update whenever you're ready.`;
+    return `No care entries have been logged yet today for ${name}. Use Quick Log to record what's happening.`;
   }
 
-  const medical = allToday.filter(e => e.type === 'Medical').sort((a,b) => b.severity === 'High' ? 1 : -1);
+  const medical = allToday.filter(e => e.type === 'Medical');
   const moves = allToday.filter(e => e.type === 'Move');
   const convos = allToday.filter(e => e.type === 'Conversation');
   const highSev = allToday.filter(e => e.severity === 'High');
-  const overdueTasks = state.tasks.filter(t => t.status==='Open' && isOverdue(t.dueDate));
   const parts = [];
 
-  // Moves come first — they're significant events
   if (moves.length) {
-    const m = moves[0];
-    parts.push(`${name} was relocated today${m.details ? ' — ' + m.details.slice(0, 90) + (m.details.length > 90 ? '…' : '') : ''}.`);
+    parts.push(`${name} was moved today — ${moves.map(e=>e.title).join(' and ')}.`);
+  }
+  if (medical.length) {
+    const titles = medical.map(e=>e.title.toLowerCase());
+    if (medical.length === 1) {
+      parts.push(`On the medical side, ${titles[0]} was logged${medical[0].details ? ' — ' + medical[0].details.slice(0,80) + (medical[0].details.length>80?'…':'') : ''}.`);
+    } else {
+      parts.push(`There were ${medical.length} medical updates today: ${titles.join('; ')}.`);
+    }
+  }
+  if (convos.length) {
+    const who = convos.map(e=>e.title.replace(/^spoke with /i,'').toLowerCase());
+    parts.push(`Communication-wise, the team connected with ${who.join(' and ')} today.`);
+  }
+  if (highSev.length && !medical.find(e=>e.severity==='High')) {
+    parts.push(`${highSev.length} high-priority update${highSev.length>1?'s require':'requires'} attention: ${highSev.map(e=>e.title.toLowerCase()).join('; ')}.`);
   }
 
-  // Medical updates — most important clinical info
-  if (medical.length === 1) {
-    const m = medical[0];
-    const detail = m.details ? m.details.slice(0, 100) + (m.details.length > 100 ? '…' : '') : null;
-    parts.push(detail
-      ? `The main medical update today: ${m.title.toLowerCase()} — ${detail}`
-      : `Medically, the team noted ${m.title.toLowerCase()} today.`);
-  } else if (medical.length > 1) {
-    const top = medical[0];
-    parts.push(`There ${medical.length === 2 ? 'were two' : `were ${medical.length}`} medical updates today. The most significant: ${top.title.toLowerCase()}${top.details ? ' (' + top.details.slice(0,60) + (top.details.length>60?'…':'') + ')' : ''}.`);
-  }
-
-  // Conversations — humanizing detail
-  if (convos.length === 1) {
-    const c = convos[0];
-    const who = c.title.replace(/^(spoke with|talked to|called|spoke to) /i, '');
-    parts.push(`${name}'s care team also connected with ${who} today${c.details ? ': ' + c.details.slice(0,80) + (c.details.length>80?'…':'') : ''}.`);
-  } else if (convos.length > 1) {
-    parts.push(`Several conversations took place today with members of the care team and family.`);
-  }
-
-  // High severity items not already covered
-  const uncoveredHigh = highSev.filter(e => e.type !== 'Medical' && e.type !== 'Move');
-  if (uncoveredHigh.length) {
-    parts.push(`Worth noting: ${uncoveredHigh.map(e=>e.title.toLowerCase()).join(' and')} ${uncoveredHigh.length === 1 ? 'was flagged as high priority' : 'were flagged as high priority'}.`);
-  }
-
-  // Calm day
-  if (parts.length === 0) {
-    const routineVerbs = ['has had a steady', 'has had a calm', 'has had a quiet'];
-    const verb = routineVerbs[allToday.length % routineVerbs.length];
-    parts.push(`${name} ${verb} day so far, with ${allToday.length} routine update${allToday.length > 1 ? 's' : ''} logged and nothing urgent to report.`);
-  }
-
-  // Overdue tasks reminder
+  const overdueTasks = state.tasks.filter(t => t.status==='Open' && isOverdue(t.dueDate));
   if (overdueTasks.length) {
-    parts.push(`There ${overdueTasks.length === 1 ? 'is' : 'are'} ${overdueTasks.length} overdue care task${overdueTasks.length > 1 ? 's' : ''} that still need attention.`);
+    parts.push(`There ${overdueTasks.length===1?'is':'are'} ${overdueTasks.length} overdue care task${overdueTasks.length>1?'s':''} that need attention.`);
   }
 
-  return parts.slice(0, 4).join(' ');
+  if (parts.length === 0) {
+    parts.push(`Today has been relatively calm for ${name}, with ${allToday.length} routine update${allToday.length>1?'s':''} logged.`);
+  }
+
+  return parts.slice(0,5).join(' ');
 }
 
 function entryRowHtml(e) {
@@ -1995,9 +1926,6 @@ function openEntryEdit(id) {
   document.getElementById('ee-type').value = e.type;
   document.getElementById('ee-severity').value = e.severity;
   document.getElementById('ee-details').value = e.details || '';
-  const entryDate = new Date(e.date);
-  document.getElementById('ee-date').value = entryDate.toISOString().split('T')[0];
-  document.getElementById('ee-time').value = entryDate.toTimeString().slice(0,5);
   openSheet('entry-edit-overlay');
 }
 
@@ -2008,9 +1936,6 @@ function saveEntryEdit() {
   e.type = document.getElementById('ee-type').value;
   e.severity = document.getElementById('ee-severity').value;
   e.details = document.getElementById('ee-details').value;
-  const dateVal = document.getElementById('ee-date').value;
-  const timeVal = document.getElementById('ee-time').value || '00:00';
-  if (dateVal) e.date = new Date(dateVal + 'T' + timeVal).toISOString();
   e.updatedAt = new Date().toISOString();
   saveState();
   closeSheet('entry-edit-overlay');
@@ -2124,7 +2049,7 @@ function confirmCompleteTask(id) {
   t.completedAt = new Date().toISOString();
   if (followUp.trim()) t.followUp = followUp.trim();
   saveState();
-  document.querySelector('div[style*="z-index:600"]')?.remove();
+  document.querySelector('div[style*="position:fixed"][style*="z-index:600"]')?.remove();
   closeSheet('task-detail-overlay');
   if (activeTab === 'tasks') renderTasks();
   if (activeTab === 'hq') renderHQ();
