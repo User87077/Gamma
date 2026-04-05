@@ -7,61 +7,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Backgrounds — layered warmth with clear separation */
-    --bg: #F3F2EE;
-    --card: #FEFEFE;
-    --card-raised: #FFFFFF;
-
-    /* Sage primary — deeper, more authoritative */
-    --accent: #4E7260;
-    --accent-light: #E6EFE9;
-    --accent-dark: #36554A;
-
-    /* Blue-gray secondary — for highlights, interactions, links */
-    --slate: #546E7A;
-    --slate-light: #EBF0F3;
-
-    /* Neutral secondary tone */
-    --accent2: #6E8078;
-    --accent2-light: #E8ECEB;
-
-    /* Text — strong hierarchy */
-    --text: #1A201C;
-    --text2: #4A5450;
-    --text3: #7A8880;
-
-    /* Borders — visible but refined */
-    --border: rgba(26,32,28,0.10);
-    --border-solid: #D8DDD9;
-    --border-strong: rgba(26,32,28,0.16);
-
-    /* Status colors — grounded, not harsh */
-    --red: #8B3232;
-    --red-light: #F2E8E8;
-    --orange: #8A5820;
-    --orange-light: #F2EAD8;
-    --green: #3A6B4C;
-    --green-light: #E2EDE6;
-    --yellow: #7A6A18;
-    --yellow-light: #EDEAD4;
-    --purple: #5A587A;
-    --purple-light: #EAEAF2;
-    --teal: #2E6464;
-    --teal-light: #DDE8E8;
-
+    --bg: #F8F7F4;
+    --card: #FFFFFF;
+    --accent: #6B8C7A;
+    --accent-light: #EBF1ED;
+    --accent2: #8A9490;
+    --accent2-light: #EEF0EF;
+    --text: #252B27;
+    --text2: #6B7570;
+    --text3: #9BA5A0;
+    --border: rgba(30,40,35,0.08);
+    --border-solid: #E2E5E2;
+    --red: #A04040;
+    --red-light: #F5EAEA;
+    --orange: #A06830;
+    --orange-light: #F5EDE0;
+    --green: #4A7A5C;
+    --green-light: #E6F0EA;
+    --yellow: #8A7820;
+    --yellow-light: #F2EED8;
+    --purple: #6A6888;
+    --purple-light: #EEEDF5;
+    --teal: #3A7070;
+    --teal-light: #E4EEEE;
     --nav-h: 64px;
     --fab-size: 52px;
     --radius: 14px;
     --radius-sm: 10px;
-    --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 14px rgba(26,32,28,0.07);
-    --shadow-lg: 0 8px 28px rgba(26,32,28,0.12);
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 3px 10px rgba(26,32,28,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(30,40,35,0.05);
+    --shadow-lg: 0 8px 24px rgba(30,40,35,0.10);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(30,40,35,0.05);
   }
   /* APP SHELL — centering wrapper */
   .app-shell {
     display: flex;
     justify-content: center;
-    background: #D8DDD9;
+    background: #E5E8E4;
     min-height: 100vh;
   }
   .app-container {
@@ -127,9 +108,9 @@
     cursor: pointer; -webkit-tap-highlight-color: transparent;
     user-select: none;
   }
-  .topbar-logo .part-care { color: #4E7260; }
-  .topbar-logo .part-steps { color: #6E8078; }
-  .topbar-logo .part-hq { color: #4E7260; }
+  .topbar-logo .part-care { color: #6B8C7A; }
+  .topbar-logo .part-steps { color: #8A9490; }
+  .topbar-logo .part-hq { color: #6B8C7A; }
   .topbar-search-btn {
     background: none; border: none; cursor: pointer;
     color: var(--text2); padding: 6px; display: flex; align-items: center;
@@ -155,14 +136,14 @@
     flex: 1; display: flex; flex-direction: column; align-items: center;
     justify-content: center; gap: 4px;
     cursor: pointer; padding: 8px 0;
-    color: #7A8880; font-size: 15px; font-weight: 500;
+    color: #9BA5A0; font-size: 15px; font-weight: 500;
     transition: color 0.15s;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
     min-height: 44px;
   }
-  .nav-tab.active { color: #4E7260; }
+  .nav-tab.active { color: #6B8C7A; }
   .nav-tab svg { width: 24px; height: 24px; }
   /* FAB */
   .fab {
@@ -171,7 +152,7 @@
     right: 20px;
     width: var(--fab-size); height: var(--fab-size);
     border-radius: 50%;
-    background: #4E7260;
+    background: #6B8C7A;
     color: #fff;
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
@@ -189,7 +170,7 @@
     box-shadow: var(--shadow-card);
     padding: 20px;
     margin-bottom: 16px;
-    border: 1px solid var(--border-strong);
+    border: 1px solid rgba(30,40,35,0.05);
   }
   .card-title {
     font-size: 15px; font-weight: 600; letter-spacing: 0.4px;
@@ -212,9 +193,9 @@
     display: inline-block; padding: 2px 9px; border-radius: 20px;
     font-size: 15px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
   }
-  .badge-low { background: #E8ECEB; color: #4A5450; }
-  .badge-medium { background: #EDE8D8; color: #7A5010; }
-  .badge-high { background: #EDE0E0; color: #7A2828; }
+  .badge-low { background: #F0F2F0; color: #6B7280; }
+  .badge-medium { background: #FFF8F0; color: #B45309; }
+  .badge-high { background: #FFF1F0; color: #C0392B; }
   .badge-update { background: var(--accent-light); color: #4A6858; }
   .badge-medical { background: var(--red-light); color: #8C3A34; }
   .badge-move { background: var(--purple-light); color: #5C5080; }
@@ -253,7 +234,7 @@
   }
   .location-dot {
     width: 8px; height: 8px; border-radius: 50%;
-    background: #8BBAA6; flex-shrink: 0;
+    background: #A8CDBA; flex-shrink: 0;
     box-shadow: 0 0 0 3px rgba(168,205,186,0.28);
   }
   /* ENTRY ROW — signature timeline design */
@@ -271,14 +252,14 @@
     width: 9px; height: 9px; border-radius: 50%;
     flex-shrink: 0; margin-top: 6px;
   }
-  .entry-sev-dot.high { background: #B84848; }
-  .entry-sev-dot.medium { background: #C8854A; }
-  .entry-sev-dot.low { background: #A8B4AC; }
+  .entry-sev-dot.high { background: #E57373; }
+  .entry-sev-dot.medium { background: #F2A65A; }
+  .entry-sev-dot.low { background: #C7CDD6; }
   .entry-icon {
     width: 34px; height: 34px; border-radius: 9px;
     display: flex; align-items: center; justify-content: center;
     font-size: 15px; flex-shrink: 0;
-    background: #EAEEED;
+    background: #F0F2F0;
   }
   .entry-body { flex: 1; min-width: 0; }
   .entry-title {
@@ -307,19 +288,19 @@
   .task-row:last-child { border-bottom: none; }
   .task-check {
     width: 26px; height: 26px; border-radius: 7px;
-    border: 2px solid #AEBAB4;
+    border: 2px solid #C4CAC4;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; margin-top: 2px;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
-  .task-check.done { background: #3A6B4C; border-color: #3A6B4C; color: #fff; }
-  .task-check.overdue { border-color: #B84848; }
+  .task-check.done { background: #4CAF7D; border-color: #4CAF7D; color: #fff; }
+  .task-check.overdue { border-color: #E57373; }
   .task-title { font-size: 18px; font-weight: 500; letter-spacing: -0.1px; }
   .task-title.done { text-decoration: line-through; color: var(--text2); }
-  .task-title.overdue { color: #8B3232; }
+  .task-title.overdue { color: #C0392B; }
   .task-due { font-size: 15px; color: var(--text2); margin-top: 4px; }
-  .task-due.overdue { font-size: 15px; color: #8B3232; font-weight: 600; }
+  .task-due.overdue { font-size: 15px; color: #C0392B; font-weight: 600; }
   /* DAILY SUMMARY */
   .summary-text {
     font-size: 18px; line-height: 1.7; color: var(--text);
@@ -341,9 +322,9 @@
     font-family: 'Inter', sans-serif;
   }
   .filter-chip.active {
-    background: #E6EFE9;
-    border-color: #4E7260;
-    color: #4E7260;
+    background: #EBF1ED;
+    border-color: #6B8C7A;
+    color: #6B8C7A;
   }
   /* MODAL / SHEET */
   .sheet-overlay {
@@ -363,7 +344,7 @@
   .sheet-overlay.open .sheet { transform: translateY(0); }
   .sheet-handle {
     width: 36px; height: 4px; border-radius: 2px;
-    background: #D4D9D5; margin: 12px auto 4px;
+    background: #E2E6E2; margin: 12px auto 4px;
     flex-shrink: 0;
   }
   .sheet-head {
@@ -380,7 +361,7 @@
   }
   .sheet-title { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .sheet-close {
-    background: #EAEEED; border: none; cursor: pointer;
+    background: #F0F2F0; border: none; cursor: pointer;
     width: 30px; height: 30px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     color: var(--text2); font-size: 16px;
@@ -399,7 +380,7 @@
     border: 1.5px solid #E2E6E2; border-radius: var(--radius-sm);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
     font-size: 18px; color: var(--text);
-    background: #F2F4F2;
+    background: #F6F8F6;
     outline: none; transition: border-color 0.15s, box-shadow 0.15s;
   }
   .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -417,9 +398,9 @@
     -webkit-tap-highlight-color: transparent; letter-spacing: -0.1px;
   }
   .btn-primary { background: #6B8C7A; color: #fff; box-shadow: 0 1px 2px rgba(107,140,122,0.15); }
-  .btn-primary:active { background: #2E4A3A; }
+  .btn-primary:active { background: #4A6858; }
   .btn-secondary { background: #F0F2F0; color: var(--text2); border: 1px solid #E2E6E2; }
-  .btn-danger { background: #EDE0E0; color: #7A2828; }
+  .btn-danger { background: #FFF1F0; color: #C0392B; }
   .btn-full { width: 100%; }
   .btn-sm { padding: 11px 16px; font-size: 15px; border-radius: 8px; min-height: 44px; }
   /* QUICK PHRASE GRID */
@@ -487,7 +468,7 @@
     pointer-events: none; width: calc(100% - 32px); max-width: 340px;
   }
   .toast {
-    background: #1A201C; color: #fff;
+    background: #252B27; color: #fff;
     padding: 12px 16px; border-radius: 12px;
     font-size: 15px; font-weight: 500;
     box-shadow: 0 8px 24px rgba(15,23,42,0.15);
@@ -534,7 +515,7 @@
   }
   .section-title { font-size: 18px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .section-link {
-    font-size: 15px; color: #4E7260; font-weight: 600; cursor: pointer;
+    font-size: 15px; color: #6B8C7A; font-weight: 600; cursor: pointer;
     font-family: 'Inter', sans-serif;
   }
   /* SEARCH */
@@ -1508,30 +1489,32 @@ function renderHQ() {
 
   // TOP 3 TODAY
   document.getElementById('hq-top3').innerHTML = `
-    <div class="card" style="margin-bottom:16px;border:1px solid var(--border-strong)">
-      <div class="section-header" style="margin-bottom:14px">
-        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#4E7260;font-family:'Inter',sans-serif">Top 3 Today</div>
-        <div class="section-link" onclick="switchTab('timeline')" style="color:#4E7260">Timeline ›</div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="section-header" style="margin-bottom:12px">
+        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text2);font-family:'Inter',sans-serif">Top 3 Today</div>
+        <div class="section-link" onclick="switchTab('timeline')">Timeline ›</div>
       </div>
       ${top3.length === 0
-        ? `<div style="font-size:18px;color:var(--text2);padding:10px 0;line-height:1.6">No updates logged today yet.</div>`
+        ? `<div style="font-size:17px;color:var(--text2);padding:8px 0;line-height:1.5">No updates logged today yet.</div>`
         : top3.map((e,i) => `
-          <div onclick="openEntryDetail('${e.id}')" style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:${i < top3.length-1 ? '1px solid var(--border)' : 'none'};cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:56px;transition:opacity 0.15s" ontouchstart="this.style.opacity=0.7" ontouchend="this.style.opacity=1">
-            <div style="width:44px;height:44px;border-radius:12px;background:${typeColor(e.type)};display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${typeIcon(e.type)}</div>
+          <div onclick="openEntryDetail('${e.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:${i < top3.length-1 ? '1px solid var(--border)' : 'none'};cursor:pointer;-webkit-tap-highlight-color:transparent">
+            <div style="width:36px;height:36px;border-radius:10px;background:${typeColor(e.type)};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${typeIcon(e.type)}</div>
             <div style="flex:1;min-width:0">
-              <div style="font-size:19px;font-weight:700;color:var(--text);line-height:1.3;letter-spacing:-0.2px">${e.title}</div>
-              <div style="font-size:16px;color:var(--text2);margin-top:4px;font-weight:500">${e.type} · ${fmtTime(e.date)}</div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);line-height:1.3">${e.title}</div>
+              <div style="font-size:15px;color:var(--text2);margin-top:3px">${e.type} · ${fmtTime(e.date)}</div>
             </div>
-            <span class="${sevBadgeClass(e.severity)}" style="flex-shrink:0;font-size:15px;padding:4px 10px">${e.severity}</span>
+            <span class="${sevBadgeClass(e.severity)}" style="flex-shrink:0">${e.severity}</span>
           </div>`).join('')}
     </div>`;
 
   // DAILY SUMMARY
   document.getElementById('hq-today').innerHTML = `
-    <div class="card" style="background:#E8EFE9;border:1px solid rgba(78,114,96,0.16);box-shadow:none;padding:22px">
-      <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#4E7260;font-family:'Inter',sans-serif;margin-bottom:12px">Daily Summary</div>
-      <div style="font-size:19px;line-height:1.75;color:#1A201C;font-family:'Inter',sans-serif;font-weight:400;letter-spacing:-0.1px">${summary}</div>
-      ${allToday.length ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(78,114,96,0.15);font-size:16px;color:#4E7260;font-weight:600;font-family:'Inter',sans-serif">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
+    <div class="card" style="background:#EBF1ED;border:1px solid rgba(107,140,122,0.10);box-shadow:none">
+      <div class="section-header" style="margin-bottom:10px">
+        <div style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#6B8C7A;font-family:'Inter',sans-serif">Daily Summary</div>
+      </div>
+      <div style="font-size:18px;line-height:1.7;color:#252B27;font-family:'Inter',sans-serif">${summary}</div>
+      ${allToday.length ? `<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(107,140,122,0.12);font-size:15px;color:#6B8C7A;font-weight:500;font-family:'Inter',sans-serif">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
     </div>`;
 
   // TASK STAT CHIPS + LIST
@@ -1828,7 +1811,7 @@ function renderTimelineList() {
   list.innerHTML = Object.entries(groups).map(([dk, es]) => {
     const label = dk === new Date().toDateString() ? 'Today' : fmtDate(es[0].date);
     return `<div style="margin-bottom:4px">
-      <div style="font-size:16px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;padding:12px 0 6px">${label}</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.4px;padding:10px 0 5px">${label}</div>
       <div class="card" style="padding:6px 16px">
         ${es.map(e => entryRowHtml(e)).join('')}
       </div>
@@ -1974,11 +1957,11 @@ function renderEntryDetail(id) {
     <div class="detail-section"><div class="detail-section-label">Logged</div><div class="detail-section-value">${fmtDatetime(e.createdAt)}</div></div>
     ${linkedTasks.length ? `<div class="detail-section">
       <div class="detail-section-label">Linked Care Tasks</div>
-      ${linkedTasks.map(t=>`<div style="font-size:17px;padding:10px 0;cursor:pointer;color:var(--accent);font-weight:500;min-height:44px;display:flex;align-items:center;gap:8px" onclick="closeSheet('entry-detail-overlay');openTaskDetail('${t.id}')">📋 ${t.title}</div>`).join('')}
+      ${linkedTasks.map(t=>`<div style="font-size:16px;padding:6px 0;cursor:pointer;color:var(--accent)" onclick="closeSheet('entry-detail-overlay');openTaskDetail('${t.id}')">📋 ${t.title}</div>`).join('')}
     </div>` : ''}
     ${linkedDocs.length ? `<div class="detail-section">
       <div class="detail-section-label">Linked Documents</div>
-      ${linkedDocs.map(d=>`<div style="font-size:17px;padding:10px 0;cursor:pointer;color:var(--accent);font-weight:500;min-height:44px;display:flex;align-items:center;gap:8px" onclick="closeSheet('entry-detail-overlay');openDocDetail('${d.id}')">📄 ${d.name}</div>`).join('')}
+      ${linkedDocs.map(d=>`<div style="font-size:16px;padding:7px 0;cursor:pointer;color:var(--accent)" onclick="closeSheet('entry-detail-overlay');openDocDetail('${d.id}')">📄 ${d.name}</div>`).join('')}
     </div>` : ''}
     <div style="padding:12px 18px;border-bottom:1px solid var(--border)">
       <button class="btn btn-secondary btn-full btn-sm" onclick="createTaskFromEntry('${id}')">
