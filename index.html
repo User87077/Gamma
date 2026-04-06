@@ -94,7 +94,7 @@
     }
     .fab { right: 18px; }
     .sheet-overlay { position: absolute; inset: 0; border-radius: 20px; }
-    #app-menu-dropdown { right: 12px !important; top: 52px !important; }
+    #app-menu-dropdown { right: 16px; top: 52px; }
   }
 
   /* ── DESKTOP (1024px+) ── */
@@ -181,7 +181,7 @@
     .filter-chip { padding: 10px 18px; font-size: 16px; }
 
     /* Phrase chips */
-    .phrase-chip { padding: 12px 20px; font-size: 17px; }
+    .phrase-chip { padding: 6px 14px; font-size: 15px; }
 
     /* ── HOVER STATES ── */
     .btn { transition: all 0.15s; }
@@ -277,9 +277,9 @@
   }
   .nav-tab {
     flex: 1; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 4px;
+    justify-content: center; gap: 3px;
     cursor: pointer; padding: 8px 0;
-    color: var(--text3); font-size: 16px; font-weight: 600;
+    color: var(--text3); font-size: 15px; font-weight: 600; line-height: 1;
     transition: color 0.15s;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -555,12 +555,13 @@
   }
   .phrase-grid { display: flex; flex-wrap: wrap; gap: 7px; }
   .phrase-chip {
-    padding: 12px 18px; border-radius: 20px; min-height: 44px;
+    padding: 6px 12px; border-radius: 20px;
     border: 1.5px solid var(--border-solid);
-    font-size: 17px; font-weight: 600; color: var(--text);
+    font-size: 15px; font-weight: 500; color: var(--text2);
     background: var(--card); cursor: pointer;
     transition: all 0.12s; -webkit-tap-highlight-color: transparent;
     font-family: 'Inter', sans-serif;
+    display: inline-flex; align-items: center; line-height: 1.2;
   }
   .phrase-chip.selected {
     background: var(--slate-light); border-color: var(--slate); color: var(--slate-strong);
@@ -864,7 +865,7 @@
 <div class="toast-container" id="toast-container"></div>
 
 <!-- APP MENU DROPDOWN -->
-<div id="app-menu-dropdown" style="display:none;position:fixed;top:52px;left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--border-subtle);border-radius:12px;box-shadow:var(--shadow-lg);z-index:400;width:220px;overflow:hidden">
+<div id="app-menu-dropdown" style="display:none;position:fixed;top:52px;right:16px;background:var(--card);border:1px solid var(--border-subtle);border-radius:12px;box-shadow:var(--shadow-lg);z-index:400;width:220px;overflow:hidden">
   <div onclick="openReportsPicker();closeAppMenu()" style="display:flex;align-items:center;gap:10px;padding:15px 16px;cursor:pointer;font-size:17px;font-weight:500;color:var(--text)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     Reports
@@ -937,12 +938,12 @@
       <button class="sheet-close" onclick="closeSheet('ql-overlay')">✕</button>
     </div>
     <div class="sheet-scroll">
-    <div class="sheet-body">
+    <div class="sheet-body" style="padding:16px 20px">
       <!-- Type + Severity in one row -->
-      <div style="display:flex;gap:10px;margin-bottom:20px">
+      <div style="display:flex;gap:10px;margin-bottom:14px">
         <div style="flex:1">
-          <label class="form-label">Type</label>
-          <select class="form-select" id="ql-type" onchange="qlTypeChanged()">
+          <label class="form-label" style="font-size:14px;margin-bottom:6px">Type</label>
+          <select class="form-select" id="ql-type" onchange="qlTypeChanged()" style="padding:10px 12px;min-height:44px;font-size:17px">
             <option value="Update">Update</option>
             <option value="Medical">Medical</option>
             <option value="Conversation">Conversation</option>
@@ -951,8 +952,8 @@
           </select>
         </div>
         <div style="flex:1">
-          <label class="form-label">Severity</label>
-          <select class="form-select" id="ql-severity">
+          <label class="form-label" style="font-size:14px;margin-bottom:6px">Severity</label>
+          <select class="form-select" id="ql-severity" style="padding:10px 12px;min-height:44px;font-size:17px">
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
@@ -960,35 +961,35 @@
         </div>
       </div>
       <!-- Single contextual phrase section -->
-      <div id="ql-phrases" style="margin-bottom:20px"></div>
+      <div id="ql-phrases" style="margin-bottom:14px"></div>
       <!-- Title -->
-      <div class="form-group">
-        <label class="form-label">Title</label>
-        <input class="form-input" id="ql-title" placeholder="What happened?">
+      <div style="margin-bottom:14px">
+        <label class="form-label" style="font-size:14px;margin-bottom:6px">Title</label>
+        <input class="form-input" id="ql-title" placeholder="What happened?" style="padding:10px 12px;min-height:44px;font-size:17px">
       </div>
       <!-- Move fields -->
       <div id="ql-move-fields">
-        <div class="form-group">
-          <label class="form-label">New Location Name</label>
-          <input class="form-input" id="ql-new-loc-name" placeholder="e.g. Rehab Center">
+        <div style="margin-bottom:14px">
+          <label class="form-label" style="font-size:14px;margin-bottom:6px">New Location Name</label>
+          <input class="form-input" id="ql-new-loc-name" placeholder="e.g. Rehab Center" style="padding:10px 12px;min-height:44px;font-size:17px">
         </div>
-        <div class="form-group">
-          <label class="form-label">Location Type</label>
-          <select class="form-select" id="ql-new-loc-type">
+        <div style="margin-bottom:14px">
+          <label class="form-label" style="font-size:14px;margin-bottom:6px">Location Type</label>
+          <select class="form-select" id="ql-new-loc-type" style="padding:10px 12px;min-height:44px;font-size:17px">
             <option>Hospital</option><option>Rehab</option><option>Home</option><option>Other</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Room Number (optional)</label>
-          <input class="form-input" id="ql-new-room" placeholder="e.g. 214">
+        <div style="margin-bottom:14px">
+          <label class="form-label" style="font-size:14px;margin-bottom:6px">Room Number (optional)</label>
+          <input class="form-input" id="ql-new-room" placeholder="e.g. 214" style="padding:10px 12px;min-height:44px;font-size:17px">
         </div>
       </div>
       <!-- Details -->
-      <div class="form-group">
-        <label class="form-label">Details (optional)</label>
-        <textarea class="form-textarea" id="ql-details" placeholder="Any additional notes..."></textarea>
+      <div style="margin-bottom:16px">
+        <label class="form-label" style="font-size:14px;margin-bottom:6px">Details (optional)</label>
+        <textarea class="form-textarea" id="ql-details" placeholder="Any additional notes..." style="min-height:72px;font-size:17px;padding:10px 12px"></textarea>
       </div>
-      <button class="btn btn-primary btn-full" onclick="submitQuickLog()">Log Care Update</button>
+      <button class="btn btn-primary btn-full" onclick="submitQuickLog()" style="min-height:48px;font-size:17px">Log Care Update</button>
     </div>
   </div></div>
 </div>
