@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareSteps v1.9.8</title>
+<title>CareStepsHQ v1.9.8</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -263,7 +263,7 @@
     user-select: none; line-height: 1;
   }
   .topbar-logo .part-care { color: #FFFFFF; }
-  .topbar-logo .part-steps { color: rgba(255,255,255,0.85); }
+  .topbar-logo .part-steps { color: rgba(255,255,255,0.70); }
   .topbar-logo .part-hq { color: #FFFFFF; }
   .topbar-search-btn {
     background: none; border: none; cursor: pointer;
@@ -779,7 +779,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to Home"><span class="part-care">Care</span><span class="part-steps">Steps</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.8</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.8</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -852,7 +852,7 @@
   <nav class="bottom-nav">
     <div class="nav-tab active" data-tab="hq" onclick="switchTab('hq')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><rect x="9" y="14" width="6" height="7"/></svg>
-      Home
+      HQ
     </div>
     <div class="nav-tab" data-tab="timeline" onclick="switchTab('timeline')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -1078,7 +1078,7 @@
   <div class="sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-head">
-      <div class="sheet-title" style="color:var(--text2)">Task Detail</div>
+      <div class="sheet-title">Task Detail</div>
       <button class="sheet-close" onclick="closeSheet('task-detail-overlay')">✕</button>
     </div>
     <div class="sheet-scroll">
@@ -1643,9 +1643,9 @@ function renderHQ() {
           const locTeam = loc ? state.team.filter(tm => tm.locationId === loc.id && tm.phone) : [];
           const contact = locTeam[0];
           return contact ? `<a href="tel:${contact.phone}" onclick="event.stopPropagation()"
-            style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);
-            color:#fff;padding:6px 12px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;
-            white-space:nowrap;flex-shrink:0;letter-spacing:0.1px">
+            style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);
+            color:#fff;padding:7px 13px;border-radius:20px;text-decoration:none;font-size:15px;font-weight:500;
+            white-space:nowrap;flex-shrink:0">
             📞 ${contact.phone}
           </a>` : '';
         })()}
