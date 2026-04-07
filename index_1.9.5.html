@@ -3,72 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareStepsHQ v1.9.7</title>
+<title>CareStepsHQ v1.9.6</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* ── Visual System v2.2 — Slate Blue ── */
+    /* ── Visual System v2.0 ── */
 
-    /* Backgrounds — cool, calm, clear */
-    --bg: #F5F4F0;          /* barely warm white — calm, not cold */
-    --card: #FFFFFF;        /* true white — clear separation */
-    --bg-main: #F5F4F0;
-    --bg-card: #FFFFFF;
-    --border-subtle: #E2DED8;
+    /* Backgrounds — clear layering */
+    --bg: #EEF0EC;          /* page base — distinctly off-white/soft sage */
+    --card: #FAFAF8;        /* card surface — warm white, clearly above bg */
+    --bg-main: #EEF0EC;
+    --bg-card: #FAFAF8;
+    --border-subtle: #D8DDD6;  /* stronger than before — cards read clearly */
 
-    /* Primary — Slate blue, trustworthy and calm */
-    --primary: #4A6E8E;        /* mid slate blue */
-    --primary-strong: #385C7A; /* deeper, for active/hover */
-    --primary-soft: #E4EBF4;   /* very soft blue tint */
-    --accent: #4A6E8E;
-    --accent-light: #E4EBF4;
-    --accent-dark: #385C7A;
-    --accent2: #4A6E8E;
-    --accent2-light: #E4EBF4;
+    /* Primary — Sage, deeper and more decisive */
+    --primary: #4A7A60;        /* richer, less washed */
+    --primary-strong: #3A6450; /* for active states, hover */
+    --primary-soft: #DFF0E6;   /* tinted backgrounds */
+    --accent: #4A7A60;
+    --accent-light: #DFF0E6;
+    --accent-dark: #3A6450;
+    --accent2: #4A7A60;
+    --accent2-light: #DFF0E6;
 
-    /* Secondary — muted sage, kept as supporting tone */
-    --slate: #5A8A6E;
-    --slate-light: #E4F2EA;
-    --slate-strong: #47735A;
+    /* Accent — Blue-Gray, cleaner */
+    --slate: #5B7A96;
+    --slate-light: #DDE8F0;
+    --slate-strong: #3D5F7A;
 
-    /* Text — cool near-black, clear hierarchy */
-    --text: #1C2330;      /* dark blue-black */
-    --text2: #48546A;     /* medium blue-gray */
-    --text3: #7A8898;     /* soft muted */
+    /* Text — strong hierarchy */
+    --text: #1A2420;      /* near-black with warm tint */
+    --text2: #3D4D48;     /* readable secondary */
+    --text3: #6B7A74;     /* muted, still legible */
 
     /* Borders & Shadows */
-    --border: rgba(28,35,48,0.10);
-    --border-solid: #E2DED8;
-    --border-strong: rgba(28,35,48,0.16);
+    --border: rgba(26,36,32,0.12);
+    --border-solid: #D8DDD6;
+    --border-strong: rgba(26,36,32,0.18);
 
-    /* Status */
-    --red: #C05858;
-    --red-light: #FAF0F0;
-    --orange: #C48848;
-    --orange-light: #FBF3E4;
-    --green: #4E8A6A;
-    --green-light: #E4F2EA;
-    --yellow: #A08030;
-    --yellow-light: #F4EDD0;
-    --purple: #7878A8;
-    --purple-light: #EEEEF8;
-    --teal: #4A9090;
-    --teal-light: #E0F0F0;
+    /* Status — grounded, not pastel */
+    --red: #B85555;
+    --red-light: #F2E4E4;
+    --orange: #C4884A;
+    --orange-light: #F5E8D4;
+    --green: #4A7A60;
+    --green-light: #DFF0E6;
+    --yellow: #A07830;
+    --yellow-light: #F0E4C8;
+    --purple: #7070A0;
+    --purple-light: #E8E8F5;
+    --teal: #3A8080;
+    --teal-light: #D8ECEC;
 
     --nav-h: 64px;
     --fab-size: 52px;
     --radius: 14px;
     --radius-sm: 10px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(28,35,48,0.08);
-    --shadow-lg: 0 8px 28px rgba(28,35,48,0.14);
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 3px 12px rgba(28,35,48,0.08);
-    --shadow-elevated: 0 2px 6px rgba(0,0,0,0.06), 0 8px 24px rgba(28,35,48,0.12);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(26,36,32,0.09);
+    --shadow-lg: 0 8px 28px rgba(26,36,32,0.16);
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 3px 12px rgba(26,36,32,0.10);
+    --shadow-elevated: 0 2px 6px rgba(0,0,0,0.07), 0 8px 24px rgba(26,36,32,0.14);
   }
   /* APP SHELL — centering wrapper */
   .app-shell {
     display: flex;
     justify-content: center;
-    background: #C8C8C4;
+    background: #C4CAC0;
     min-height: 100vh;
   }
   .app-container {
@@ -102,7 +102,7 @@
   @media (min-width: 1024px) {
     /* Shell — richer background, centered stage */
     .app-shell {
-      background: #B8B8B4;
+      background: #B4BAB0;
       align-items: flex-start;
       padding: 36px 0;
     }
@@ -189,7 +189,7 @@
     /* ── HOVER STATES ── */
     .btn { transition: all 0.15s; }
     .btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31,41,51,0.15); }
-    .btn-primary:hover { background: var(--primary-strong); opacity: 1; transform: translateY(-1px); }
+    .btn-primary:hover { background: #3A6450; opacity: 1; transform: translateY(-1px); }
     .btn-secondary:hover { background: var(--slate-light); border-color: var(--slate); opacity: 1; }
 
     .entry-row { transition: background 0.12s; }
@@ -205,7 +205,7 @@
     .doc-card:hover { background: var(--bg); box-shadow: 0 4px 20px rgba(31,41,51,0.11); }
 
     .nav-tab { transition: color 0.15s; }
-    .nav-tab:hover { color: var(--primary); }
+    .nav-tab:hover { color: #4A7A60; }
 
     .filter-chip { transition: all 0.15s; }
     .filter-chip:hover:not(.active) { border-color: var(--slate); background: var(--slate-light); color: var(--slate-strong); }
@@ -246,7 +246,7 @@
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     padding: 14px 20px 12px;
-    background: #2C4E6E;
+    background: #2E5240;
     border-bottom: none;
     flex-shrink: 0;
     gap: 10px;
@@ -306,7 +306,7 @@
     color: #fff;
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(44,78,110,0.30);
+    box-shadow: 0 4px 16px rgba(42,90,70,0.36);
     z-index: 101;
     font-size: 24px;
     transition: transform 0.15s, box-shadow 0.15s;
@@ -356,12 +356,12 @@
   .badge-other { background: var(--bg); color: var(--text2); }
   /* HQ STYLES */
   .hq-hero {
-    background: linear-gradient(135deg, #2C4E6E 0%, #385C7A 50%, #4A6E8E 100%);
+    background: linear-gradient(135deg, #2E5240 0%, #3E6850 40%, #4A7A60 100%);
     border-radius: 0;
     padding: 22px 20px; color: #fff;
     margin-bottom: 0; display: block;
     position: relative; overflow: hidden;
-    box-shadow: 0 4px 20px rgba(44,78,110,0.28);
+    box-shadow: 0 6px 24px rgba(42,82,64,0.32);
   }
   .hq-hero::before {
     content: ''; position: absolute; top: -24px; right: -24px;
@@ -480,11 +480,10 @@
     background: var(--primary-soft);
     border-color: var(--primary);
     color: var(--primary-strong);
-    font-weight: 600;
   }
   /* MODAL / SHEET */
   .sheet-overlay {
-    position: fixed; inset: 0; background: rgba(14,20,30,0.48);
+    position: fixed; inset: 0; background: rgba(10,18,14,0.50);
     z-index: 200; display: flex; align-items: flex-end; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
@@ -553,7 +552,7 @@
     cursor: pointer; border: none; transition: all 0.15s;
     -webkit-tap-highlight-color: transparent; letter-spacing: -0.1px;
   }
-  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(44,78,110,0.28); letter-spacing: 0.1px; }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(42,90,70,0.30); letter-spacing: 0.1px; }
   .btn-primary:active { background: var(--primary-strong); }
   .btn-secondary { background: var(--card); color: var(--text2); border: 1.5px solid var(--border-solid); font-weight: 600; }
   .btn-danger { background: var(--red-light); color: var(--red); font-weight: 700; }
@@ -774,7 +773,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.7</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.6</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1680,8 +1679,8 @@ function renderHQ() {
   const nsEl = document.getElementById('hq-nextsteps');
   if (nextStepObjects.length > 0) {
     nsEl.innerHTML = `
-      <div style="background:#E4EDF8;border-radius:14px;border:1px solid #B4C8E0;padding:20px;margin-bottom:20px">
-        <div style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary);margin-bottom:16px">Next Steps</div>
+      <div style="background:#D8EEE0;border-radius:14px;border:1px solid #A8CDB8;padding:20px;margin-bottom:20px">
+        <div style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary-strong);margin-bottom:16px">Next Steps</div>
         ${nextStepObjects.slice(0,3).map(item => `
           <div onclick="${item.taskId ? `openTaskDetail('${item.taskId}')` : `openEntryDetail('${item.entryId}')`}"
             style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;cursor:pointer;-webkit-tap-highlight-color:transparent">
@@ -1695,7 +1694,7 @@ function renderHQ() {
 
   // ── DAILY SUMMARY ─────────────────────────────────────────────────────────
   document.getElementById('hq-today').innerHTML = `
-    <div style="background:#F0F4F8;border-radius:14px;border:1px solid #C8D4E4;padding:20px;margin-bottom:20px">
+    <div style="background:#F2F6F3;border-radius:14px;border:1px solid #C8D8CC;padding:20px;margin-bottom:20px">
       <div style="font-size:15px;font-weight:500;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);margin-bottom:12px">Today's Summary</div>
       <div style="font-size:17px;line-height:1.75;color:var(--text2);font-weight:400;letter-spacing:-0.1px">${summary}</div>
       ${allToday.length ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-subtle);font-size:16px;color:var(--primary);font-weight:600">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
