@@ -3,72 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareStepsHQ v1.9.5</title>
+<title>CareStepsHQ v1.9.4</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* ── Visual System v2.0 ── */
+    /* ── Locked Color System v1.0 ── */
 
-    /* Backgrounds — clear layering */
-    --bg: #EEF0EC;          /* page base — distinctly off-white/soft sage */
-    --card: #FAFAF8;        /* card surface — warm white, clearly above bg */
-    --bg-main: #EEF0EC;
-    --bg-card: #FAFAF8;
-    --border-subtle: #D8DDD6;  /* stronger than before — cards read clearly */
+    /* Backgrounds */
+    --bg: #F6F7F5;
+    --card: #FFFFFF;
+    --bg-main: #F6F7F5;
+    --bg-card: #FFFFFF;
+    --border-subtle: #E6E8E4;
 
-    /* Primary — Sage, deeper and more decisive */
-    --primary: #4A7A60;        /* richer, less washed */
-    --primary-strong: #3A6450; /* for active states, hover */
-    --primary-soft: #DFF0E6;   /* tinted backgrounds */
-    --accent: #4A7A60;
-    --accent-light: #DFF0E6;
-    --accent-dark: #3A6450;
-    --accent2: #4A7A60;
-    --accent2-light: #DFF0E6;
+    /* Primary — Sage */
+    --primary: #6F8F7A;
+    --primary-strong: #5C7866;
+    --primary-soft: #E6EFEA;
+    --accent: #6F8F7A;
+    --accent-light: #E6EFEA;
+    --accent-dark: #5C7866;
+    --accent2: #6F8F7A;
+    --accent2-light: #E6EFEA;
 
-    /* Accent — Blue-Gray, cleaner */
-    --slate: #5B7A96;
-    --slate-light: #DDE8F0;
-    --slate-strong: #3D5F7A;
+    /* Accent — Blue-Gray */
+    --slate: #7C8FA6;
+    --slate-light: #E8EDF3;
+    --slate-strong: #5E7490;
 
-    /* Text — strong hierarchy */
-    --text: #1A2420;      /* near-black with warm tint */
-    --text2: #3D4D48;     /* readable secondary */
-    --text3: #6B7A74;     /* muted, still legible */
+    /* Text */
+    --text: #1F2933;
+    --text2: #4B5563;
+    --text3: #6B7280;
 
     /* Borders & Shadows */
-    --border: rgba(26,36,32,0.12);
-    --border-solid: #D8DDD6;
-    --border-strong: rgba(26,36,32,0.18);
+    --border: rgba(31,41,51,0.10);
+    --border-solid: #E6E8E4;
+    --border-strong: rgba(31,41,51,0.14);
 
-    /* Status — grounded, not pastel */
-    --red: #B85555;
-    --red-light: #F2E4E4;
-    --orange: #C4884A;
-    --orange-light: #F5E8D4;
-    --green: #4A7A60;
-    --green-light: #DFF0E6;
-    --yellow: #A07830;
-    --yellow-light: #F0E4C8;
-    --purple: #7070A0;
-    --purple-light: #E8E8F5;
-    --teal: #3A8080;
-    --teal-light: #D8ECEC;
+    /* Status */
+    --red: #C46A6A;
+    --red-light: #F7EDED;
+    --orange: #D4A373;
+    --orange-light: #FAF0E4;
+    --green: #7FA38A;
+    --green-light: #EBF3EE;
+    --yellow: #B5936A;
+    --yellow-light: #FAF0E0;
+    --purple: #8A88AA;
+    --purple-light: #EEEDF5;
+    --teal: #5A9090;
+    --teal-light: #E4EEEE;
 
     --nav-h: 64px;
     --fab-size: 52px;
     --radius: 14px;
     --radius-sm: 10px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(26,36,32,0.09);
-    --shadow-lg: 0 8px 28px rgba(26,36,32,0.16);
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 3px 12px rgba(26,36,32,0.10);
-    --shadow-elevated: 0 2px 6px rgba(0,0,0,0.07), 0 8px 24px rgba(26,36,32,0.14);
+    --shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(31,41,51,0.07);
+    --shadow-lg: 0 8px 28px rgba(31,41,51,0.12);
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(31,41,51,0.10);
   }
   /* APP SHELL — centering wrapper */
   .app-shell {
     display: flex;
     justify-content: center;
-    background: #C4CAC0;
+    background: #D0D4CF;
     min-height: 100vh;
   }
   .app-container {
@@ -102,7 +101,7 @@
   @media (min-width: 1024px) {
     /* Shell — richer background, centered stage */
     .app-shell {
-      background: #B4BAB0;
+      background: #BFC4BE;
       align-items: flex-start;
       padding: 36px 0;
     }
@@ -123,7 +122,7 @@
     html, body { font-size: 19px; }
 
     /* Topbar — more breathing room */
-    .topbar { padding: 16px 32px 14px; border-bottom: none; }
+    .topbar { padding: 20px 32px 16px; border-bottom: 1px solid var(--border-subtle); }
     .topbar-logo { font-size: 22px; }
 
     /* Screens — generous inner padding */
@@ -146,8 +145,6 @@
 
     /* Hero card */
     .hq-hero { padding: 28px 30px; }
-    #screen-hq > div:not(#hq-hero) { padding: 0 36px; }
-    #hq-top3 { padding-top: 28px; }
     .hq-hero-name { font-size: 28px; }
 
     /* Buttons */
@@ -189,7 +186,7 @@
     /* ── HOVER STATES ── */
     .btn { transition: all 0.15s; }
     .btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(31,41,51,0.15); }
-    .btn-primary:hover { background: #3A6450; opacity: 1; transform: translateY(-1px); }
+    .btn-primary:hover { background: var(--primary-strong); opacity: 1; transform: translateY(-1px); }
     .btn-secondary:hover { background: var(--slate-light); border-color: var(--slate); opacity: 1; }
 
     .entry-row { transition: background 0.12s; }
@@ -205,7 +202,7 @@
     .doc-card:hover { background: var(--bg); box-shadow: 0 4px 20px rgba(31,41,51,0.11); }
 
     .nav-tab { transition: color 0.15s; }
-    .nav-tab:hover { color: #4A7A60; }
+    .nav-tab:hover { color: var(--primary); }
 
     .filter-chip { transition: all 0.15s; }
     .filter-chip:hover:not(.active) { border-color: var(--slate); background: var(--slate-light); color: var(--slate-strong); }
@@ -242,27 +239,26 @@
   /* TOP BAR */
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px 12px;
-    background: #2E5240;
-    border-bottom: none;
+    padding: 16px 20px 12px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border-subtle);
     flex-shrink: 0;
     gap: 10px;
   }
   .topbar-logo {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-    font-size: 22px; font-weight: 600; letter-spacing: -0.3px;
+    font-size: 21px; font-weight: 700; letter-spacing: -0.5px;
     cursor: pointer; -webkit-tap-highlight-color: transparent;
-    user-select: none; line-height: 1;
+    user-select: none;
   }
-  .topbar-logo .part-care { color: #FFFFFF; }
-  .topbar-logo .part-steps { color: rgba(255,255,255,0.70); }
-  .topbar-logo .part-hq { color: #FFFFFF; }
+  .topbar-logo .part-care { color: var(--primary); }
+  .topbar-logo .part-steps { color: var(--primary-strong); }
+  .topbar-logo .part-hq { color: var(--primary); }
   .topbar-search-btn {
     background: none; border: none; cursor: pointer;
-    color: rgba(255,255,255,0.80); padding: 6px; display: flex; align-items: center;
+    color: var(--text2); padding: 6px; display: flex; align-items: center;
     border-radius: 8px;
   }
-  .topbar-search-btn:hover { color: #fff; }
   /* SCROLL AREA */
   .screen-area {
     flex: 1; overflow-y: auto; overflow-x: hidden;
@@ -274,10 +270,10 @@
     position: fixed; bottom: 0; left: 0; right: 0;
     height: var(--nav-h);
     background: var(--card);
-    border-top: 1px solid var(--border-solid);
+    border-top: 1px solid rgba(30,40,35,0.06);
     display: flex; align-items: center;
     z-index: 100;
-    box-shadow: 0 -2px 12px rgba(26,36,32,0.08);
+    box-shadow: 0 -1px 0 rgba(30,40,35,0.06);
   }
   .nav-tab {
     flex: 1; display: flex; flex-direction: column; align-items: center;
@@ -303,7 +299,7 @@
     color: #fff;
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(42,90,70,0.36);
+    box-shadow: 0 4px 14px rgba(107,140,122,0.30);
     z-index: 101;
     font-size: 24px;
     transition: transform 0.15s, box-shadow 0.15s;
@@ -317,7 +313,7 @@
     box-shadow: var(--shadow-card);
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid var(--border-solid);
+    border: 1px solid var(--border-subtle);
   }
   .card-title {
     font-size: 16px; font-weight: 700; letter-spacing: 0.3px;
@@ -334,9 +330,6 @@
   }
   /* SCREEN */
   .screen { display: none; padding: 26px 18px 0; }
-  #screen-hq { padding: 0; }
-  #screen-hq > div:not(#hq-hero) { padding: 0 18px; }
-  #hq-top3 { padding-top: 22px; }
   .screen.active { display: block; }
   /* BADGES */
   .badge {
@@ -353,24 +346,22 @@
   .badge-other { background: var(--bg); color: var(--text2); }
   /* HQ STYLES */
   .hq-hero {
-    background: linear-gradient(135deg, #2E5240 0%, #3E6850 40%, #4A7A60 100%);
-    border-radius: 0;
-    padding: 22px 20px; color: #fff;
-    margin-bottom: 0; display: block;
+    background: linear-gradient(135deg, var(--primary-strong) 0%, var(--primary) 100%);
+    border-radius: var(--radius);
+    padding: 22px; color: #fff;
+    margin-bottom: 14px;
     position: relative; overflow: hidden;
-    box-shadow: 0 6px 24px rgba(42,82,64,0.32);
+    box-shadow: 0 4px 20px rgba(92,120,102,0.24);
   }
   .hq-hero::before {
-    content: ''; position: absolute; top: -24px; right: -24px;
-    width: 140px; height: 140px; border-radius: 50%;
-    background: rgba(255,255,255,0.13);
-    pointer-events: none;
+    content: ''; position: absolute; top: -30px; right: -30px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
   }
   .hq-hero::after {
-    content: ''; position: absolute; bottom: -32px; left: -16px;
-    width: 100px; height: 100px; border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    pointer-events: none;
+    content: ''; position: absolute; bottom: -20px; left: 20px;
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
   }
   .hq-hero-name {
     font-family: 'Inter', sans-serif;
@@ -393,7 +384,7 @@
   .entry-row {
     display: flex; align-items: flex-start; gap: 12px;
     padding: 22px 0;
-    border-bottom: 1px solid rgba(26,36,32,0.10);
+    border-bottom: 1px solid rgba(20,28,24,0.09);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: opacity 0.15s;
@@ -432,7 +423,7 @@
   /* TASK ROW */
   .task-row {
     display: flex; align-items: flex-start; gap: 13px;
-    padding: 22px 0; border-bottom: 1px solid rgba(26,36,32,0.10);
+    padding: 22px 0; border-bottom: 1px solid rgba(20,28,24,0.09);
     cursor: pointer; -webkit-tap-highlight-color: transparent;
     transition: opacity 0.15s;
   }
@@ -474,13 +465,13 @@
     font-family: 'Inter', sans-serif;
   }
   .filter-chip.active {
-    background: var(--primary-soft);
-    border-color: var(--primary);
-    color: var(--primary-strong);
+    background: var(--slate-light);
+    border-color: var(--slate);
+    color: var(--slate-strong);
   }
   /* MODAL / SHEET */
   .sheet-overlay {
-    position: fixed; inset: 0; background: rgba(10,18,14,0.50);
+    position: fixed; inset: 0; background: rgba(15,23,42,0.40);
     z-index: 200; display: flex; align-items: flex-end; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
@@ -549,9 +540,9 @@
     cursor: pointer; border: none; transition: all 0.15s;
     -webkit-tap-highlight-color: transparent; letter-spacing: -0.1px;
   }
-  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(42,90,70,0.30); letter-spacing: 0.1px; }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(111,143,122,0.25); }
   .btn-primary:active { background: var(--primary-strong); }
-  .btn-secondary { background: var(--card); color: var(--text2); border: 1.5px solid var(--border-solid); font-weight: 600; }
+  .btn-secondary { background: var(--slate-light); color: var(--slate-strong); border: 1.5px solid var(--border-solid); font-weight: 600; }
   .btn-danger { background: var(--red-light); color: var(--red); font-weight: 700; }
   .btn-full { width: 100%; }
   .btn-sm { padding: 9px 14px; font-size: 16px; border-radius: 8px; min-height: 44px; }
@@ -578,7 +569,7 @@
   /* DETAIL VIEW */
   .detail-header {
     display: flex; align-items: flex-start; gap: 14px;
-    padding: 18px 20px; border-bottom: 1px solid rgba(26,36,32,0.10);
+    padding: 18px 20px; border-bottom: 1px solid rgba(30,40,35,0.06);
   }
   .detail-icon {
     width: 50px; height: 50px; border-radius: 13px;
@@ -588,7 +579,7 @@
   .detail-title { font-size: 24px; font-weight: 800; line-height: 1.3; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .detail-meta { font-size: 17px; color: var(--text2); margin-top: 6px; }
   .detail-section {
-    padding: 22px 24px; border-bottom: 1px solid rgba(26,36,32,0.10);
+    padding: 22px 24px; border-bottom: 1px solid rgba(20,28,24,0.09);
   }
   .detail-section-label {
     font-size: 16px; font-weight: 700; text-transform: uppercase;
@@ -635,7 +626,7 @@
     display: flex; align-items: center; gap: 14px;
     padding: 16px 18px; background: var(--card);
     border-radius: var(--radius); box-shadow: var(--shadow-card);
-    border: 1px solid var(--border-solid);
+    border: 1px solid var(--border-subtle);
     margin-bottom: 12px; cursor: pointer; min-height: 64px;
   }
   .team-avatar {
@@ -652,7 +643,7 @@
     display: flex; align-items: center; gap: 13px;
     padding: 16px 18px; background: var(--card);
     border-radius: var(--radius); box-shadow: var(--shadow-card);
-    border: 1px solid var(--border-solid);
+    border: 1px solid var(--border-subtle);
     margin-bottom: 12px; cursor: pointer; min-height: 60px;
   }
   .doc-icon {
@@ -668,7 +659,7 @@
   }
   .section-title { font-size: 22px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .section-link {
-    font-size: 17px; color: var(--primary); font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center;
+    font-size: 17px; color: var(--slate); font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center;
     font-family: 'Inter', sans-serif;
   }
   /* SEARCH */
@@ -770,7 +761,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.5</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to HQ"><span class="part-care">Care</span><span class="part-steps">Steps</span><span class="part-hq">HQ</span><span style="font-size:13px;font-weight:600;color:var(--text3);letter-spacing:0;margin-left:5px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.4</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1648,9 +1639,9 @@ function renderHQ() {
   // ── TOP 3 TODAY — dominant, largest block ──────────────────────────────────
   document.getElementById('hq-top3').innerHTML = `
     <div style="background:var(--card);border-radius:16px;border:1.5px solid var(--border-subtle);
-      box-shadow:var(--shadow-elevated);padding:28px 30px;margin-bottom:32px">
+      box-shadow:0 4px 22px rgba(31,41,51,0.13);padding:32px;margin-bottom:36px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <div style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary-strong)">Top 3 Today</div>
+        <div style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary-strong)">Top 3 Today</div>
         <div onclick="switchTab('timeline')" style="font-size:16px;font-weight:600;color:var(--slate);cursor:pointer">Timeline ›</div>
       </div>
       ${top3.length === 0
@@ -1658,7 +1649,7 @@ function renderHQ() {
         : top3.map((e,i) => `
           <div onclick="openEntryDetail('${e.id}')" style="padding:20px 0;border-bottom:${i < top3.length-1 ? '1px solid var(--border-subtle)' : 'none'};cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:72px">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-              <div style="font-size:22px;font-weight:600;color:var(--text);line-height:1.3;letter-spacing:-0.2px;flex:1">${e.title}</div>
+              <div style="font-size:24px;font-weight:800;color:var(--text);line-height:1.2;letter-spacing:-0.4px;flex:1">${e.title}</div>
               <span class="${sevBadgeClass(e.severity)}" style="font-size:16px;padding:5px 12px;flex-shrink:0;margin-top:2px">${e.severity}</span>
             </div>
             <div style="font-size:17px;color:var(--text2);margin-top:8px;font-weight:600">${e.type} · ${fmtTime(e.date)}</div>
@@ -1674,8 +1665,8 @@ function renderHQ() {
   const nsEl = document.getElementById('hq-nextsteps');
   if (nextStepItems.length > 0) {
     nsEl.innerHTML = `
-      <div style="background:#D8EEE0;border-radius:14px;border:1px solid #A8CDB8;padding:24px;margin-bottom:32px">
-        <div style="font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary-strong);margin-bottom:16px">Next Steps</div>
+      <div style="background:var(--primary-soft);border-radius:14px;border:1px solid rgba(111,143,122,0.22);padding:24px;margin-bottom:34px">
+        <div style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--primary-strong);margin-bottom:16px">Next Steps</div>
         ${nextStepItems.slice(0,3).map(s => `
           <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">
             <div style="width:8px;height:8px;border-radius:50%;background:var(--primary);margin-top:7px;flex-shrink:0"></div>
@@ -1688,7 +1679,7 @@ function renderHQ() {
 
   // ── DAILY SUMMARY ─────────────────────────────────────────────────────────
   document.getElementById('hq-today').innerHTML = `
-    <div style="background:#F2F6F3;border-radius:14px;border:1px solid #C8D8CC;padding:22px;margin-bottom:32px">
+    <div style="background:var(--card);border-radius:14px;border:1px solid var(--border-subtle);padding:22px;margin-bottom:34px">
       <div style="font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text2);margin-bottom:14px">Today's Summary</div>
       <div style="font-size:17px;line-height:1.75;color:var(--text2);font-weight:400;letter-spacing:-0.1px">${summary}</div>
       ${allToday.length ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-subtle);font-size:16px;color:var(--primary);font-weight:600">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
