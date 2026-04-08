@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareSteps v1.9.8</title>
+<title>CareSteps v1.9.9</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -779,7 +779,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to Home"><span class="part-care">Care</span><span class="part-steps">Steps</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.8</span></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to Home"><span class="part-care">Care</span><span class="part-steps">Steps</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;vertical-align:middle;font-family:-apple-system,sans-serif">v1.9.9</span></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -804,7 +804,7 @@
 
     <!-- TIMELINE + CALENDAR -->
     <div class="screen" id="screen-timeline">
-      <div class="screen-title">Care Timeline</div>
+      <div class="screen-title" style="color:var(--text2)">Care Timeline</div>
       <div class="filter-bar" id="timeline-filters"></div>
       <div style="display:flex;gap:0;background:var(--border);border-radius:10px;padding:3px;margin-bottom:12px">
         <div id="tl-tab-list" onclick="setTimelineView('list')" style="flex:1;text-align:center;padding:10px 0;font-size:16px;font-weight:600;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--card);color:var(--text)">📋 List</div>
@@ -816,7 +816,7 @@
 
     <!-- DOCUMENTS -->
     <div class="screen" id="screen-docs">
-      <div class="screen-title">Documents</div>
+      <div class="screen-title" style="color:var(--text2)">Documents</div>
       <button class="add-btn" onclick="openAddDoc()" style="margin-bottom:14px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         Add Document
@@ -826,7 +826,7 @@
 
     <!-- CARE TEAM -->
     <div class="screen" id="screen-team">
-      <div class="screen-title">Care Team</div>
+      <div class="screen-title" style="color:var(--text2)">Care Team</div>
       <button class="add-btn" onclick="openAddTeam()" style="margin-bottom:14px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         Add Care Team Member
@@ -836,7 +836,7 @@
 
     <!-- TASKS -->
     <div class="screen" id="screen-tasks">
-      <div class="screen-title">Care Tasks</div>
+      <div class="screen-title" style="color:var(--text2)">Care Tasks</div>
       <button class="add-btn" onclick="openAddTask()" style="margin-bottom:14px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         Add Care Task
@@ -1638,17 +1638,17 @@ function renderHQ() {
         <div style="flex:1;min-width:0">
           <div style="font-weight:600;font-size:17px">${loc?.name || 'No location'}</div>
           <div style="opacity:0.90;font-size:16px">${stay?.room ? `Room ${stay.room}` : ''}${stay?.room && stay ? ' · ' : ''}${stay ? 'Since ' + fmtDate(stay.startDate) : ''}</div>
+          ${(() => {
+            const locTeam = loc ? state.team.filter(tm => tm.locationId === loc.id && tm.phone) : [];
+            const contact = locTeam[0];
+            return contact ? `<a href="tel:${contact.phone}" onclick="event.stopPropagation()"
+              style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);
+              color:#fff;padding:5px 12px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;
+              white-space:nowrap;letter-spacing:0.1px;margin-top:8px">
+              ${contact.phone}
+            </a>` : '';
+          })()}
         </div>
-        ${(() => {
-          const locTeam = loc ? state.team.filter(tm => tm.locationId === loc.id && tm.phone) : [];
-          const contact = locTeam[0];
-          return contact ? `<a href="tel:${contact.phone}" onclick="event.stopPropagation()"
-            style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.18);
-            color:#fff;padding:6px 12px;border-radius:20px;text-decoration:none;font-size:14px;font-weight:500;
-            white-space:nowrap;flex-shrink:0;letter-spacing:0.1px">
-            📞 ${contact.phone}
-          </a>` : '';
-        })()}
       </div>
     </div>`;
 
@@ -1711,7 +1711,7 @@ function renderHQ() {
   // ── DAILY SUMMARY ─────────────────────────────────────────────────────────
   document.getElementById('hq-today').innerHTML = `
     <div style="background:#F0F4F8;border-radius:14px;border:1px solid #C8D4E4;padding:20px;margin-bottom:20px">
-      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:12px">Today's Summary</div>
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--amber);margin-bottom:12px">Today's Summary</div>
       <div style="font-size:17px;line-height:1.75;color:var(--text2);font-weight:400;letter-spacing:-0.1px">${summary}</div>
       ${allToday.length ? `<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-subtle);font-size:16px;color:var(--primary);font-weight:600">${allToday.length} entr${allToday.length===1?'y':'ies'} logged today</div>` : ''}
     </div>`;
@@ -1719,7 +1719,6 @@ function renderHQ() {
   // ── QUICK ACTIONS ─────────────────────────────────────────────────────────
   document.getElementById('hq-actions').innerHTML = `
     <div style="margin-bottom:20px">
-      <div style="font-size:15px;font-weight:500;text-transform:uppercase;letter-spacing:0.6px;color:var(--text3);margin-bottom:12px">Quick Actions</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <button onclick="openQuickLog()" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:12px;border:none;background:var(--primary);color:#fff;font-size:17px;font-weight:500;cursor:pointer;min-height:56px;line-height:1;font-family:inherit;-webkit-tap-highlight-color:transparent">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -1746,11 +1745,11 @@ function renderHQ() {
   document.getElementById('hq-tasks').innerHTML = `
     <div class="card" style="margin-bottom:24px">
       <div class="section-header" style="margin-bottom:12px">
-        <div class="card-title" style="margin-bottom:0">Care Tasks</div>
+        <div class="card-title" style="margin-bottom:0;color:var(--amber)">Care Tasks</div>
         <div class="section-link" onclick="switchTab('tasks')">All ${allOpen.length > 0 ? '(' + allOpen.length + ')' : ''} ›</div>
       </div>
       ${openTasks.length ? openTasks.map(t => taskRowHtml(t, true)).join('') : '<div class="empty-state" style="padding:12px 0"><p>No open tasks 🎉</p></div>'}
-      ${overdue.length ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-subtle);font-size:16px;color:var(--red);font-weight:600">${overdue.length} overdue</div>` : ''}
+      ${overdue.length ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-subtle);font-size:16px;color:var(--amber);font-weight:600">${overdue.length} overdue</div>` : ''}
     </div>`;
 
     // LOCATION HISTORY
@@ -1761,7 +1760,7 @@ function renderHQ() {
 
   document.getElementById('hq-location-history').innerHTML = `
     <div class="card" style="margin-bottom:24px;background:#F8F6F2">
-      <div class="card-title">Location History</div>
+      <div class="card-title" style="color:var(--amber)">Location History</div>
       ${stayHistory.length === 0
         ? `<div class="empty-state" style="padding:12px 0"><p>No stays recorded.</p></div>`
         : stayHistory.map((s, i) => {
