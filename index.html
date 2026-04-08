@@ -853,7 +853,7 @@
   <nav class="bottom-nav">
     <div class="nav-tab active" data-tab="hq" onclick="switchTab('hq')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><rect x="9" y="14" width="6" height="7"/></svg>
-      Home
+      HQ
     </div>
     <div class="nav-tab" data-tab="timeline" onclick="switchTab('timeline')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -888,6 +888,11 @@
   <div onclick="openReportsPicker();closeAppMenu()" style="display:flex;align-items:center;gap:10px;padding:15px 16px;cursor:pointer;font-size:17px;font-weight:500;color:var(--text)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
     Reports
+  </div>
+  <div style="height:1px;background:var(--border-subtle);margin:0 12px"></div>
+  <div onclick="resetApp();closeAppMenu()" style="display:flex;align-items:center;gap:10px;padding:15px 16px;cursor:pointer;font-size:17px;font-weight:500;color:var(--red)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+    Reset App
   </div>
 </div>
 <div id="app-menu-bg" style="display:none;position:fixed;inset:0;z-index:399" onclick="closeAppMenu()"></div>
@@ -1400,7 +1405,7 @@ function loadState() {
     };
     return;
   }
-  initSampleData();
+  // No saved state — wizard will handle setup
 }
 
 // ============================================================
@@ -3592,10 +3597,216 @@ function stopDictation() {
 }
 
 // ============================================================
+// WIZARD
+// ============================================================
+let wizardStep = 1;
+const WIZARD_STEPS = 4;
+const PROGRESS = { 1: 0, 2: 33, 3: 66, 4: 100 };
+
+function showWizard() {
+  document.getElementById('wizard-overlay').style.display = 'block';
+  wizardGoTo(1);
+}
+
+function hideWizard() {
+  document.getElementById('wizard-overlay').style.display = 'none';
+}
+
+function wizardGoTo(step) {
+  for (let i = 1; i <= WIZARD_STEPS; i++) {
+    const el = document.getElementById('wizard-step-' + i);
+    if (el) el.style.display = i === step ? 'flex' : 'none';
+  }
+  document.getElementById('wizard-progress').style.width = PROGRESS[step] + '%';
+  wizardStep = step;
+  // Focus first input on step
+  setTimeout(() => {
+    const input = document.querySelector('#wizard-step-' + step + ' input');
+    if (input && step > 1) input.focus();
+  }, 100);
+}
+
+function wizardNext(step) {
+  if (step === 3) {
+    // Validate name
+    const name = document.getElementById('wiz-name').value.trim();
+    if (!name) {
+      document.getElementById('wiz-name-err').style.display = 'block';
+      return;
+    }
+    document.getElementById('wiz-name-err').style.display = 'none';
+  }
+  wizardGoTo(step);
+}
+
+function wizardValidate(step) {
+  if (step === 2) {
+    const name = document.getElementById('wiz-name').value.trim();
+    document.getElementById('wiz-name-err').style.display = 'none';
+  }
+}
+
+function wizardFinish() {
+  const name = document.getElementById('wiz-name').value.trim();
+  const dob  = document.getElementById('wiz-dob').value;
+  const cond = document.getElementById('wiz-condition').value.trim();
+
+  // Build clean fresh state
+  state = {
+    lovedOne: {
+      id: uid(), name,
+      DOB: dob || null,
+      condition: cond || '',
+      bloodType: '', allergies: '',
+      DNR: false, advanceDirective: false,
+      POA: '', insurance: '', notes: '', photo: null,
+      isNew: true
+    },
+    locations: [],
+    stays: [],
+    entries: [],
+    tasks: [],
+    documents: [],
+    team: []
+  };
+
+  saveState();
+  hideWizard();
+  renderHQ();
+  toast('Welcome to CareSteps, ' + name.split(' ')[0] + ' ❤️');
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function resetApp() {
+  confirm_(
+    'Reset App?',
+    'This will permanently delete all data and restart the setup. This cannot be undone.',
+    () => {
+      localStorage.removeItem('cshq_state');
+      state = { lovedOne: null, locations: [], stays: [], entries: [], tasks: [], documents: [], team: [] };
+      showWizard();
+    }
+  );
+}
+
+// ============================================================
 // INIT
 // ============================================================
 loadState();
-renderHQ();
+if (!state.lovedOne) {
+  showWizard();
+} else {
+  renderHQ();
+}
 </script>
+<!-- FIRST RUN WIZARD -->
+<div id="wizard-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column">
+
+    <!-- Progress bar -->
+    <div style="height:3px;background:var(--border-subtle)">
+      <div id="wizard-progress" style="height:100%;background:var(--amber);transition:width 0.3s;width:0%"></div>
+    </div>
+
+    <!-- Step 1: Welcome -->
+    <div id="wizard-step-1" style="flex:1;display:flex;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 45%,#4A6E8E 100%);padding:48px 28px 40px;color:#fff;text-align:center">
+        <div style="font-size:38px;margin-bottom:16px">🤝</div>
+        <div style="font-family:'Inter',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:12px">You're not alone in this.</div>
+        <div style="font-size:17px;opacity:0.85;line-height:1.6">CareSteps helps you stay on top of everything when caring for someone you love.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1">
+        <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:36px">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📋</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Track every update</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">Log medical events, conversations, and moves in seconds.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">👥</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Keep the care team connected</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">One place for contacts, tasks, and shared updates.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📤</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Share with family in one tap</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">Generate and send updates without retyping anything.</div>
+            </div>
+          </div>
+        </div>
+        <button onclick="wizardNext(2)" style="width:100%;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px">Get Started</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Name -->
+    <div id="wizard-step-2" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 1 of 3</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Who are you caring for?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">This is the person whose care you're coordinating.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Their full name</label>
+          <input id="wiz-name" class="form-input" placeholder="e.g. Margaret Cooper" style="font-size:19px;padding:14px 16px;min-height:54px" oninput="wizardValidate(2)">
+          <div id="wiz-name-err" style="display:none;font-size:15px;color:var(--red);margin-top:8px">Please enter a name to continue.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(1)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button id="wiz-next-2" onclick="wizardNext(3)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: DOB -->
+    <div id="wizard-step-3" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 2 of 3</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">When were they born?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Helps us show their age and keep records accurate.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Date of birth</label>
+          <input id="wiz-dob" class="form-input" type="date" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(2)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardNext(4)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Condition -->
+    <div id="wizard-step-4" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 3 of 3</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">What are they being treated for?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their primary condition or reason for care.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Primary condition</label>
+          <input id="wiz-condition" class="form-input" placeholder="e.g. Congestive Heart Failure" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can add more detail in the profile later.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(3)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardFinish()" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Take me to CareSteps</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
