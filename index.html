@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CareTracker v2.0.0</title>
+<title>CareTracker v1.9.9.9</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -189,7 +189,7 @@
     .filter-chip { padding: 10px 18px; font-size: 16px; }
 
     /* Phrase chips */
-    .phrase-chip { padding: 6px 14px; font-size: 15px; }
+    .phrase-chip { height: 38px; min-height: 38px; padding: 0 16px; font-size: 15px; }
 
     /* ── HOVER STATES ── */
     .btn { transition: all 0.15s; }
@@ -213,10 +213,10 @@
     .nav-tab:hover { color: var(--primary); }
 
     .filter-chip { transition: all 0.15s; }
-    .filter-chip:hover:not(.active) { border-color: var(--slate); background: var(--slate-light); color: var(--slate-strong); }
+    .filter-chip:hover:not(.active) { background: rgba(28,35,48,0.14); }
 
     .phrase-chip { transition: all 0.12s; }
-    .phrase-chip:hover:not(.selected) { border-color: var(--slate); background: var(--slate-light); }
+    .phrase-chip:hover:not(.selected) { background: rgba(28,35,48,0.14); }
 
     .hq-hero { transition: opacity 0.15s; cursor: pointer; }
     .hq-hero:hover { opacity: 0.94; }
@@ -474,18 +474,18 @@
   .filter-bar::-webkit-scrollbar { display: none; }
   .filter-chip {
     display: inline-flex; align-items: center; gap: 5px;
-    padding: 9px 16px; border-radius: 20px; min-height: 44px;
-    border: 1.5px solid rgba(30,40,35,0.12);
-    font-size: 17px; font-weight: 500; color: var(--text);
-    background: var(--card); cursor: pointer; white-space: nowrap;
+    padding: 8px 16px; border-radius: 10px; min-height: 36px;
+    border: none;
+    font-size: 16px; font-weight: 500; color: var(--text2);
+    background: rgba(28,35,48,0.08); cursor: pointer; white-space: nowrap;
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
     font-family: 'Inter', sans-serif;
   }
   .filter-chip.active {
-    background: var(--primary-soft);
-    border-color: var(--primary);
-    color: var(--primary-strong);
+    background: var(--primary);
+    border: none;
+    color: #fff;
     font-weight: 600;
   }
   /* MODAL / SHEET */
@@ -572,18 +572,18 @@
     letter-spacing: 0.4px; color: var(--text2); margin-bottom: 10px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
   }
-  .phrase-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .phrase-grid { display: flex; flex-wrap: wrap; gap: 8px 8px; margin-bottom: 8px; }
   .phrase-chip {
-    padding: 6px 12px; border-radius: 20px;
-    border: 1.5px solid var(--border-solid);
+    padding: 0 14px; border-radius: 10px;
+    border: none; height: 36px; min-height: 36px;
     font-size: 15px; font-weight: 500; color: var(--text2);
-    background: var(--card); cursor: pointer;
+    background: rgba(28,35,48,0.08); cursor: pointer;
     transition: all 0.12s; -webkit-tap-highlight-color: transparent;
     font-family: 'Inter', sans-serif;
-    display: inline-flex; align-items: center; line-height: 1.2;
+    display: inline-flex; align-items: center; justify-content: center; line-height: 1;
   }
   .phrase-chip.selected {
-    background: var(--slate-light); border-color: var(--slate); color: var(--slate-strong);
+    background: var(--primary); border: none; color: #fff; font-weight: 600;
   }
   /* DETAIL VIEW */
   .detail-header {
@@ -781,7 +781,7 @@
 <div class="app-container">
 <div id="app">
   <div class="topbar">
-    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to Home" style="display:flex;flex-direction:column;align-items:flex-start;gap:0"><div style="line-height:1"><span class="part-care">Care</span><span class="part-steps">Tracker</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;font-family:-apple-system,sans-serif">v2.0.0</span></div><div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.62);letter-spacing:0.3px;font-family:-apple-system,sans-serif;line-height:1;margin-top:2px">by CareSteps</div></div>
+    <div class="topbar-logo" onclick="switchTab('hq')" title="Go to Home" style="display:flex;flex-direction:column;align-items:flex-start;gap:0"><div style="line-height:1"><span class="part-care">Care</span><span class="part-steps">Tracker</span><span style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.50);letter-spacing:0;margin-left:6px;font-family:-apple-system,sans-serif">v1.9.9.9</span></div><div style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.62);letter-spacing:0.3px;font-family:-apple-system,sans-serif;line-height:1;margin-top:2px">by CareSteps</div></div>
     <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
       <button class="topbar-search-btn" onclick="showSearch()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -959,7 +959,7 @@
   <div class="sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-head">
-      <div class="sheet-title">⚡ Quick Log</div>
+      <div class="sheet-title" id="ql-title-label">⚡ Quick Log</div>
       <button class="sheet-close" onclick="closeSheet('ql-overlay')">✕</button>
     </div>
     <div class="sheet-scroll">
@@ -1009,13 +1009,6 @@
           <input class="form-input" id="ql-new-room" placeholder="e.g. 214" style="padding:10px 12px;min-height:44px;font-size:17px">
         </div>
       </div>
-      <!-- Team Member -->
-      <div style="margin-bottom:14px">
-        <label class="form-label" style="font-size:14px;margin-bottom:6px">Care Team Member (optional)</label>
-        <select class="form-select" id="ql-team-member" style="padding:10px 12px;min-height:44px;font-size:17px">
-          <option value="">— None —</option>
-        </select>
-      </div>
       <!-- Details -->
       <div style="margin-bottom:16px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
@@ -1030,6 +1023,12 @@
           <span id="ql-dictation-interim" style="color:var(--text2);font-style:italic"></span>
         </div>
         <textarea class="form-textarea" id="ql-details" placeholder="Speak or type notes..." style="min-height:72px;font-size:17px;padding:10px 12px"></textarea>
+      </div>
+      <div id="ql-team-member-row" style="display:none;margin-bottom:14px">
+        <label class="form-label" style="font-size:14px;margin-bottom:6px">Care Team Member (optional)</label>
+        <select class="form-select" id="ql-team-member" style="padding:10px 12px;min-height:44px;font-size:17px">
+          <option value="">— None —</option>
+        </select>
       </div>
       <button class="btn btn-primary btn-full" onclick="submitQuickLog()" style="min-height:48px;font-size:17px">Log Care Update</button>
     </div>
@@ -1750,7 +1749,7 @@ function renderHQ() {
   document.getElementById('hq-actions').innerHTML = `
     <div style="margin-bottom:20px">
       <div style="display:flex;flex-direction:column;gap:10px">
-        <button onclick="openQuickLog()" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:12px;border:none;background:var(--primary);color:#fff;font-size:17px;font-weight:500;cursor:pointer;min-height:56px;line-height:1;font-family:inherit;-webkit-tap-highlight-color:transparent">
+        <button onclick="openHQLog()" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:12px;border:none;background:var(--primary);color:#fff;font-size:17px;font-weight:500;cursor:pointer;min-height:56px;line-height:1;font-family:inherit;-webkit-tap-highlight-color:transparent">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           Log Update
         </button>
@@ -2891,8 +2890,23 @@ const PHRASES = {
 
 let selectedPhrases = [];
 
+function openHQLog() {
+  openQuickLog();
+  // Show team member field and update title for HQ Log Update
+  const row = document.getElementById('ql-team-member-row');
+  if (row) row.style.display = 'block';
+  populateTeamDropdown('ql-team-member', null);
+  const label = document.getElementById('ql-title-label');
+  if (label) label.textContent = 'Log Update';
+}
+
 function openQuickLog() {
   stopDictation();
+  // Reset title and hide team member field by default
+  const label = document.getElementById('ql-title-label');
+  if (label) label.textContent = '⚡ Quick Log';
+  const row = document.getElementById('ql-team-member-row');
+  if (row) row.style.display = 'none';
   selectedPhrases = [];
   document.getElementById('ql-title').value = '';
   document.getElementById('ql-details').value = '';
@@ -2902,7 +2916,6 @@ function openQuickLog() {
   document.getElementById('ql-new-loc-name').value = '';
   document.getElementById('ql-new-loc-type').value = 'Hospital';
   document.getElementById('ql-new-room').value = '';
-  populateTeamDropdown('ql-team-member', null);
   renderPhrases();
   openSheet('ql-overlay');
 }
@@ -2926,7 +2939,7 @@ function renderPhrases() {
   cats.forEach(cat => {
     const catPhrases = PHRASES[cat];
     if (!catPhrases) return;
-    html += `<div class="phrase-grid" style="gap:8px">` +
+    html += `<div class="phrase-grid" style="gap:8px;margin-bottom:8px">` +
       catPhrases.map((p, idx) =>
         `<div class="phrase-chip ${selectedPhrases.includes(p)?'selected':''}" data-cat="${cat}" data-idx="${idx}" onclick="togglePhraseByIndex(this)">${p}</div>`
       ).join('') +
@@ -3003,7 +3016,8 @@ function submitQuickLog() {
     stayId = currentStay?.id;
   }
 
-  const teamMemberId = document.getElementById('ql-team-member').value || null;
+  const tmEl = document.getElementById('ql-team-member');
+  const teamMemberId = tmEl ? (tmEl.value || null) : null;
   state.entries.unshift({
     id: uid(), lovedOneId: state.lovedOne.id,
     date: now, type, title, details, severity,
@@ -3184,7 +3198,7 @@ function buildConfigUI(id) {
         <div style="display:flex;gap:8px">
           ${['Reassuring','Factual','Detailed'].map(t => `
             <div onclick="setReportTone(this,'${t}')" data-tone="${t}"
-              style="flex:1;text-align:center;padding:13px 8px;border-radius:9px;font-size:16px;font-weight:600;cursor:pointer;min-height:44px;
+              style="flex:1;text-align:center;padding:8px 6px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer;min-height:36px;
               border:1.5px solid var(--border);color:var(--text2);background:var(--card)">
               ${t}
             </div>`).join('')}
@@ -3678,13 +3692,22 @@ const WIZARD_STEPS = 4;
 const PROGRESS = { 1: 0, 2: 33, 3: 66, 4: 100 };
 
 function showWizard() {
-  document.getElementById('wizard-overlay').style.display = 'block';
+  const overlay = document.getElementById('wizard-overlay');
+  overlay.style.display = 'block';
+  // Prevent interaction with app beneath wizard
+  document.getElementById('app').style.pointerEvents = 'none';
+  document.getElementById('app').setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = 'hidden';
   wizardGoTo(1);
 }
 
 function hideWizard() {
   stopWizDictation();
   document.getElementById('wizard-overlay').style.display = 'none';
+  // Restore app interaction
+  document.getElementById('app').style.pointerEvents = '';
+  document.getElementById('app').removeAttribute('aria-hidden');
+  document.body.style.overflow = '';
 }
 
 function wizardGoTo(step) {
@@ -3780,7 +3803,7 @@ if (!state.lovedOne) {
 }
 </script>
 <!-- FIRST RUN WIZARD -->
-<div id="wizard-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch">
+<div id="wizard-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
   <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column">
 
     <!-- Progress bar -->
@@ -3843,9 +3866,9 @@ if (!state.lovedOne) {
             <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 1s infinite"></span>
             <span id="wiz-dictation-interim" style="color:var(--text2);font-style:italic"></span>
           </div>
-          <input id="wiz-firstname" class="form-input" placeholder="e.g. Margaret" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" oninput="wizardValidate(2)">
+          <input id="wiz-firstname" class="form-input" placeholder="e.g. Margaret" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words" oninput="wizardValidate(2)">
           <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Last name</label>
-          <input id="wiz-lastname" class="form-input" placeholder="e.g. Cooper" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <input id="wiz-lastname" class="form-input" placeholder="e.g. Cooper" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
           <div id="wiz-name-err" style="display:none;font-size:15px;color:var(--red);margin-top:8px">Please enter a first name to continue.</div>
         </div>
         <div style="display:flex;gap:10px;margin-top:32px">
@@ -3889,7 +3912,7 @@ if (!state.lovedOne) {
       <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
         <div style="flex:1">
           <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Primary condition</label>
-          <input id="wiz-condition" class="form-input" placeholder="e.g. Congestive Heart Failure" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <input id="wiz-condition" class="form-input" placeholder="e.g. Congestive Heart Failure" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
           <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can add more detail in the profile later.</div>
         </div>
         <div style="display:flex;gap:10px;margin-top:32px">
