@@ -69,6 +69,7 @@
     --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 3px 12px rgba(28,35,48,0.08);
     --shadow-elevated: 0 2px 6px rgba(0,0,0,0.06), 0 8px 24px rgba(28,35,48,0.12);
   }
+  *, *::before, *::after { box-sizing: border-box; }
   /* APP SHELL — centering wrapper */
   .app-shell {
     display: flex;
@@ -82,6 +83,8 @@
     background: var(--bg);
     min-height: 100vh;
     position: relative;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   /* ── TABLET (768px+) ── */
@@ -240,7 +243,7 @@
   html, body {
     height: 100%; width: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
-    font-size: 18px; font-weight: 400;
+    font-size: 20px; font-weight: 400;
     background: var(--bg); color: var(--text);
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.01em;
@@ -292,7 +295,7 @@
     flex: 1; display: flex; flex-direction: column; align-items: center;
     justify-content: center; gap: 3px;
     cursor: pointer; padding: 8px 0;
-    color: var(--text3); font-size: 15px; font-weight: 600; line-height: 1;
+    color: var(--text3); font-size: 16px; font-weight: 600; line-height: 1;
     transition: color 0.15s;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
@@ -329,7 +332,7 @@
     border: 1px solid var(--border-solid);
   }
   .card-title {
-    font-size: 15px; font-weight: 700; letter-spacing: 0.4px;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.4px;
     text-transform: uppercase; color: var(--text3);
     margin-bottom: 14px;
     font-family: 'Inter', sans-serif;
@@ -337,7 +340,7 @@
   /* SCREEN TITLE */
   .screen-title {
     font-family: 'Inter', sans-serif;
-    font-size: 28px; font-weight: 700; color: var(--text);
+    font-size: 30px; font-weight: 700; color: var(--text);
     letter-spacing: -0.5px; margin-bottom: 16px; border-bottom: 1.5px solid var(--border-solid); padding-bottom: 14px;
     padding-top: 4px; line-height: 1.2;
   }
@@ -350,7 +353,7 @@
   /* BADGES */
   .badge {
     display: inline-block; padding: 5px 13px; border-radius: 20px;
-    font-size: 16px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    font-size: 17px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
   }
   .badge-low { background: var(--green-light); color: var(--primary-strong); }
   .badge-medium { background: var(--orange-light); color: #C45000; }
@@ -386,12 +389,12 @@
     font-size: 26px; font-weight: 600; margin-bottom: 6px;
     letter-spacing: -0.3px;
   }
-  .hq-hero-meta { font-size: 17px; opacity: 0.95; font-weight: 500; }
+  .hq-hero-meta { font-size: 18px; opacity: 0.95; font-weight: 500; }
   .hq-hero-location {
     margin-top: 14px; padding-top: 14px;
     border-top: 1px solid rgba(255,255,255,0.20);
     display: flex; align-items: center; gap: 8px;
-    font-size: 17px;
+    font-size: 18px;
   }
   .location-dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -424,18 +427,18 @@
   }
   .entry-body { flex: 1; min-width: 0; }
   .entry-title {
-    font-size: 20px; font-weight: 600; color: var(--text);
+    font-size: 21px; font-weight: 600; color: var(--text);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     letter-spacing: -0.1px;
   }
-  .entry-meta { font-size: 17px; color: var(--text2); margin-top: 5px; font-weight: 500; }
+  .entry-meta { font-size: 18px; color: var(--text2); margin-top: 5px; font-weight: 500; }
   .entry-details {
-    font-size: 17px; color: var(--text2); font-weight: 400; margin-top: 6px; line-height: 1.65;
+    font-size: 18px; color: var(--text2); font-weight: 400; margin-top: 6px; line-height: 1.65;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .entry-time {
-    font-size: 17px; color: var(--text3); flex-shrink: 0; font-weight: 500;
+    font-size: 18px; color: var(--text3); flex-shrink: 0; font-weight: 500;
     margin-top: 4px; font-variant-numeric: tabular-nums;
   }
   /* TASK ROW */
@@ -457,11 +460,11 @@
   }
   .task-check.done { background: var(--primary-strong); border-color: var(--primary-strong); color: #fff; }
   .task-check.overdue { border-color: var(--red); }
-  .task-title { font-size: 20px; font-weight: 600; letter-spacing: -0.1px; }
+  .task-title { font-size: 21px; font-weight: 600; letter-spacing: -0.1px; }
   .task-title.done { text-decoration: line-through; color: var(--text2); }
   .task-title.overdue { color: var(--red); }
-  .task-due { font-size: 17px; color: var(--text2); margin-top: 4px; }
-  .task-due.overdue { font-size: 17px; color: var(--red); font-weight: 600; }
+  .task-due { font-size: 18px; color: var(--text2); margin-top: 4px; }
+  .task-due.overdue { font-size: 18px; color: var(--red); font-weight: 600; }
   /* DAILY SUMMARY */
   .summary-text {
     font-size: 18px; line-height: 1.7; color: var(--text);
@@ -476,7 +479,7 @@
     display: inline-flex; align-items: center; gap: 5px;
     padding: 8px 16px; border-radius: 10px; min-height: 36px;
     border: none;
-    font-size: 16px; font-weight: 500; color: var(--text2);
+    font-size: 17px; font-weight: 500; color: var(--text2);
     background: rgba(28,35,48,0.08); cursor: pointer; white-space: nowrap;
     transition: all 0.15s;
     -webkit-tap-highlight-color: transparent;
@@ -521,7 +524,7 @@
     padding-bottom: env(safe-area-inset-bottom, 16px);
     -webkit-overflow-scrolling: touch;
   }
-  .sheet-title { font-size: 22px; font-weight: 600; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
+  .sheet-title { font-size: 23px; font-weight: 600; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .sheet-close {
     background: var(--bg); border: none; cursor: pointer;
     width: 34px; height: 34px; border-radius: 50%;
@@ -532,7 +535,7 @@
   /* FORM */
   .form-group { margin-bottom: 22px; }
   .form-label {
-    display: block; font-size: 16px; font-weight: 700;
+    display: block; font-size: 17px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.3px;
     color: var(--text); margin-bottom: 10px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
@@ -576,7 +579,7 @@
   .phrase-chip {
     padding: 0 14px; border-radius: 10px;
     border: none; height: 36px; min-height: 36px;
-    font-size: 15px; font-weight: 500; color: var(--text2);
+    font-size: 16px; font-weight: 500; color: var(--text2);
     background: rgba(28,35,48,0.08); cursor: pointer;
     transition: all 0.12s; -webkit-tap-highlight-color: transparent;
     font-family: 'Inter', sans-serif;
@@ -596,7 +599,7 @@
     flex-shrink: 0; background: var(--primary-soft);
   }
   .detail-title { font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -0.2px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
-  .detail-meta { font-size: 17px; color: var(--text2); margin-top: 6px; }
+  .detail-meta { font-size: 18px; color: var(--text2); margin-top: 6px; }
   .detail-section {
     padding: 20px 22px; border-bottom: 1px solid rgba(26,36,32,0.08);
   }
@@ -605,7 +608,7 @@
     letter-spacing: 0.4px; color: var(--text3); margin-bottom: 6px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
   }
-  .detail-section-value { font-size: 17px; line-height: 1.65; color: var(--text); font-weight: 500; }
+  .detail-section-value { font-size: 18px; line-height: 1.65; color: var(--text); font-weight: 500; }
   .detail-actions { display: flex; gap: 10px; padding: 18px 22px 20px; }
   /* CONFIRM */
   .confirm-overlay {
@@ -656,8 +659,8 @@
     font-weight: 700; font-size: 17px; flex-shrink: 0;
     font-family: 'Inter', sans-serif;
   }
-  .team-name { font-size: 18px; font-weight: 600; letter-spacing: -0.1px; line-height: 1.3; }
-  .team-role { font-size: 17px; color: var(--text2); font-weight: 500; margin-top: 4px; }
+  .team-name { font-size: 19px; font-weight: 600; letter-spacing: -0.1px; line-height: 1.3; }
+  .team-role { font-size: 18px; color: var(--text2); font-weight: 500; margin-top: 4px; }
   /* DOC CARD */
   .doc-card {
     display: flex; align-items: center; gap: 14px;
@@ -679,7 +682,7 @@
   }
   .section-title { font-size: 20px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; }
   .section-link {
-    font-size: 16px; color: var(--primary); font-weight: 500; cursor: pointer; min-height: 44px; display: flex; align-items: center;
+    font-size: 17px; color: var(--primary); font-weight: 500; cursor: pointer; min-height: 44px; display: flex; align-items: center;
     font-family: 'Inter', sans-serif;
   }
   /* SEARCH */
@@ -697,7 +700,7 @@
   /* EMPTY */
   .empty-state { text-align: center; padding: 32px 20px; color: var(--text2); }
   .empty-state .emoji { font-size: 36px; margin-bottom: 10px; }
-  .empty-state p { font-size: 18px; line-height: 1.65; font-weight: 500; }
+  .empty-state p { font-size: 19px; line-height: 1.65; font-weight: 500; }
   /* PROFILE */
   .profile-row {
     display: flex; justify-content: space-between; align-items: flex-start;
@@ -963,37 +966,23 @@
       <button class="sheet-close" onclick="closeSheet('ql-overlay')">✕</button>
     </div>
     <div class="sheet-scroll">
-    <div class="sheet-body" style="padding:16px 20px">
-      <!-- Type + Severity in one row -->
-      <div style="display:flex;gap:10px;margin-bottom:14px">
-        <div style="flex:1">
-          <label class="form-label" style="font-size:14px;margin-bottom:6px">Type</label>
-          <select class="form-select" id="ql-type" onchange="qlTypeChanged()" style="padding:10px 12px;min-height:44px;font-size:17px">
-            <option value="Update">Update</option>
-            <option value="Medical">Medical</option>
-            <option value="Conversation">Conversation</option>
-            <option value="Move">Move</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div style="flex:1">
-          <label class="form-label" style="font-size:14px;margin-bottom:6px">Severity</label>
-          <select class="form-select" id="ql-severity" style="padding:10px 12px;min-height:44px;font-size:17px">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
-      </div>
-      <!-- Single contextual phrase section -->
-      <div id="ql-phrases" style="margin-bottom:14px"></div>
-      <!-- Title -->
-      <div style="margin-bottom:14px">
-        <label class="form-label" style="font-size:14px;margin-bottom:6px">Title</label>
-        <input class="form-input" id="ql-title" placeholder="What happened?" style="padding:10px 12px;min-height:44px;font-size:17px">
-      </div>
-      <!-- Move fields -->
-      <div id="ql-move-fields">
+    <div class="sheet-body" style="padding:20px 20px">
+      <!-- Hidden fields — AI sets these, shown after parse for review -->
+      <select id="ql-type" onchange="qlTypeChanged()" style="display:none">
+        <option value="Update">Update</option>
+        <option value="Medical">Medical</option>
+        <option value="Conversation">Conversation</option>
+        <option value="Move">Move</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="ql-severity" style="display:none">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <input id="ql-title" style="display:none">
+      <div id="ql-phrases" style="display:none"></div>
+      <div id="ql-move-fields" style="display:none">
         <div style="margin-bottom:14px">
           <label class="form-label" style="font-size:14px;margin-bottom:6px">New Location Name</label>
           <input class="form-input" id="ql-new-loc-name" placeholder="e.g. Rehab Center" style="padding:10px 12px;min-height:44px;font-size:17px">
@@ -1009,28 +998,53 @@
           <input class="form-input" id="ql-new-room" placeholder="e.g. 214" style="padding:10px 12px;min-height:44px;font-size:17px">
         </div>
       </div>
-      <!-- Details -->
-      <div style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <label class="form-label" style="font-size:14px;margin-bottom:0">Details (optional)</label>
-          <button type="button" id="ql-mic-btn" onclick="toggleDictation()" style="display:flex;align-items:center;gap:5px;background:var(--primary-soft);color:var(--primary);border:none;border-radius:20px;padding:5px 12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent">
-            <svg id="ql-mic-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-            <span id="ql-mic-label">Dictate</span>
-          </button>
-        </div>
-        <div id="ql-dictation-status" style="display:none;font-size:14px;color:var(--primary);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px">
-          <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 1s infinite"></span>
-          <span id="ql-dictation-interim" style="color:var(--text2);font-style:italic"></span>
-        </div>
-        <textarea class="form-textarea" id="ql-details" placeholder="Speak or type notes..." style="min-height:72px;font-size:17px;padding:10px 12px"></textarea>
+
+      <!-- Smart Log button — prominent -->
+      <button type="button" id="ql-smart-btn" onclick="toggleSmartLog()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:#6B4C9A;color:#fff;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px;margin-bottom:14px;-webkit-tap-highlight-color:transparent">
+        <svg id="ql-smart-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <span id="ql-smart-label">Smart Log</span>
+      </button>
+
+      <!-- Status -->
+      <div id="ql-smart-status" style="display:none;font-size:15px;font-weight:500;margin-bottom:12px;align-items:center;gap:8px;justify-content:center">
+        <span id="ql-smart-dot" style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 1s infinite"></span>
+        <span id="ql-smart-status-text" style="font-style:italic;color:var(--text2)">Listening...</span>
       </div>
+
+      <!-- Notes textarea -->
+      <div style="margin-bottom:14px">
+        <textarea class="form-textarea" id="ql-details" placeholder="Or type your notes here..." style="min-height:100px;font-size:17px;padding:12px 14px"></textarea>
+      </div>
+
+      <!-- AI parsed result summary — shown after parse -->
+      <div id="ql-parsed-summary" style="display:none;background:var(--primary-soft);border-radius:12px;padding:14px 16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--primary);margin-bottom:10px">✨ AI filled these in</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span id="ql-parsed-type" style="font-size:15px;font-weight:600;background:var(--card);padding:4px 12px;border-radius:20px;color:var(--text)"></span>
+          <span id="ql-parsed-sev" style="font-size:15px;font-weight:600;background:var(--card);padding:4px 12px;border-radius:20px;color:var(--text)"></span>
+        </div>
+        <div id="ql-parsed-title-row" style="margin-top:10px;font-size:16px;color:var(--text);font-weight:500"></div>
+      </div>
+
+      <!-- Follow-up task prompt -->
+      <div id="ql-ai-task-prompt" style="display:none;background:#F0EBF8;border-radius:12px;padding:14px 16px;margin-bottom:14px">
+        <div style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#4A3270;margin-bottom:8px">✨ Suggested task</div>
+        <div id="ql-ai-task-title" style="font-size:16px;color:#1C2330;margin-bottom:10px;font-weight:500"></div>
+        <div style="display:flex;gap:8px">
+          <button onclick="acceptAITask()" class="btn btn-primary btn-sm" style="flex:1;font-size:15px;background:#6B4C9A">Add Task</button>
+          <button onclick="dismissAITask()" class="btn btn-secondary btn-sm" style="flex:1;font-size:15px">Skip</button>
+        </div>
+      </div>
+
+      <!-- Team member (HQ mode only) -->
       <div id="ql-team-member-row" style="display:none;margin-bottom:14px">
         <label class="form-label" style="font-size:14px;margin-bottom:6px">Care Team Member (optional)</label>
         <select class="form-select" id="ql-team-member" style="padding:10px 12px;min-height:44px;font-size:17px">
           <option value="">— None —</option>
         </select>
       </div>
-      <button class="btn btn-primary btn-full" onclick="submitQuickLog()" style="min-height:48px;font-size:17px">Log Care Update</button>
+
+      <button class="btn btn-primary btn-full" onclick="submitQuickLog()" style="min-height:52px;font-size:18px">Log Care Update</button>
     </div>
   </div></div>
 </div>
@@ -1789,7 +1803,13 @@ function renderHQ() {
 
   document.getElementById('hq-location-history').innerHTML = `
     <div class="card" style="margin-bottom:24px;background:#F8F6F2">
-      <div class="card-title" style="color:var(--amber)">Location History</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="card-title" style="color:var(--amber);margin-bottom:0">Location History</div>
+        <div onclick="openAddLocation()" style="font-size:16px;color:var(--primary);font-weight:600;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:4px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add
+        </div>
+      </div>
       ${stayHistory.length === 0
         ? `<div class="empty-state" style="padding:12px 0"><p>No stays recorded.</p></div>`
         : stayHistory.map((s, i) => {
@@ -2902,6 +2922,12 @@ function openHQLog() {
 
 function openQuickLog() {
   stopDictation();
+  // Reset Smart Log state
+  stopSmartLog(false);
+  dismissAITask();
+  resetParsedSummary();
+  const smartStatus = document.getElementById('ql-smart-status');
+  if (smartStatus) smartStatus.style.display = 'none';
   // Reset title and hide team member field by default
   const label = document.getElementById('ql-title-label');
   if (label) label.textContent = '⚡ Quick Log';
@@ -2987,12 +3013,14 @@ function qlTypeChanged() {
 }
 
 function submitQuickLog() {
-  const title = document.getElementById('ql-title').value.trim();
-  if (!title) { toast('Please enter a title or select a phrase'); return; }
+  let title = document.getElementById('ql-title').value.trim();
+  const details = document.getElementById('ql-details').value.trim();
+  if (!title && details) { title = details.slice(0, 60); }
+  if (!title) { toast('Please add some notes first'); return; }
+  document.getElementById('ql-title').value = title;
 
   const type = document.getElementById('ql-type').value;
   const severity = document.getElementById('ql-severity').value;
-  const details = document.getElementById('ql-details').value;
   const now = new Date().toISOString();
 
   let locationId, stayId;
@@ -3491,10 +3519,52 @@ function sendReport() {
 
 function shareViaSMS() {
   document.querySelector('div[style*="position:fixed"][style*="z-index:600"]')?.remove();
-  const body = encodeURIComponent(currentReportText);
-  // sms: URI with body pre-filled; works on iOS and Android
-  const smsUrl = `sms:?body=${body}`;
-  const a = document.createElement('a'); a.href = smsUrl; a.click();
+  const smsText = buildSMSText();
+  const body = encodeURIComponent(smsText);
+  const a = document.createElement('a'); a.href = `sms:?body=${body}`; a.click();
+}
+
+function buildSMSText() {
+  const lo = state.lovedOne;
+  const loc = getCurrentLocation();
+  const stay = getCurrentStay();
+  const today = new Date();
+  const lines = [];
+
+  lines.push(`Update: ${lo?.name || 'Care Update'}`);
+  lines.push(today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+
+  if (loc) {
+    const room = stay?.room ? ` Rm ${stay.room}` : '';
+    lines.push(`📍 ${loc.name}${room}`);
+  }
+
+  const todayEntries = state.entries.filter(e => isToday(e.date)).sort((a,b) => new Date(b.date)-new Date(a.date));
+  const high = todayEntries.filter(e => e.severity === 'High').slice(0,2);
+  const other = todayEntries.filter(e => e.severity !== 'High').slice(0, Math.max(0, 2 - high.length));
+  const shown = [...high, ...other];
+
+  lines.push('');
+  if (shown.length) {
+    shown.forEach(e => {
+      const detail = e.details ? ': ' + e.details.slice(0,60) + (e.details.length > 60 ? '...' : '') : '';
+      lines.push(`• ${e.title}${detail}`);
+    });
+    if (todayEntries.length > shown.length) {
+      lines.push(`+ ${todayEntries.length - shown.length} more update${todayEntries.length - shown.length > 1 ? 's' : ''} today`);
+    }
+  } else {
+    lines.push('No updates logged today.');
+  }
+
+  const overdue = state.tasks.filter(t => t.status === 'Open' && isOverdue(t.dueDate)).slice(0,2);
+  if (overdue.length) {
+    lines.push('');
+    lines.push('Action needed:');
+    overdue.forEach(t => lines.push(`• ${t.title}`));
+  }
+
+  return lines.join('\n');
 }
 
 function shareViaEmail() {
@@ -3521,94 +3591,189 @@ function populateEntryDropdown(selectId, selectedId) {
 }
 
 // ============================================================
-// DICTATION
+// SMART LOG — dictate → auto AI parse
 // ============================================================
-let recognition = null;
-let isListening = false;
+let smartListening = false;
+let smartRecognition = null;
+let smartFinalTranscript = '';
+let pendingAITask = null;
 
-function toggleDictation() {
+function toggleSmartLog() {
+  if (smartListening) {
+    stopSmartLog(true); // stop and parse
+  } else {
+    startSmartLog();
+  }
+}
+
+function startSmartLog() {
   if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
     toast('Speech recognition not supported on this browser');
     return;
   }
-  if (isListening) {
-    stopDictation();
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  smartRecognition = new SpeechRecognition();
+  smartRecognition.continuous = true;
+  smartRecognition.interimResults = true;
+  smartRecognition.lang = 'en-US';
+  smartFinalTranscript = document.getElementById('ql-details').value;
+
+  const btn = document.getElementById('ql-smart-btn');
+  const label = document.getElementById('ql-smart-label');
+  const icon = document.getElementById('ql-smart-icon');
+  const status = document.getElementById('ql-smart-status');
+  const statusText = document.getElementById('ql-smart-status-text');
+  const dot = document.getElementById('ql-smart-dot');
+
+  smartRecognition.onstart = () => {
+    smartListening = true;
+    status.style.display = 'flex';
+    dot.style.background = 'var(--red)';
+    statusText.textContent = 'Listening... tap to stop';
+    statusText.style.color = 'var(--text2)';
+    btn.style.background = '#FAE8E8';
+    btn.style.color = 'var(--red)';
+    label.textContent = 'Stop';
+    icon.setAttribute('stroke', 'var(--red)');
+  };
+
+  smartRecognition.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        smartFinalTranscript += (smartFinalTranscript ? ' ' : '') + t.trim();
+        document.getElementById('ql-details').value = smartFinalTranscript;
+      } else {
+        interim = t;
+      }
+    }
+    if (interim) statusText.textContent = interim;
+  };
+
+  smartRecognition.onerror = (e) => {
+    if (e.error !== 'aborted') toast('Mic error: ' + e.error);
+    stopSmartLog(false);
+  };
+
+  smartRecognition.onend = () => {
+    if (smartListening) smartRecognition.start(); // auto-restart on silence
+  };
+
+  smartRecognition.start();
+}
+
+function stopSmartLog(andParse) {
+  smartListening = false;
+  if (smartRecognition) { smartRecognition.onend = null; smartRecognition.stop(); smartRecognition = null; }
+
+  const btn = document.getElementById('ql-smart-btn');
+  const label = document.getElementById('ql-smart-label');
+  const icon = document.getElementById('ql-smart-icon');
+  const status = document.getElementById('ql-smart-status');
+  const statusText = document.getElementById('ql-smart-status-text');
+  const dot = document.getElementById('ql-smart-dot');
+
+  btn.style.background = '#F0EBF8';
+  btn.style.color = '#6B4C9A';
+  label.textContent = 'Smart Log';
+  if (icon) icon.setAttribute('stroke', '#6B4C9A');
+
+  if (andParse && smartFinalTranscript.trim()) {
+    dot.style.background = '#6B4C9A';
+    statusText.textContent = 'Analyzing...';
+    statusText.style.color = '#6B4C9A';
+    runAIParse(smartFinalTranscript.trim()).then(() => {
+      status.style.display = 'none';
+    });
   } else {
-    startDictation();
+    status.style.display = 'none';
   }
 }
 
-function startDictation() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
+function stopDictation() { stopSmartLog(false); } // alias for closeSheet hook
 
-  const details = document.getElementById('ql-details');
-  const status = document.getElementById('ql-dictation-status');
-  const interim = document.getElementById('ql-dictation-interim');
-  const btn = document.getElementById('ql-mic-btn');
-  const label = document.getElementById('ql-mic-label');
-  const icon = document.getElementById('ql-mic-icon');
-
-  let finalTranscript = details.value;
-
-  recognition.onstart = () => {
-    isListening = true;
-    status.style.display = 'flex';
-    btn.style.background = 'var(--red-light)';
-    btn.style.color = 'var(--red)';
-    label.textContent = 'Stop';
-    icon.style.stroke = 'var(--red)';
-  };
-
-  recognition.onresult = (event) => {
-    let interimText = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalTranscript += (finalTranscript ? ' ' : '') + transcript.trim();
-        details.value = finalTranscript;
-        // If title is empty, use first sentence as title
-        const titleEl = document.getElementById('ql-title');
-        if (!titleEl.value.trim()) {
-          const firstSentence = transcript.trim().split(/[.!?]/)[0].trim();
-          if (firstSentence) titleEl.value = firstSentence.charAt(0).toUpperCase() + firstSentence.slice(1);
-        }
-        interimText = '';
-      } else {
-        interimText += transcript;
-      }
-    }
-    interim.textContent = interimText;
-  };
-
-  recognition.onerror = (event) => {
-    if (event.error !== 'aborted') toast('Microphone error: ' + event.error);
-    stopDictation();
-  };
-
-  recognition.onend = () => {
-    if (isListening) recognition.start(); // auto-restart to handle iOS timeout
-  };
-
-  recognition.start();
+async function aiParseLog() {
+  const raw = document.getElementById('ql-details').value.trim();
+  if (!raw) { toast('Add some notes first'); return; }
+  const status = document.getElementById('ql-smart-status');
+  const statusText = document.getElementById('ql-smart-status-text');
+  const dot = document.getElementById('ql-smart-dot');
+  status.style.display = 'flex';
+  dot.style.background = '#6B4C9A';
+  statusText.textContent = 'Analyzing...';
+  statusText.style.color = '#6B4C9A';
+  await runAIParse(raw);
+  status.style.display = 'none';
 }
 
-function stopDictation() {
-  isListening = false;
-  if (recognition) { recognition.onend = null; recognition.stop(); recognition = null; }
-  const status = document.getElementById('ql-dictation-status');
-  const btn = document.getElementById('ql-mic-btn');
-  const label = document.getElementById('ql-mic-label');
-  const icon = document.getElementById('ql-mic-icon');
-  const interim = document.getElementById('ql-dictation-interim');
-  if (status) status.style.display = 'none';
-  if (btn) { btn.style.background = 'var(--primary-soft)'; btn.style.color = 'var(--primary)'; }
-  if (label) label.textContent = 'Dictate';
-  if (icon) icon.style.stroke = 'currentColor';
-  if (interim) interim.textContent = '';
+async function runAIParse(raw) {
+  const loName = state.lovedOne?.name || 'the patient';
+  dismissAITask();
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: `You are a care coordination assistant. Parse care updates about ${loName} and return ONLY valid JSON, no markdown. Use this exact structure:
+{"type":"Medical|Conversation|Update|Move|Other","severity":"Low|Medium|High","title":"concise title under 60 chars","details":"cleaned note with key facts","followUpTask":null or {"title":"task title under 60 chars","dueInDays":0}}
+High=urgent/emergency. Medium=needs attention. Low=routine. followUpTask only if a clear action item exists.`,
+        messages: [{ role: 'user', content: raw }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    if (parsed.type) { document.getElementById('ql-type').value = parsed.type; qlTypeChanged(); renderPhrases(); }
+    if (parsed.severity) document.getElementById('ql-severity').value = parsed.severity;
+    if (parsed.title) document.getElementById('ql-title').value = parsed.title;
+    if (parsed.details) document.getElementById('ql-details').value = parsed.details;
+
+    // Show parsed summary
+    const summary = document.getElementById('ql-parsed-summary');
+    if (summary && (parsed.type || parsed.severity || parsed.title)) {
+      summary.style.display = 'block';
+      document.getElementById('ql-parsed-type').textContent = parsed.type || '';
+      document.getElementById('ql-parsed-sev').textContent = parsed.severity || '';
+      const titleRow = document.getElementById('ql-parsed-title-row');
+      if (titleRow) titleRow.textContent = parsed.title || '';
+    }
+
+    if (parsed.followUpTask?.title) {
+      pendingAITask = parsed.followUpTask;
+      document.getElementById('ql-ai-task-title').textContent = parsed.followUpTask.title;
+      document.getElementById('ql-ai-task-prompt').style.display = 'block';
+    }
+    toast('\u2728 Fields filled — review and log');
+  } catch(err) {
+    toast('Could not analyze — try again');
+    console.error(err);
+  }
+}
+
+function acceptAITask() {
+  if (!pendingAITask) return;
+  const dueDate = pendingAITask.dueInDays > 0
+    ? new Date(Date.now() + pendingAITask.dueInDays * 86400000).toISOString().split('T')[0]
+    : null;
+  state.tasks.unshift({ id: uid(), lovedOneId: state.lovedOne.id, title: pendingAITask.title, dueDate, priority: 'Medium', status: 'Open', notes: '', createdAt: new Date().toISOString() });
+  saveState();
+  dismissAITask();
+  toast('\u2713 Task added');
+}
+
+function dismissAITask() {
+  pendingAITask = null;
+  const el = document.getElementById('ql-ai-task-prompt');
+  if (el) el.style.display = 'none';
+}
+
+function resetParsedSummary() {
+  const s = document.getElementById('ql-parsed-summary');
+  if (s) s.style.display = 'none';
 }
 
 // ============================================================
@@ -3688,8 +3853,8 @@ function stopWizDictation() {
 // WIZARD
 // ============================================================
 let wizardStep = 1;
-const WIZARD_STEPS = 4;
-const PROGRESS = { 1: 0, 2: 33, 3: 66, 4: 100 };
+const WIZARD_STEPS = 5;
+const PROGRESS = { 1: 0, 2: 25, 3: 50, 4: 75, 5: 100 };
 
 function showWizard() {
   const overlay = document.getElementById('wizard-overlay');
@@ -3753,18 +3918,31 @@ function wizardFinish() {
   const dob = (dobYear && dobMonth && dobDay) ? `${dobYear}-${dobMonth}-${dobDay}` : null;
   const cond = document.getElementById('wiz-condition').value.trim();
 
+  const locName = document.getElementById('wiz-loc-name').value.trim();
+  const locType = document.getElementById('wiz-loc-type').value;
+  const locRoom = document.getElementById('wiz-loc-room').value.trim();
+  const loId = uid();
+  const locations = [];
+  const stays = [];
+  if (locName) {
+    const locId = uid();
+    const stayId = uid();
+    locations.push({ id: locId, name: locName, type: locType, address: '' });
+    stays.push({ id: stayId, lovedOneId: loId, locationId: locId, startDate: new Date().toISOString(), endDate: null, notes: '', room: locRoom || null });
+  }
+
   // Build clean fresh state
   state = {
     lovedOne: {
-      id: uid(), name,
+      id: loId, name,
       DOB: dob || null,
       condition: cond || '',
       bloodType: '', allergies: '',
       DNR: false, advanceDirective: false,
       POA: '', insurance: '', notes: '', photo: null,
     },
-    locations: [],
-    stays: [],
+    locations,
+    stays,
     entries: [],
     tasks: [],
     documents: [],
@@ -3849,7 +4027,7 @@ if (!state.lovedOne) {
     <!-- Step 2: Name -->
     <div id="wizard-step-2" style="display:none;flex:1;flex-direction:column">
       <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 1 of 3</div>
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 1 of 4</div>
         <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Who are you caring for?</div>
         <div style="font-size:16px;opacity:0.8;margin-top:8px">This is the person whose care you're coordinating.</div>
       </div>
@@ -3881,7 +4059,7 @@ if (!state.lovedOne) {
     <!-- Step 3: DOB -->
     <div id="wizard-step-3" style="display:none;flex:1;flex-direction:column">
       <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 2 of 3</div>
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 2 of 4</div>
         <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">When were they born?</div>
         <div style="font-size:16px;opacity:0.8;margin-top:8px">Helps us show their age and keep records accurate.</div>
       </div>
@@ -3905,7 +4083,7 @@ if (!state.lovedOne) {
     <!-- Step 4: Condition -->
     <div id="wizard-step-4" style="display:none;flex:1;flex-direction:column">
       <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 3 of 3</div>
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 3 of 4</div>
         <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">What are they being treated for?</div>
         <div style="font-size:16px;opacity:0.8;margin-top:8px">Their primary condition or reason for care.</div>
       </div>
@@ -3917,11 +4095,82 @@ if (!state.lovedOne) {
         </div>
         <div style="display:flex;gap:10px;margin-top:32px">
           <button onclick="wizardNext(3)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
-          <button onclick="wizardFinish()" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Take me to CareSteps</button>
+          <button onclick="wizardNext(5)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
         </div>
       </div>
     </div>
 
+    <!-- Step 5: Location -->
+    <div id="wizard-step-5" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 4 of 4</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Where are they right now?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their current care location — hospital, home, rehab, or other.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location name</label>
+          <input id="wiz-loc-name" class="form-input" placeholder="e.g. St. Mary's Hospital" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location type</label>
+          <select id="wiz-loc-type" class="form-select" style="font-size:18px;padding:14px 16px;min-height:54px;margin-bottom:14px">
+            <option value="Hospital">Hospital</option>
+            <option value="Rehab">Rehab</option>
+            <option value="Home">Home</option>
+            <option value="Nursing Home">Nursing Home</option>
+            <option value="Other">Other</option>
+          </select>
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Room number (optional)</label>
+          <input id="wiz-loc-room" class="form-input" placeholder="e.g. 214" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(4)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardFinish()" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Take me to CareTracker</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD LOCATION SHEET -->
+<div class="sheet-overlay" id="add-loc-overlay" onclick="closeSheetIfBg(event,'add-loc-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Add Location</div>
+      <button class="sheet-close" onclick="closeSheet('add-loc-overlay')">✕</button>
+    </div>
+    <div class="sheet-scroll">
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Location Name</label>
+        <input class="form-input" id="al-name" placeholder="e.g. St. Mary's Hospital" autocapitalize="words">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="al-type">
+          <option value="Hospital">Hospital</option>
+          <option value="Rehab">Rehab</option>
+          <option value="Home">Home</option>
+          <option value="Nursing Home">Nursing Home</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room Number (optional)</label>
+        <input class="form-input" id="al-room" placeholder="e.g. 214">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address (optional)</label>
+        <input class="form-input" id="al-address" placeholder="Street address">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveAddLocation()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('add-loc-overlay')">Cancel</button>
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 
