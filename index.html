@@ -322,6 +322,8 @@
     -webkit-tap-highlight-color: transparent;
   }
   .fab:active { transform: scale(0.93); box-shadow: 0 2px 8px rgba(74,104,88,0.24); }
+  .fab.recording { background: var(--red); box-shadow: 0 4px 20px rgba(192,88,88,0.5); animation: fabPulse 1.2s infinite; }
+  @keyframes fabPulse { 0%,100% { box-shadow: 0 4px 20px rgba(192,88,88,0.5); } 50% { box-shadow: 0 4px 32px rgba(192,88,88,0.8); } }
   /* CARDS */
   .card {
     background: var(--card);
@@ -877,8 +879,8 @@
     </div>
   </nav>
 
-  <button class="fab" onclick="openQuickLog()" title="Quick Log">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+  <button class="fab" id="main-fab" onclick="toggleFABRecord()" title="Quick Log">
+    <svg id="fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
   </button>
 </div><!-- /#app -->
 </div><!-- /.app-container -->
@@ -1379,6 +1381,201 @@
     <div class="confirm-actions">
       <button class="btn btn-danger" style="flex:1" onclick="confirmYes()">Delete</button>
       <button class="btn btn-secondary" style="flex:1" onclick="confirmNo()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- FIRST RUN WIZARD -->
+<div id="wizard-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
+  <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column">
+
+    <!-- Progress bar -->
+    <div style="height:3px;background:var(--border-subtle)">
+      <div id="wizard-progress" style="height:100%;background:var(--amber);transition:width 0.3s;width:0%"></div>
+    </div>
+
+    <!-- Step 1: Welcome -->
+    <div id="wizard-step-1" style="flex:1;display:flex;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 45%,#4A6E8E 100%);padding:48px 28px 40px;color:#fff;text-align:center">
+        <div style="font-size:38px;margin-bottom:16px">🤝</div>
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;margin-bottom:8px">by CareSteps</div><div style="font-family:'Inter',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:12px">You're not alone in this.</div>
+        <div style="font-size:17px;opacity:0.85;line-height:1.6">CareTracker helps you stay on top of everything when caring for someone you love.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1">
+        <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:36px">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📋</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Track every update</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">Log medical events, conversations, and moves in seconds.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">👥</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Keep the care team connected</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">One place for contacts, tasks, and shared updates.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📤</div>
+            <div>
+              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Share with family in one tap</div>
+              <div style="font-size:16px;color:var(--text2);line-height:1.5">Generate and send updates without retyping anything.</div>
+            </div>
+          </div>
+        </div>
+        <button onclick="wizardNext(2)" style="width:100%;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px">Get Started</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Name -->
+    <div id="wizard-step-2" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 1 of 4</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Who are you caring for?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">This is the person whose care you're coordinating.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px">First name</label>
+            <button type="button" id="wiz-mic-btn" onclick="toggleWizDictation()" style="display:flex;align-items:center;gap:5px;background:var(--primary-soft);color:var(--primary);border:none;border-radius:20px;padding:5px 12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent">
+              <svg id="wiz-mic-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <span id="wiz-mic-label">Dictate</span>
+            </button>
+          </div>
+          <div id="wiz-dictation-status" style="display:none;font-size:14px;color:var(--primary);font-weight:500;margin-bottom:8px;align-items:center;gap:6px">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 1s infinite"></span>
+            <span id="wiz-dictation-interim" style="color:var(--text2);font-style:italic"></span>
+          </div>
+          <input id="wiz-firstname" class="form-input" placeholder="e.g. Margaret" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words" oninput="wizardValidate(2)">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Last name</label>
+          <input id="wiz-lastname" class="form-input" placeholder="e.g. Cooper" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
+          <div id="wiz-name-err" style="display:none;font-size:15px;color:var(--red);margin-top:8px">Please enter a first name to continue.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(1)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button id="wiz-next-2" onclick="wizardNext(3)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: DOB -->
+    <div id="wizard-step-3" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 2 of 4</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">When were they born?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Helps us show their age and keep records accurate.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Date of birth</label>
+          <div style="display:flex;gap:10px">
+            <select id="wiz-dob-month" class="form-select" style="flex:2;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+            <select id="wiz-dob-day" class="form-select" style="flex:1;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select id="wiz-dob-year" class="form-select" style="flex:2;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Year</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option><option value="1959">1959</option><option value="1958">1958</option><option value="1957">1957</option><option value="1956">1956</option><option value="1955">1955</option><option value="1954">1954</option><option value="1953">1953</option><option value="1952">1952</option><option value="1951">1951</option><option value="1950">1950</option><option value="1949">1949</option><option value="1948">1948</option><option value="1947">1947</option><option value="1946">1946</option><option value="1945">1945</option><option value="1944">1944</option><option value="1943">1943</option><option value="1942">1942</option><option value="1941">1941</option><option value="1940">1940</option><option value="1939">1939</option><option value="1938">1938</option><option value="1937">1937</option><option value="1936">1936</option><option value="1935">1935</option><option value="1934">1934</option><option value="1933">1933</option><option value="1932">1932</option><option value="1931">1931</option><option value="1930">1930</option><option value="1929">1929</option><option value="1928">1928</option><option value="1927">1927</option><option value="1926">1926</option><option value="1925">1925</option><option value="1924">1924</option><option value="1923">1923</option><option value="1922">1922</option><option value="1921">1921</option><option value="1920">1920</option></select>
+          </div>
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(2)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardNext(4)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Condition -->
+    <div id="wizard-step-4" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 3 of 4</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">What are they being treated for?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their primary condition or reason for care.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Primary condition</label>
+          <input id="wiz-condition" class="form-input" placeholder="e.g. Congestive Heart Failure" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can add more detail in the profile later.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(3)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardNext(5)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Location -->
+    <div id="wizard-step-5" style="display:none;flex:1;flex-direction:column">
+      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
+        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 4 of 4</div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Where are they right now?</div>
+        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their current care location — hospital, home, rehab, or other.</div>
+      </div>
+      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
+        <div style="flex:1">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location name</label>
+          <input id="wiz-loc-name" class="form-input" placeholder="e.g. St. Mary's Hospital" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words">
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location type</label>
+          <select id="wiz-loc-type" class="form-select" style="font-size:18px;padding:14px 16px;min-height:54px;margin-bottom:14px">
+            <option value="Hospital">Hospital</option>
+            <option value="Rehab">Rehab</option>
+            <option value="Home">Home</option>
+            <option value="Nursing Home">Nursing Home</option>
+            <option value="Other">Other</option>
+          </select>
+          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Room number (optional)</label>
+          <input id="wiz-loc-room" class="form-input" placeholder="e.g. 214" style="font-size:19px;padding:14px 16px;min-height:54px">
+          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:32px">
+          <button onclick="wizardNext(4)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
+          <button onclick="wizardFinish()" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Take me to CareTracker</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD LOCATION SHEET -->
+<div class="sheet-overlay" id="add-loc-overlay" onclick="closeSheetIfBg(event,'add-loc-overlay')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Add Location</div>
+      <button class="sheet-close" onclick="closeSheet('add-loc-overlay')">✕</button>
+    </div>
+    <div class="sheet-scroll">
+    <div class="sheet-body">
+      <div class="form-group">
+        <label class="form-label">Location Name</label>
+        <input class="form-input" id="al-name" placeholder="e.g. St. Mary's Hospital" autocapitalize="words">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="al-type">
+          <option value="Hospital">Hospital</option>
+          <option value="Rehab">Rehab</option>
+          <option value="Home">Home</option>
+          <option value="Nursing Home">Nursing Home</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Room Number (optional)</label>
+        <input class="form-input" id="al-room" placeholder="e.g. 214">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address (optional)</label>
+        <input class="form-input" id="al-address" placeholder="Street address">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveAddLocation()">Save</button>
+        <button class="btn btn-secondary" onclick="closeSheet('add-loc-overlay')">Cancel</button>
+      </div>
+    </div>
     </div>
   </div>
 </div>
@@ -1923,7 +2120,10 @@ function buildDailySummary(lo, allToday) {
     return `Nothing has been logged for ${name} yet today. Tap the + button to add a care update whenever you're ready.`;
   }
 
-  const medical = allToday.filter(e => e.type === 'Medical').sort((a,b) => b.severity === 'High' ? 1 : -1);
+  const medical = allToday.filter(e => e.type === 'Medical').sort((a,b) => {
+    const p = { High: 3, Medium: 2, Low: 1 };
+    return (p[b.severity] || 0) - (p[a.severity] || 0);
+  });
   const moves = allToday.filter(e => e.type === 'Move');
   const convos = allToday.filter(e => e.type === 'Conversation');
   const highSev = allToday.filter(e => e.severity === 'High');
@@ -2363,10 +2563,8 @@ function toggleTask(id) {
     if (activeTab === 'hq') renderHQ();
     toast('Task reopened');
   } else {
-    // Complete — route through the same follow-up prompt as the detail button
-    openTaskDetail(id);
-    // Brief delay to let the sheet open, then trigger the complete flow
-    setTimeout(() => completeTaskFromDetail(id), 320);
+    // Complete — show the follow-up prompt directly (no need to open detail sheet first)
+    completeTaskFromDetail(id);
   }
 }
 
@@ -2385,7 +2583,7 @@ function completeTaskFromDetail(id) {
       <textarea id="complete-followup-input" placeholder="What happened? Outcome? Next steps?" style="width:100%;min-height:90px;border-radius:12px;border:1.5px solid var(--border);padding:12px;font-size:17px;font-family:inherit;color:var(--text);background:var(--bg);resize:none;box-sizing:border-box;line-height:1.5">${t.followUp || ''}</textarea>
       <div style="display:flex;gap:10px;margin-top:14px">
         <button onclick="confirmCompleteTask('${id}')" style="flex:1;padding:14px;border-radius:12px;background:var(--accent);border:none;cursor:pointer;font-size:17px;font-weight:600;color:#fff;font-family:inherit">✓ Complete</button>
-        <button onclick="this.closest('div[style*=position]').remove()" style="padding:14px 18px;border-radius:12px;background:var(--bg);border:1.5px solid var(--border);cursor:pointer;font-size:16px;font-weight:600;color:var(--text2);font-family:inherit">Cancel</button>
+        <button onclick="this.closest('#complete-task-overlay').remove();closeSheet('task-detail-overlay')" style="padding:14px 18px;border-radius:12px;background:var(--bg);border:1.5px solid var(--border);cursor:pointer;font-size:16px;font-weight:600;color:var(--text2);font-family:inherit">Cancel</button>
       </div>
     </div>`;
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
@@ -2416,7 +2614,16 @@ function reopenTaskFromDetail(id) {
   t.status = 'Open';
   t.completedAt = null;
   saveState();
-  openTaskDetail(id); // refresh detail view
+  // Re-render detail content in place — sheet is already open, no need to re-open it
+  currentTaskId = id;
+  const bodyEl = document.getElementById('task-detail-body');
+  if (bodyEl) {
+    // Temporarily swap openSheet to a no-op so openTaskDetail only re-renders content
+    const _orig = window.openSheet;
+    window.openSheet = () => {};
+    openTaskDetail(id);
+    window.openSheet = _orig;
+  }
   if (activeTab === 'tasks') renderTasks();
   if (activeTab === 'hq') renderHQ();
   toast('Task reopened');
@@ -3135,6 +3342,44 @@ function hqQuickReport(typeId) {
 }
 
 // ============================================================
+// ADD LOCATION
+// ============================================================
+function openAddLocation() {
+  document.getElementById('al-name').value = '';
+  document.getElementById('al-type').value = 'Hospital';
+  document.getElementById('al-room').value = '';
+  document.getElementById('al-address').value = '';
+  openSheet('add-loc-overlay');
+}
+
+function saveAddLocation() {
+  const name = document.getElementById('al-name').value.trim();
+  if (!name) { toast('Please enter a location name'); return; }
+  const type    = document.getElementById('al-type').value;
+  const room    = document.getElementById('al-room').value.trim();
+  const address = document.getElementById('al-address').value.trim();
+
+  const locId  = uid();
+  const stayId = uid();
+  state.locations.push({ id: locId, name, type, address });
+
+  // End the current stay if one exists
+  const currentStay = getCurrentStay();
+  if (currentStay) { currentStay.endDate = new Date().toISOString(); }
+
+  state.stays.push({
+    id: stayId, lovedOneId: state.lovedOne.id,
+    locationId: locId, startDate: new Date().toISOString(),
+    endDate: null, notes: '', room: room || null
+  });
+
+  saveState();
+  closeSheet('add-loc-overlay');
+  renderHQ();
+  toast('Location added');
+}
+
+// ============================================================
 // REPORTS SYSTEM
 // ============================================================
 const REPORT_TYPES = [
@@ -3199,8 +3444,8 @@ function buildConfigUI(id) {
       <div style="display:flex;gap:8px">
         ${['Today','Last 3 Days','Last 7 Days','Custom'].map(opt => `
           <div onclick="setReportRange(this,'${opt}')" data-range="${opt}"
-            style="flex:1;text-align:center;padding:13px 8px;border-radius:9px;font-size:16px;font-weight:600;cursor:pointer;min-height:44px;
-            border:1.5px solid var(--border);color:var(--text2);background:var(--card);transition:all 0.12s;-webkit-tap-highlight-color:transparent">
+            style="flex:1;text-align:center;padding:10px 4px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;min-height:38px;display:flex;align-items:center;justify-content:center;
+            border:none;color:var(--text2);background:rgba(28,35,48,0.08);transition:all 0.12s;-webkit-tap-highlight-color:transparent">
             ${opt === 'Last 3 Days' ? '3 Days' : opt === 'Last 7 Days' ? '7 Days' : opt}
           </div>`).join('')}
       </div>
@@ -3226,8 +3471,8 @@ function buildConfigUI(id) {
         <div style="display:flex;gap:8px">
           ${['Reassuring','Factual','Detailed'].map(t => `
             <div onclick="setReportTone(this,'${t}')" data-tone="${t}"
-              style="flex:1;text-align:center;padding:8px 6px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer;min-height:36px;
-              border:1.5px solid var(--border);color:var(--text2);background:var(--card)">
+              style="flex:1;text-align:center;padding:10px 4px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;min-height:38px;display:flex;align-items:center;justify-content:center;
+              border:none;color:var(--text2);background:rgba(28,35,48,0.08);transition:all 0.12s;-webkit-tap-highlight-color:transparent">
               ${t}
             </div>`).join('')}
         </div>
@@ -3280,9 +3525,9 @@ function toggleSwitch(id) {
 
 function setReportRange(el, val) {
   document.querySelectorAll('[data-range]').forEach(d => {
-    d.style.background = 'var(--card)'; d.style.color = 'var(--text2)'; d.style.borderColor = 'var(--border)';
+    d.style.background = 'rgba(28,35,48,0.08)'; d.style.color = 'var(--text2)';
   });
-  el.style.background = 'var(--accent)'; el.style.color = '#fff'; el.style.borderColor = 'var(--accent)';
+  el.style.background = 'var(--accent)'; el.style.color = '#fff';
   currentReportConfig.range = val;
   const cf = document.getElementById('custom-range-fields');
   if (cf) cf.style.display = val === 'Custom' ? 'block' : 'none';
@@ -3290,9 +3535,9 @@ function setReportRange(el, val) {
 
 function setReportTone(el, val) {
   document.querySelectorAll('[data-tone]').forEach(d => {
-    d.style.background = 'var(--card)'; d.style.color = 'var(--text2)'; d.style.borderColor = 'var(--border)';
+    d.style.background = 'rgba(28,35,48,0.08)'; d.style.color = 'var(--text2)';
   });
-  el.style.background = 'var(--accent2)'; el.style.color = '#fff'; el.style.borderColor = 'var(--accent2)';
+  el.style.background = 'var(--accent2)'; el.style.color = '#fff';
   currentReportConfig.tone = val;
 }
 
@@ -3588,6 +3833,151 @@ function populateEntryDropdown(selectId, selectedId) {
   const sorted = [...state.entries].sort((a,b) => new Date(b.date) - new Date(a.date));
   sel.innerHTML = `<option value="">— None —</option>` +
     sorted.map(e => `<option value="${e.id}" ${e.id === selectedId ? 'selected' : ''}>${fmtDate(e.date)} · ${e.title.slice(0,40)}</option>`).join('');
+}
+
+// ============================================================
+// FAB ONE-TAP RECORD
+// ============================================================
+let fabRecording = false;
+let fabRecognition = null;
+let fabTranscript = '';
+
+function toggleFABRecord() {
+  if (fabRecording) {
+    stopFABRecord();
+  } else {
+    startFABRecord();
+  }
+}
+
+function startFABRecord() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    openQuickLog(); return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  fabRecognition = new SR();
+  fabRecognition.continuous = true;
+  fabRecognition.interimResults = false;
+  fabRecognition.lang = 'en-US';
+  fabTranscript = '';
+
+  fabRecognition.onstart = () => {
+    fabRecording = true;
+    const fab = document.getElementById('main-fab');
+    const icon = document.getElementById('fab-icon');
+    if (fab) fab.classList.add('recording');
+    if (icon) icon.innerHTML = '<rect x="4" y="4" width="16" height="16" rx="2"/>';
+    toast('Recording... tap to stop');
+  };
+
+  fabRecognition.onresult = (event) => {
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        fabTranscript += (fabTranscript ? ' ' : '') + event.results[i][0].transcript.trim();
+      }
+    }
+  };
+
+  fabRecognition.onerror = (e) => {
+    if (e.error !== 'aborted') toast('Mic error: ' + e.error);
+    resetFAB();
+  };
+
+  fabRecognition.onend = () => {
+    if (fabRecording) fabRecognition.start();
+  };
+
+  fabRecognition.start();
+}
+
+function stopFABRecord() {
+  fabRecording = false;
+  if (fabRecognition) { fabRecognition.onend = null; fabRecognition.stop(); fabRecognition = null; }
+  resetFAB();
+  if (!fabTranscript.trim()) { toast('Nothing recorded'); return; }
+  toast('Analyzing...');
+  fabAutoLog(fabTranscript.trim());
+}
+
+function resetFAB() {
+  fabRecording = false;
+  const fab = document.getElementById('main-fab');
+  const icon = document.getElementById('fab-icon');
+  if (fab) fab.classList.remove('recording');
+  if (icon) icon.innerHTML = '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>';
+}
+
+async function fabAutoLog(raw) {
+  const loName = state.lovedOne?.name || 'the patient';
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: 'You are a care coordination assistant. Parse care updates about ' + loName + ' and return ONLY valid JSON, no markdown: {"type":"Medical|Conversation|Update|Move|Other","severity":"Low|Medium|High","title":"concise title under 60 chars","details":"cleaned note with key facts","followUpTask":null} High=urgent. Medium=needs attention. Low=routine. followUpTask: {"title":"task title","dueInDays":0} only if a clear action item exists, else null.',
+        messages: [{ role: 'user', content: raw }]
+      })
+    });
+    const data = await response.json();
+    const text = (data.content || []).map(function(c){ return c.text || ''; }).join('');
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    const now = new Date().toISOString();
+    const currentStay = getCurrentStay();
+    const entryId = uid();
+
+    state.entries.unshift({
+      id: entryId,
+      lovedOneId: state.lovedOne.id,
+      date: now,
+      type: parsed.type || 'Update',
+      title: parsed.title || raw.slice(0, 60),
+      details: parsed.details || raw,
+      severity: parsed.severity || 'Low',
+      locationId: currentStay ? currentStay.locationId : (state.locations[0] ? state.locations[0].id : null),
+      stayId: currentStay ? currentStay.id : null,
+      teamMemberId: null,
+      createdAt: now
+    });
+
+    if (parsed.followUpTask && parsed.followUpTask.title) {
+      var dueDate = parsed.followUpTask.dueInDays > 0
+        ? new Date(Date.now() + parsed.followUpTask.dueInDays * 86400000).toISOString().split('T')[0]
+        : null;
+      state.tasks.unshift({ id: uid(), lovedOneId: state.lovedOne.id, title: parsed.followUpTask.title, dueDate: dueDate, priority: 'Medium', status: 'Open', notes: '', createdAt: now });
+    }
+
+    saveState();
+    if (activeTab === 'hq') renderHQ();
+    if (activeTab === 'timeline') renderTimeline();
+    showUndoToast(parsed.title || raw.slice(0, 40), entryId);
+  } catch(err) {
+    toast('Could not log — try again');
+    console.error(err);
+  }
+}
+
+function showUndoToast(label, entryId) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const t = document.createElement('div');
+  const shortLabel = label.length > 35 ? label.slice(0, 35) + '...' : label;
+  t.style.cssText = 'background:#1F2933;color:#fff;padding:12px 16px;border-radius:12px;font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 8px 24px rgba(15,23,42,0.15);font-family:inherit';
+  t.innerHTML = '<span>Logged: ' + shortLabel + '</span><button style="background:rgba(255,255,255,0.18);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0">Undo</button>';
+  t.querySelector('button').onclick = function() { undoFABLog(entryId, t); };
+  container.appendChild(t);
+  setTimeout(function() { if (t.parentNode) t.remove(); }, 7000);
+}
+
+function undoFABLog(entryId, toastEl) {
+  state.entries = state.entries.filter(function(e){ return e.id !== entryId; });
+  saveState();
+  if (toastEl && toastEl.parentNode) toastEl.remove();
+  if (activeTab === 'hq') renderHQ();
+  if (activeTab === 'timeline') renderTimeline();
+  toast('Entry removed');
 }
 
 // ============================================================
@@ -3980,199 +4370,5 @@ if (!state.lovedOne) {
   renderHQ();
 }
 </script>
-<!-- FIRST RUN WIZARD -->
-<div id="wizard-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;">
-  <div style="max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column">
-
-    <!-- Progress bar -->
-    <div style="height:3px;background:var(--border-subtle)">
-      <div id="wizard-progress" style="height:100%;background:var(--amber);transition:width 0.3s;width:0%"></div>
-    </div>
-
-    <!-- Step 1: Welcome -->
-    <div id="wizard-step-1" style="flex:1;display:flex;flex-direction:column">
-      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 45%,#4A6E8E 100%);padding:48px 28px 40px;color:#fff;text-align:center">
-        <div style="font-size:38px;margin-bottom:16px">🤝</div>
-        <div style="font-size:13px;font-weight:600;letter-spacing:0.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;margin-bottom:8px">by CareSteps</div><div style="font-family:'Inter',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:12px">You're not alone in this.</div>
-        <div style="font-size:17px;opacity:0.85;line-height:1.6">CareTracker helps you stay on top of everything when caring for someone you love.</div>
-      </div>
-      <div style="padding:32px 28px;flex:1">
-        <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:36px">
-          <div style="display:flex;align-items:flex-start;gap:14px">
-            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📋</div>
-            <div>
-              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Track every update</div>
-              <div style="font-size:16px;color:var(--text2);line-height:1.5">Log medical events, conversations, and moves in seconds.</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:14px">
-            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">👥</div>
-            <div>
-              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Keep the care team connected</div>
-              <div style="font-size:16px;color:var(--text2);line-height:1.5">One place for contacts, tasks, and shared updates.</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:flex-start;gap:14px">
-            <div style="width:36px;height:36px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📤</div>
-            <div>
-              <div style="font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px">Share with family in one tap</div>
-              <div style="font-size:16px;color:var(--text2);line-height:1.5">Generate and send updates without retyping anything.</div>
-            </div>
-          </div>
-        </div>
-        <button onclick="wizardNext(2)" style="width:100%;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:16px;font-size:18px;font-weight:600;cursor:pointer;font-family:inherit;min-height:54px">Get Started</button>
-      </div>
-    </div>
-
-    <!-- Step 2: Name -->
-    <div id="wizard-step-2" style="display:none;flex:1;flex-direction:column">
-      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 1 of 4</div>
-        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Who are you caring for?</div>
-        <div style="font-size:16px;opacity:0.8;margin-top:8px">This is the person whose care you're coordinating.</div>
-      </div>
-      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
-        <div style="flex:1">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px">First name</label>
-            <button type="button" id="wiz-mic-btn" onclick="toggleWizDictation()" style="display:flex;align-items:center;gap:5px;background:var(--primary-soft);color:var(--primary);border:none;border-radius:20px;padding:5px 12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent">
-              <svg id="wiz-mic-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-              <span id="wiz-mic-label">Dictate</span>
-            </button>
-          </div>
-          <div id="wiz-dictation-status" style="display:none;font-size:14px;color:var(--primary);font-weight:500;margin-bottom:8px;align-items:center;gap:6px">
-            <span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 1s infinite"></span>
-            <span id="wiz-dictation-interim" style="color:var(--text2);font-style:italic"></span>
-          </div>
-          <input id="wiz-firstname" class="form-input" placeholder="e.g. Margaret" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words" oninput="wizardValidate(2)">
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Last name</label>
-          <input id="wiz-lastname" class="form-input" placeholder="e.g. Cooper" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
-          <div id="wiz-name-err" style="display:none;font-size:15px;color:var(--red);margin-top:8px">Please enter a first name to continue.</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:32px">
-          <button onclick="wizardNext(1)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
-          <button id="wiz-next-2" onclick="wizardNext(3)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: DOB -->
-    <div id="wizard-step-3" style="display:none;flex:1;flex-direction:column">
-      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 2 of 4</div>
-        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">When were they born?</div>
-        <div style="font-size:16px;opacity:0.8;margin-top:8px">Helps us show their age and keep records accurate.</div>
-      </div>
-      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
-        <div style="flex:1">
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Date of birth</label>
-          <div style="display:flex;gap:10px">
-            <select id="wiz-dob-month" class="form-select" style="flex:2;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
-            <select id="wiz-dob-day" class="form-select" style="flex:1;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
-            <select id="wiz-dob-year" class="form-select" style="flex:2;font-size:17px;padding:12px 10px;min-height:54px"><option value="">Year</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option><option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option><option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option><option value="1959">1959</option><option value="1958">1958</option><option value="1957">1957</option><option value="1956">1956</option><option value="1955">1955</option><option value="1954">1954</option><option value="1953">1953</option><option value="1952">1952</option><option value="1951">1951</option><option value="1950">1950</option><option value="1949">1949</option><option value="1948">1948</option><option value="1947">1947</option><option value="1946">1946</option><option value="1945">1945</option><option value="1944">1944</option><option value="1943">1943</option><option value="1942">1942</option><option value="1941">1941</option><option value="1940">1940</option><option value="1939">1939</option><option value="1938">1938</option><option value="1937">1937</option><option value="1936">1936</option><option value="1935">1935</option><option value="1934">1934</option><option value="1933">1933</option><option value="1932">1932</option><option value="1931">1931</option><option value="1930">1930</option><option value="1929">1929</option><option value="1928">1928</option><option value="1927">1927</option><option value="1926">1926</option><option value="1925">1925</option><option value="1924">1924</option><option value="1923">1923</option><option value="1922">1922</option><option value="1921">1921</option><option value="1920">1920</option></select>
-          </div>
-          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:32px">
-          <button onclick="wizardNext(2)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
-          <button onclick="wizardNext(4)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 4: Condition -->
-    <div id="wizard-step-4" style="display:none;flex:1;flex-direction:column">
-      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 3 of 4</div>
-        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">What are they being treated for?</div>
-        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their primary condition or reason for care.</div>
-      </div>
-      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
-        <div style="flex:1">
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Primary condition</label>
-          <input id="wiz-condition" class="form-input" placeholder="e.g. Congestive Heart Failure" style="font-size:19px;padding:14px 16px;min-height:54px" autocapitalize="words">
-          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can add more detail in the profile later.</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:32px">
-          <button onclick="wizardNext(3)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
-          <button onclick="wizardNext(5)" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Next</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 5: Location -->
-    <div id="wizard-step-5" style="display:none;flex:1;flex-direction:column">
-      <div style="background:linear-gradient(140deg,#1E3A56 0%,#2C4E6E 100%);padding:40px 28px 32px;color:#fff">
-        <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:12px">Step 4 of 4</div>
-        <div style="font-size:26px;font-weight:700;letter-spacing:-0.4px;line-height:1.3">Where are they right now?</div>
-        <div style="font-size:16px;opacity:0.8;margin-top:8px">Their current care location — hospital, home, rehab, or other.</div>
-      </div>
-      <div style="padding:32px 28px;flex:1;display:flex;flex-direction:column">
-        <div style="flex:1">
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location name</label>
-          <input id="wiz-loc-name" class="form-input" placeholder="e.g. St. Mary's Hospital" style="font-size:19px;padding:14px 16px;min-height:54px;margin-bottom:14px" autocapitalize="words">
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Location type</label>
-          <select id="wiz-loc-type" class="form-select" style="font-size:18px;padding:14px 16px;min-height:54px;margin-bottom:14px">
-            <option value="Hospital">Hospital</option>
-            <option value="Rehab">Rehab</option>
-            <option value="Home">Home</option>
-            <option value="Nursing Home">Nursing Home</option>
-            <option value="Other">Other</option>
-          </select>
-          <label style="font-size:16px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:10px">Room number (optional)</label>
-          <input id="wiz-loc-room" class="form-input" placeholder="e.g. 214" style="font-size:19px;padding:14px 16px;min-height:54px">
-          <div style="font-size:15px;color:var(--text3);margin-top:10px">Optional — you can skip this for now.</div>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:32px">
-          <button onclick="wizardNext(4)" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border-solid);border-radius:12px;padding:14px 20px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Back</button>
-          <button onclick="wizardFinish()" style="flex:1;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;min-height:50px">Take me to CareTracker</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ADD LOCATION SHEET -->
-<div class="sheet-overlay" id="add-loc-overlay" onclick="closeSheetIfBg(event,'add-loc-overlay')">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <div class="sheet-title">Add Location</div>
-      <button class="sheet-close" onclick="closeSheet('add-loc-overlay')">✕</button>
-    </div>
-    <div class="sheet-scroll">
-    <div class="sheet-body">
-      <div class="form-group">
-        <label class="form-label">Location Name</label>
-        <input class="form-input" id="al-name" placeholder="e.g. St. Mary's Hospital" autocapitalize="words">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Type</label>
-        <select class="form-select" id="al-type">
-          <option value="Hospital">Hospital</option>
-          <option value="Rehab">Rehab</option>
-          <option value="Home">Home</option>
-          <option value="Nursing Home">Nursing Home</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Room Number (optional)</label>
-        <input class="form-input" id="al-room" placeholder="e.g. 214">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Address (optional)</label>
-        <input class="form-input" id="al-address" placeholder="Street address">
-      </div>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-primary" style="flex:1" onclick="saveAddLocation()">Save</button>
-        <button class="btn btn-secondary" onclick="closeSheet('add-loc-overlay')">Cancel</button>
-      </div>
-    </div>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
